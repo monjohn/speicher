@@ -3,13 +3,12 @@
         [compojure.handler :only [site]] ; form, query params decode; cookie; session, etc
         [compojure.core :only [defroutes GET POST DELETE ANY context]]
         [org.httpkit.server]
-        [org.httpkit.client :only [get] :rename {get http-get}]
-        )
-  (:require [file-db :refer [load-data]]
-            [ring.middleware.reload :as reload]
+        [org.httpkit.client :only [get] :rename {get http-get}])
+  (:require [ring.middleware.reload :as reload]
             [clojure.data.json :as json]
             [clojure.edn :as edn]
-            ))
+            [file-db :as db]))
+
 
 
 (def level-limit {:daily 6
@@ -17,17 +16,20 @@
              :monthly 11
              :yearly 6})
 
-(def subsequent-level {:daily :weekly
-                        :weekly :monthly
-                        :monthly :yearly})
+(def next-level {:daily :weekly 
+                 :weekly :monthly
+                 :monthly :yearly})
+
+(defn get-list [kw]
+  (db/load-data kw))
 
 (defn level-complete? [level count]
   (= (get level-limit level)
        count))
 
 (defn level-up [[a b c d]]
-  (let [next-level  (get subsequent-level d)] 
-    [a b 0 next-level]))
+  (let [next-level  (get next-level d)] 
+    (db/append-to-list [a b 0 next-level] next-level)))
 
 (defn is-correct [[a b c d]]
   (if (level-complete? d c) 
@@ -37,7 +39,7 @@
 (defn is-false [x]
   x)
 
-
+;; (get-list :daily)
 
 
 
