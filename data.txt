@@ -1,0 +1,8 @@
+{:clayton-humid 100, :clayton-temp 55.4, :my-humid 65.2, :my-temp 81.3}
+{:clayton-humid 100, :clayton-temp 50.22, :my-humid 65.2, :my-temp 81.3}{:clayton-humid 100, :clayton-temp 50.22, :my-humid 65.2, :my-temp 81.3}{:clayton-humid 100, :clayton-temp 50.22, :my-humid nil, :my-temp nil}
+{:clayton-humid 100, :clayton-temp 50.22, :my-humid nil, :my-temp nil}{:clayton-humid 100, :clayton-temp 50.22, :my-humid nil, :my-temp nil}
+
+
+{:clayton-humid 100, :clayton-temp 50.22, :my-humid nil, :my-temp nil}{:clayton-humid 100, :clayton-temp 50.22, :my-humid "64.3", :my-temp "79.1"}{:clayton-humid 100, :clayton-temp 50.22, :my-temp 79.1, :my-humid 64.3}
+
+{:clayton-humid 100, :clayton-temp 50.22, :my-temp 79.1, :my-humid 64.3}{:datetime #inst "2014-11-26T04:01:58.707-00:00", :clayton-humid 100, :clayton-temp 50.22}

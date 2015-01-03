@@ -1,0 +1,59 @@
+<!doctype html>
+<html itemscope="" itemtype="http://schema.org/WebPage" lang="en">
+    <head>
+        <meta content="What's the temp?" name="description">
+        <meta content="noodp" name="robots">
+        <meta content="origin" id="mref" name="referrer">
+        <style>
+            .flip-card {
+                height: 200px;
+                width: 200px;
+                transform: perspective(400px) rotateY(0deg);
+                -moz-transform: perspective(400px) rotateY(0deg);
+                -webkit-transform: perspective(400px) rotateY(0deg);
+                -o-transform: perspective(400px) rotateY(0deg);
+                -ms-transform: perspective(400px) rotateY(0deg);
+                transition: all ease 0.2s;
+                -moz-transition: all ease 0.2s;
+                -webkit-transition: all ease 0.2s;
+                -o-transition: all ease 0.2s;
+                -ms-transition: all ease 0.2s;
+            }
+            .flip-card .flip-front {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+            }
+            .flip-card .flip-back {
+                height: 100%;
+                width: 100%;
+            }
+            .flip-card:hover {
+                transform: perspective(400px) rotateY(180deg);
+                -moz-transform: perspective(400px) rotateY(180deg);
+                -webkit-transform: perspective(400px) rotateY(180deg);
+                -o-transform: perspective(400px) rotateY(180deg);
+                -ms-transform: perspective(400px) rotateY(180deg);
+            }
+            .flip-card:hover .flip-back {
+                transform: perspective(400px) rotateY(-180deg);
+                -moz-transform: perspective(400px) rotateY(-180deg);
+                -webkit-transform: perspective(400px) rotateY(-180deg);
+                -o-transform: perspective(400px) rotateY(-180deg);
+                -ms-transform: perspective(400px) rotateY(-180deg);
+            }
+        </style>
+
+        <title>Vocab</title>
+    </head>
+    <body>
+        <h1>Card</h1>
+        <div class="flip-card">
+            <div class="flip-front">Front</div>
+            <div class="flip-back">Back</div>
+        </div>
+
+    </body>
+</html>
