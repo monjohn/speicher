@@ -9,7 +9,7 @@
             [clojure.edn :as edn]
             [file-db :as db]))
 
-
+(def current-list (atom []))
 
 (def level-limit {:daily 6
              :weekly 6
@@ -29,20 +29,27 @@
 
 (defn level-up [[a b c d]]
   (let [next-level  (get next-level d)] 
-    (db/append-to-list [a b 0 next-level] next-level)))
+    (db/append-to-list next-level [a b 0 next-level])))
 
 (defn is-correct [[a b c d]]
   (if (level-complete? d c) 
     (level-up [a b c d])
     [a b (inc  c) d]))
 
-(defn is-false [x]
-  x)
-
-;; (get-list :daily)
 
 
+(defn finished [kw data]
+  (db/save-data data :daily)
+  (println "You have completed the list. Ready for the next?"))
 
+(defn test-list []
+  (let [list (get-list :daily)]
+    (->> 
+     (map (fn [entry t-f]
+            (if-not t-f entry
+                    (is-correct entry))) list (cycle [true false]))
+     (filter (comp not nil?) )
+     (finished :daily))))
 
 
 
@@ -56,7 +63,7 @@
 (defn data-dump [req]
   {:status  200
    :headers {"Content-Type" "text/html"}
-   :body   (load-data)})
+   :body   (get-list :daily)})
 
 
 
