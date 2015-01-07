@@ -1,5 +1,7 @@
 (ns server
-  (:use [compojure.route :only [files not-found]]
+  (:use [clojure.java.io :only (reader)]
+        [clojure.pprint :only [pprint]]
+        [compojure.route :only [files not-found]]
         [compojure.handler :only [site]] ; form, query params decode; cookie; session, etc
         [compojure.core :only [defroutes GET POST DELETE ANY context]]
         [org.httpkit.server]
@@ -51,7 +53,13 @@
      (filter (comp not nil?) )
      (finished :daily))))
 
-
+(defn search-for [w]
+  (let [pattern (re-pattern (str "^" w))
+        finds
+        (with-open [rdr (reader "./resources/data/de-en.txt")]
+          (doall (filter  #(re-seq pattern %) (line-seq rdr))))]
+(pprint finds)    
+))
 
 (defn clojurize-form [m]
   (apply merge
