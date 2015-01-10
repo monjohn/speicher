@@ -4,7 +4,7 @@
 (def path "./resources/data/")
 
 
-(def data 
+(def data
    [["Tag" "day" 6 :daily]
      ["Woche" "week" 2 :daily ]
      ["Monat" "month" 3 :daily ]
@@ -25,7 +25,7 @@
 
 (defn load-data [kw]
   (let [file-name (name kw)]
-      (read-string (slurp 
+      (read-string (slurp
                     (str path file-name ".edn")))))
 
 (defn append-to-list [kw entry]
@@ -34,6 +34,6 @@
        (save-data kw))
    nil)
 
-(save-data data :daily)
+;(save-data data :daily)
 
 

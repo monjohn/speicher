@@ -1,1 +1,1 @@
-(["Monat" "month" 5 :daily])
+[["Tag" "day" 6 :daily] ["Woche" "week" 2 :daily] ["Monat" "month" 3 :daily] ["Jahr" "year" 2 :daily]]

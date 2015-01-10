@@ -18,7 +18,7 @@
              :monthly 11
              :yearly 6})
 
-(def next-level {:daily :weekly 
+(def next-level {:daily :weekly
                  :weekly :monthly
                  :monthly :yearly})
 
@@ -30,11 +30,11 @@
        count))
 
 (defn level-up [[a b c d]]
-  (let [next-level  (get next-level d)] 
+  (let [next-level  (get next-level d)]
     (db/append-to-list next-level [a b 0 next-level])))
 
 (defn is-correct [[a b c d]]
-  (if (level-complete? d c) 
+  (if (level-complete? d c)
     (level-up [a b c d])
     [a b (inc  c) d]))
 
@@ -46,7 +46,7 @@
 
 (defn test-list []
   (let [list (get-list :daily)]
-    (->> 
+    (->>
      (map (fn [entry t-f]
             (if-not t-f entry
                     (is-correct entry))) list (cycle [true false]))
@@ -58,7 +58,7 @@
         finds
         (with-open [rdr (reader "./resources/data/de-en.txt")]
           (doall (filter  #(re-seq pattern %) (line-seq rdr))))]
-(pprint finds)    
+(pprint finds)
 ))
 
 (defn clojurize-form [m]
@@ -68,18 +68,24 @@
               m)))
 
 
-(defn data-dump [req]
+(defn return-data [data]
   {:status  200
    :headers {"Content-Type" "text/html"}
-   :body   (get-list :daily)})
+   :body   (prn-str data)})
 
+(defn list-request [req]
+   (-> req  :route-params  :list
+       edn/read-string
+       get-list
+       return-data))
 
 
 (defroutes all-routes
-  (GET "/add" [] data-dump)
+  (POST "/" [] list-request)
+  (GET "/:list" [list] list-request)
   (GET "/" []
-    (-> 
-     (ring.util.response/file-response "/public/index.html" 
+    (->
+     (ring.util.response/file-response "/public/index.html"
                                        {:root "resources"})
            (ring.util.response/content-type "text/html")))
   ;;   (context "/user/:id" []
