@@ -53,25 +53,23 @@
      (filter (comp not nil?) )
      (finished :daily))))
 
-(defn search-for [w]
-  (let [pattern (re-pattern (str "^" w))
-        finds
-        (with-open [rdr (reader "./resources/data/de-en.txt")]
-          (doall (filter  #(re-seq pattern %) (line-seq rdr))))]
-(pprint finds)
-))
-
-(defn clojurize-form [m]
-  (apply merge
-         (map (fn [[k v]]
-                {(keyword k) (edn/read-string v)})
-              m)))
-
 
 (defn return-data [data]
   {:status  200
-   :headers {"Content-Type" "text/html"}
-   :body   (prn-str data)})
+   :headers {"Content-Type" "Application/edn"}
+   :body   (pr-str data)})
+
+(defn search-for [req]
+  (let [word (-> req :params :word)
+        _ (println "Searching for: " word)
+        pattern (re-pattern (str "^" word))
+        finds
+        (with-open [rdr (reader "./resources/data/de-en.txt")]
+          (doall (filter  #(re-seq pattern %) (line-seq rdr))))]
+  ;  (pprint  (vec finds))
+    (return-data finds)))
+
+
 
 (defn list-request [req]
    (-> req  :route-params  :list
@@ -83,6 +81,7 @@
 (defroutes all-routes
   (POST "/" [] list-request)
   (GET "/:list" [list] list-request)
+  (GET "/search/:word" [word] search-for)
   (GET "/" []
     (->
      (ring.util.response/file-response "/public/index.html"

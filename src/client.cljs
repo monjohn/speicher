@@ -13,67 +13,80 @@
 
 (enable-console-print!)
 
-(defn get-some [x]
-  (go (let [response (<! (http/get "https://api.github.com/users" {:with-credentials? false}))]
-        (prn (:status response))
-        (prn (map :login (:body response))))))
 
-
-(defn get-list [app kw]
-  (go
-  (let [ch (-> app :channels :response)
+(defn get-list [state kw]
+  (go (let [ch (:input-chan state)
         response (<! (http/get (str "/" kw) {:edn-params {:list kw}}
                                   :headers {"accept" "application/edn"}))]
-    (>! ch response))
-  app))
+    (>! ch [:response response]))) 
+  state)
 
-(defn init-history
-  "Set up Google Closure history management"
-  [app]
-  (let [h (goog.History.)]
-    (.setEnabled h true)
-    (e/listen h goog.History.EventType.NAVIGATE
-              (fn [evt]
-                (let [ch (-> app :channels :nav)
-                      token (.-token evt)]
-                  (.setToken h token)
-                  (go (>! ch token)))))))
+(defn lookup [state word]
+  (go (let [ch (:input-chan state)
+        response (<! (http/get (str "/search/" word)
+                                 {:headers {"accept" "application/edn"}}
+                                ))]
+    (>! ch [:definitions response])))
+  state)
 
-(defn handle-response [app {:keys [status body] :as resp}]
-  (->> body read-string (assoc app :list )))
+;; (defn init-history
+;;   "Set up Google Closure history management"
+;;   [app]
+;;   (let [h (goog.History.)]
+;;     (.setEnabled h true)
+;;     (e/listen h goog.History.EventType.NAVIGATE
+;;               (fn [evt]
+;;                 (let [ch (-> app :state :input-chan)
+;;                       token (.-token evt)]
+;;                   (.setToken h token)
+;;                   (go (>! ch token)))))))
 
-(defn load-app
-  "Return a map containing the initial application"
-  []
-  {:state (atom {};(or (store/load) (data/fresh))
-                )
-   :channels {:nav (chan)
-              :response (chan)
-              :answer (chan)}
-   :consumers {:nav println
-               :response handle-response
-               :answer get-some}})
+(defn handle-response [state {:keys [status body] :as resp}]
+  (->> body read-string (assoc state :list )))
+
+(defn show-definitions [state {:keys [body]}]
+  (assoc state :mode :dictionary 
+         :dictionary body))
 
 (defn init-updates
   "For every entry in a map of channel identifiers to consumers,
   initiate a channel listener which will update the application state
   using the appropriate function whenever a value is recieved, as
   well as triggering a render."
-  [app]
-  (doseq [[ch update-fn] (:consumers app)]
+  [{:keys [state functions]}]
+  (let [input-chan (:input-chan @state)]
     (go (while true
-          (let [val (<! (get (:channels app) ch))
-                _ (.log js/console (str "on channel [" ch "], recieved value [" val "]"))
-                new-state (swap! (:state app) update-fn val)]
-            (render/request-render app))))))
+          (let [[msg-name msg-data] (<! input-chan )
+                _ (.log js/console (str "on channel [" msg-name "], received value [" msg-data "]"))
+                update-fn  (get functions msg-name)]
+
+             (swap! state update-fn msg-data)
+            (render/request-render @state))))))
+
+(defn print-entry [state data]
+  (println data)
+  state)
+
+(defn load-app
+  "Return a map containing the initial application"
+  []
+  {:state (atom {:input-chan (chan)
+                 :mode :search-page
+                 };(or (store/load) (data/fresh))
+                )
+   :functions {:nav print-entry
+               :definitions show-definitions
+               :response handle-response
+               :search-term lookup
+               :answer print-entry}})
 
 (defn ^:export main
   "Application entry point"
   []
   (let [app (load-app)]
     ; (store/init-persistence app)
-    (init-history app)
+  ;  (init-history app)
     (init-updates app)
-    (render/request-render app)
-    (get-list app :daily)))
+  ;  (render/request-render app)
+    (get-list @(:state app) :daily)))
 
