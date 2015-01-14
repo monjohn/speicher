@@ -11,6 +11,18 @@
 
 ;; (repl/connect "http://localhost:9000/repl")
 
+;; (defn init-history
+;;   "Set up Google Closure history management"
+;;   [app]
+;;   (let [h (goog.History.)]
+;;     (.setEnabled h true)
+;;     (e/listen h goog.History.EventType.NAVIGATE
+;;               (fn [evt]
+;;                 (let [ch (-> app :state :input-chan)
+;;                       token (.-token evt)]
+;;                   (.setToken h token)
+;;                   (go (>! ch token)))))))
+
 (enable-console-print!)
 
 
@@ -29,23 +41,12 @@
     (>! ch [:definitions response])))
   state)
 
-;; (defn init-history
-;;   "Set up Google Closure history management"
-;;   [app]
-;;   (let [h (goog.History.)]
-;;     (.setEnabled h true)
-;;     (e/listen h goog.History.EventType.NAVIGATE
-;;               (fn [evt]
-;;                 (let [ch (-> app :state :input-chan)
-;;                       token (.-token evt)]
-;;                   (.setToken h token)
-;;                   (go (>! ch token)))))))
 
 (defn handle-response [state {:keys [status body] :as resp}]
   (->> body read-string (assoc state :list )))
 
 (defn show-definitions [state {:keys [body]}]
-  (assoc state :mode :dictionary 
+  (assoc state
          :dictionary body))
 
 (defn init-updates

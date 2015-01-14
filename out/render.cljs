@@ -3,8 +3,7 @@
             [quiescent :as q :include-macros true]
             [quiescent.dom :as d]
             [clojure.walk :refer [keywordize-keys]]
-             [clojure.string :refer [blank? capitalize split]]
-)
+             [clojure.string :refer [blank? capitalize split]])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 
@@ -44,10 +43,16 @@
   "Takes list of entries, splits eng/ger in pairs,
   then splits the sublits and stiches them back together"
   [dict]
+(println "format-entries: " dict)
   (map #(let [pair (split % #" :: ")]
-          (map (fn [g e] (vector g e)) (split (first pair) #" \|")
-                     (split (second pair) #" \|"))) 
-       dict))
+          (interleave (split (first pair) #" \|")
+                     (split (second pair) #" \|"))
+          ) dict))
+
+; "string"
+; '(ger, eng)
+; (def s2 (split (first s1) #" \|"))  
+; (interleave ger eng)
 
 
 (defn handle-search-submit [input-chan e]
@@ -57,17 +62,15 @@
     (go (>! input-chan [:search-term  term])))
   false)
 
-(q/defcomponent Search-table-row [top? g e]
+(q/defcomponent Search-table-row [g e]
   (d/tr {}
-        (d/td {:className "check-column"}
-              (when top?  (d/input {:type "radio" :name "entries" :value "hello"}) ;(d/span {} " ")
-)
-              (d/td {} g))
+        (d/td {} g)
         (d/td {} e)))
 
 (q/defcomponent Search [{:keys [input-chan dictionary]}]
   "Page to search for and add new word to list"
-  (let [handle-fn (partial handle-search-submit input-chan)]
+  (let [handle-fn (partial handle-search-submit input-chan)
+        _ (println (format-entries dictionary))]
     (d/div {}
       (d/div {}
                   (d/input {:name "search" :id "term" :placeholder "enter new word"}))
@@ -79,17 +82,14 @@
                             (d/legend {} "Pick the definition which fits best"))
                 (d/table {}
                          (d/tr {}
-                               (d/th {} "Pick One")
-                               (d/th {} "German")
-                               (d/th {} "English"))
-                         (apply d/div {}
-                                (map (fn [word] 
-                                     (apply d/tbody {} 
-                                            (map-indexed 
-                                             (fn [idx [g e]] 
-                                               (Search-table-row (= 0 idx) g e)) word)))
-                                     (format-entries dictionary))))
-        (d/button {:onClick handle-fn} "Submit"))))))
+                               (d/td {} "German")
+                               (d/td {} "English"))
+                         (apply d/tbody {}
+                                (map (fn [[g e]] d/tr {}
+                                        ;(d/input {:type "radio" :name "entries" :value "hello"}) (d/span {} " ")
+                                            (Search-table-row g e))
+                                     (format-entries dictionary)))))
+        (d/button {:onClick handle-fn} "Submit")))))
 
 
 
