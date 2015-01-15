@@ -8,7 +8,7 @@
                  [http-kit "2.1.16"]
                  [org.clojure/data.json "0.2.5"]
                  ;clientside dependencies
-                 [org.clojure/clojurescript "0.0-2674"]
+                 [org.clojure/clojurescript "0.0-2665"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [quiescent "0.1.4"]
                  [cljs-http "0.1.24"]]
