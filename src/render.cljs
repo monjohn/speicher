@@ -1,5 +1,6 @@
 (ns render
   (:require [cljs.core.async :refer [>!]]
+            [cljs.reader :refer [read-string]]
             [quiescent :as q :include-macros true]
             [quiescent.dom :as d]
             [clojure.walk :refer [keywordize-keys]]
@@ -7,12 +8,22 @@
 )
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
+(defn toArray [js-col]
+  (-> (clj->js [])
+      (.-slice)
+      (.call js-col)
+      (js->clj)))
 
-;; (defn clojurize-form [m]
-;;   (apply merge
-;;          (map (fn [[k v]]
-;;                 {(keyword k) (edn/read-string v)})
-;;               m)))
+
+(defn serialize-form [e]
+  (->>
+   (toArray (.-elements (.-target e)))
+   (filter #(.-checked %))
+   (reduce
+    #(let [k (.-name %2)
+           v (.-value %2)]
+       (assoc %1 k v)) {} )
+   keywordize-keys))
 
 
 (q/defcomponent Word
@@ -40,6 +51,13 @@
 (def data '("lernen | lernend | gelernt | ich lerne | du lernst | er/sie lernt | ich/er/sie lernte | er/sie hat/hatte gelernt | deutsch lernen :: to learn {learned, learnt; learned, learnt} | learning | learned; learnt | I learn | you learn | he/she learns | I/he/she learned; I/he/she learnt | he/she has/had learned; he/she has/had learnt | to learn German" "lernen; sich aneignen; aufschnappen :: to pick up"))
 
 
+(defn handle-search-submit [input-chan e]
+;; TODO: add validation so that no word less than 3 letters get submitted
+  (let [term (.-value (.getElementById js/document "term"))]
+    (go (>! input-chan [:search-term  term])))
+  false)
+
+
 (defn format-entries 
   "Takes list of entries, splits eng/ger in pairs,
   then splits the sublits and stiches them back together"
@@ -50,31 +68,24 @@
        dict))
 
 
-(defn handle-search-submit [input-chan e]
-;; TODO: add validation so that no word less than 3 letters get submitted
-  (let [term (.-value (.getElementById js/document "term"))]
-    (println (count term))
-    (go (>! input-chan [:search-term  term])))
-  false)
-
-(q/defcomponent Search-table-row [top? g e]
+(q/defcomponent Search-table-row [id top? g e]
   (d/tr {}
         (d/td {:className "check-column"}
-              (when top?  (d/input {:type "radio" :name "entries" :value "hello"}) ;(d/span {} " ")
-)
-              (d/td {} g))
+              (when top?  (d/input {:type "radio" :name "entries" :value (str id)}))
+        (d/td {} g))
         (d/td {} e)))
+
 
 (q/defcomponent Search [{:keys [input-chan dictionary]}]
   "Page to search for and add new word to list"
   (let [handle-fn (partial handle-search-submit input-chan)]
     (d/div {}
-      (d/div {}
-                  (d/input {:name "search" :id "term" :placeholder "enter new word"}))
-      (d/button {:onClick handle-fn} "Submit" )
+           (d/div {} (d/input {:name "search" :id "term" :placeholder "enter new word"})
+                  (d/button {:onClick handle-fn} "Submit" ))
       (d/br)
       (when dictionary 
-        (d/form {}
+        (d/form {:action "" 
+                 :onSubmit #(println (serialize-form %))}
                 (d/fieldset {}
                             (d/legend {} "Pick the definition which fits best"))
                 (d/table {}
@@ -83,13 +94,14 @@
                                (d/th {} "German")
                                (d/th {} "English"))
                          (apply d/div {}
-                                (map (fn [word] 
-                                     (apply d/tbody {} 
-                                            (map-indexed 
-                                             (fn [idx [g e]] 
-                                               (Search-table-row (= 0 idx) g e)) word)))
-                                     (format-entries dictionary))))
-        (d/button {:onClick handle-fn} "Submit"))))))
+                                (map-indexed (fn [i0 entry] 
+                                               (apply d/tbody {} 
+                                                      (map-indexed 
+                                                       (fn [i1 [g e]] 
+                                                         (Search-table-row i0 (= 0 i1) g e)) entry)))
+                                             (format-entries dictionary))))
+                (d/button {:type "submit"
+                           } "Submit"))))))
 
 
 

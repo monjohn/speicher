@@ -1,0 +1,5 @@
+(for [x (range) y ["a" "b" "c"]] [x y])
+(for [x (range 10) y ["a" "b" "c"]] [x y])
+(range 3)
+(range (count "123"))
+(for [x (range 5) y (range 3)] [x y])
