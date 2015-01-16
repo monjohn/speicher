@@ -82,7 +82,6 @@
         (d/td {} g)
         (d/td {} e)))
 
-
 (q/defcomponent Search [{:keys [input-chan dictionary]}]
   "Page to search for and add new word to list"
   (let [handle-search (partial handle-search-submit input-chan)
@@ -119,7 +118,7 @@
          ;  (Header nil (:submit input-chan))
          (condp = (:mode state)
            :search-page (Search state)
-           :dictionary (Search  state)
+;           :dictionary (Search  state)
            (WordTable state input-chan))))
 
 ;; Here we use an atom to tell us if we already have a render queued
