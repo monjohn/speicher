@@ -25,22 +25,34 @@
 
 (enable-console-print!)
 
+(defn test-http [state word]
+  (go (let [ch (:input-chan state)
+            response (<! (http/post "/add" {:for-params {:entry word}}))]
+(println response)))
+)
 
 (defn get-list [state kw]
   (go (let [ch (:input-chan state)
-        response (<! (http/get (str "/" kw) {:edn-params {:list kw}}
-                                  :headers {"accept" "application/edn"}))]
+        response (<! (http/get (str "/list/" kw) {:edn-params {:list kw}}))]
     (>! ch [:response response]))) 
   state)
 
 (defn lookup [state word]
   (go (let [ch (:input-chan state)
-        response (<! (http/get (str "/search/" word)
-                                 {:headers {"accept" "application/edn"}}
-                                ))]
+        response (<! (http/get (str "/search/" word)))]
     (>! ch [:definitions response])))
   state)
 
+(defn add-new-word [state entry-index]
+; (println  (get (vec (:dictionary state)) 1))
+  (go (let [entry (first (render/format-entry  
+                          (get (vec (:dictionary state)) 
+                               (read-string (:entry  entry-index)))))
+            ch (:input-chan state)
+            response (<! (http/post "/add" {:form-params {:entry entry}} ))]
+            (>! ch [:definition-added response])
+            (dissoc state :dictionary))))
+      
 
 (defn handle-response [state {:keys [status body] :as resp}]
   (->> body read-string (assoc state :list )))
@@ -76,7 +88,9 @@
                  };(or (store/load) (data/fresh))
                 )
    :functions {:nav print-entry
+               :add-new-word  add-new-word
                :definitions show-definitions
+               :definition-added print-entry
                :response handle-response
                :search-term lookup
                :answer print-entry}})

@@ -57,35 +57,43 @@
     (go (>! input-chan [:search-term  term])))
   false)
 
+(defn handle-new-word-submit [input-chan e]
+;; TODO: check if more than one word is checked
+  (let [form (serialize-form e)]
+      (go (>! input-chan [:add-new-word form ]))
+    false))
+
+(defn format-entry [entry]
+(let [pair (split entry #" :: ")]
+          (map (fn [g e] (vector g e)) (split (first pair) #" \|")
+                     (split (second pair) #" \|"))))
 
 (defn format-entries 
   "Takes list of entries, splits eng/ger in pairs,
   then splits the sublits and stiches them back together"
   [dict]
-  (map #(let [pair (split % #" :: ")]
-          (map (fn [g e] (vector g e)) (split (first pair) #" \|")
-                     (split (second pair) #" \|"))) 
-       dict))
+  (map format-entry dict))
 
 
 (q/defcomponent Search-table-row [id top? g e]
   (d/tr {}
         (d/td {:className "check-column"}
-              (when top?  (d/input {:type "radio" :name "entries" :value (str id)}))
-        (d/td {} g))
+              (when top?  (d/input {:type "radio" :name "entry" :value (str id)})))
+        (d/td {} g)
         (d/td {} e)))
 
 
 (q/defcomponent Search [{:keys [input-chan dictionary]}]
   "Page to search for and add new word to list"
-  (let [handle-fn (partial handle-search-submit input-chan)]
+  (let [handle-search (partial handle-search-submit input-chan)
+        handle-new-word (partial handle-new-word-submit input-chan)]
     (d/div {}
-           (d/div {} (d/input {:name "search" :id "term" :placeholder "enter new word"})
-                  (d/button {:onClick handle-fn} "Submit" ))
+           (d/form {} (d/input {:name "search" :id "term" :placeholder "enter new word"})
+                  (d/button {:onClick handle-search} "Submit" ))
       (d/br)
       (when dictionary 
-        (d/form {:action "" 
-                 :onSubmit #(println (serialize-form %))}
+        (d/form {:action "#" :onSubmit handle-new-word}  
+                
                 (d/fieldset {}
                             (d/legend {} "Pick the definition which fits best"))
                 (d/table {}
@@ -100,8 +108,7 @@
                                                        (fn [i1 [g e]] 
                                                          (Search-table-row i0 (= 0 i1) g e)) entry)))
                                              (format-entries dictionary))))
-                (d/button {:type "submit"
-                           } "Submit"))))))
+                (d/button {:type "submit"} "Submit"))))))
 
 
 

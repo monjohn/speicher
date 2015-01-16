@@ -54,8 +54,8 @@
      (finished :daily))))
 
 
-(defn return-data [data]
-  {:status  200
+(defn make-response [data & [status]]
+  {:status  (or status 200)
    :headers {"Content-Type" "Application/edn"}
    :body   (pr-str data)})
 
@@ -66,21 +66,28 @@
         finds
         (with-open [rdr (reader "./resources/data/de-en.txt")]
           (doall (filter  #(re-seq pattern %) (line-seq rdr))))]
-  ;  (pprint  (vec finds))
-    (return-data finds)))
+    (make-response finds)))
 
+(defn add-word [req]
+  (println req)
 
+  (let [entry  (-> req :params :entry)
+        _ (println "entry: " entry)
+        ger (first entry)
+        eng (second entry)]
+  (db/append-to-list :daily [ger eng 0 :daily])
+  (make-response "Saved" 201)))
 
 (defn list-request [req]
    (-> req  :route-params  :list
        edn/read-string
        get-list
-       return-data))
+       make-response))
 
 
 (defroutes all-routes
-  (POST "/" [] list-request)
-  (GET "/:list" [list] list-request)
+  (POST "/add" [] add-word)
+  (GET "/list/:list" [list] list-request)
   (GET "/search/:word" [word] search-for)
   (GET "/" []
     (->

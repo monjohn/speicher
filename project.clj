@@ -19,14 +19,14 @@
 
   :node-dependencies [[source-map-support "0.2.8"]]
 
-  ;:plugins [[lein-cljsbuild "1.0.4"] [lein-npm "0.4.0"]]
+  :plugins [[lein-cljsbuild "1.0.4"] [lein-npm "0.4.0"]]
 
   :repositories
   {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
 
   :source-paths ["src" "target/classes"]
 
-  :clean-targets ["out/speicher" "speicher.js" "speicher.min.js"]
+  :clean-targets ["out" "speicher.js" "speicher.min.js"]
 
   :cljsbuild {
               :builds [{:id "dev"
