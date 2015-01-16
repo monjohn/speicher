@@ -41,7 +41,7 @@
                         :source-paths ["src"]
                         :compiler {
                                    :output-to "resources/public/js/speicher.min.js"
-                                   :preamble ["react-0.10.0.min.js"]
+                                   :preamble ["react-0.10.0.js"]
                        :externs ["react-externs-0.10.0.js"]
                                    :pretty-print false
                                    :optimizations :advanced}}]})
