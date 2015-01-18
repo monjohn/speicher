@@ -35,15 +35,16 @@
                    "Recognized it")))
 
 (q/defcomponent Wordrow [row input-chan]
-  (d/tr {}
-        (d/td {} (first row))
-        (d/td {} (second row))))
+  (d/dl {}
+        (d/dt {} (first row))
+        (d/dd {} (second row))))
 
 
 (q/defcomponent WordTable
   "A list of words rendered in table"
   [state input-chan]
-  (apply d/table {}
+(println "WordTalbe: " state )
+  (apply d/div {}
          (map #(Wordrow % input-chan) (:list state))))
 
 ;; ---------- Preparing Dictionary for Display
@@ -52,13 +53,14 @@
 
 
 (defn handle-search-submit [input-chan e]
-;; TODO: add validation so that no word less than 3 letters get submitted
+;; TODO: send message when a word less than 3 letters get submitted
   (let [term (.-value (.getElementById js/document "term"))]
-    (go (>! input-chan [:search-term  term])))
+
+    (go 
+      (when (< 2 (count term)) (>! input-chan [:search-term  term]))))
   false)
 
 (defn handle-new-word-submit [input-chan e]
-;; TODO: check if more than one word is checked
   (let [form (serialize-form e)]
       (go (>! input-chan [:add-new-word form ]))
     false))
@@ -92,7 +94,6 @@
       (d/br)
       (when dictionary 
         (d/form {:action "#" :onSubmit handle-new-word}  
-                
                 (d/fieldset {}
                             (d/legend {} "Pick the definition which fits best"))
                 (d/table {}
@@ -100,7 +101,7 @@
                                (d/th {} "Pick One")
                                (d/th {} "German")
                                (d/th {} "English"))
-                         (apply d/div {}
+                         (apply d/tbody {}
                                 (map-indexed (fn [i0 entry] 
                                                (apply d/tbody {} 
                                                       (map-indexed 
@@ -110,16 +111,18 @@
                 (d/button {:type "submit"} "Submit"))))))
 
 
-
 (q/defcomponent Page
   "The root of the application"
   [state input-chan]
   (d/div {}
-         ;  (Header nil (:submit input-chan))
+         (d/span {:onClick  #(go (>! (:input-chan state) [:show-list :daily]))} "Daily")
+         (d/span {:onClick  #(go (>! (:input-chan state) [:show-list :weekly]))} "Weekly")
+         (d/span {:onClick  #(go (>! (:input-chan state) [:show-list :monthly]))} "Monthly")
+         (d/h1 nil "Deutsch lernen")
          (condp = (:mode state)
            :search-page (Search state)
 ;           :dictionary (Search  state)
-           (WordTable state input-chan))))
+           (WordTable state (:input-chan state)))))
 
 ;; Here we use an atom to tell us if we already have a render queued
 ;; up; if so, requesting another render is a no-op

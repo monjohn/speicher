@@ -31,7 +31,7 @@
 (println response)))
 )
 
-(defn get-list [state kw]
+(defn show-list [state kw]
   (go (let [ch (:input-chan state)
         response (<! (http/get (str "/list/" kw) {:edn-params {:list kw}}))]
     (>! ch [:response response]))) 
@@ -44,7 +44,6 @@
   state)
 
 (defn add-new-word [state entry-index]
-; (println  (get (vec (:dictionary state)) 1))
   (go (let [entry (first (render/format-entry  
                           (get (vec (:dictionary state)) 
                                (read-string (:entry  entry-index)))))
@@ -54,12 +53,13 @@
             (dissoc state :dictionary))))
       
 
-(defn handle-response [state {:keys [status body] :as resp}]
-  (->> body read-string (assoc state :list )))
+(defn handle-response [state {:keys [status body]}]
+  ( assoc state :list body ))
 
 (defn show-definitions [state {:keys [body]}]
   (assoc state
          :dictionary body))
+
 
 (defn init-updates
   "For every entry in a map of channel identifiers to consumers,
@@ -84,7 +84,7 @@
   "Return a map containing the initial application"
   []
   {:state (atom {:input-chan (chan)
-                 :mode :search-page
+                 :mode :show-list; :search-page
                  };(or (store/load) (data/fresh))
                 )
    :functions {:nav print-entry
@@ -93,6 +93,7 @@
                :definition-added print-entry
                :response handle-response
                :search-term lookup
+               :show-list show-list
                :answer print-entry}})
 
 (defn ^:export main
@@ -103,5 +104,6 @@
   ;  (init-history app)
     (init-updates app)
   ;  (render/request-render app)
-    (get-list @(:state app) :daily)))
+    (show-list @(:state app) :daily)
+    ))
 
