@@ -25,17 +25,23 @@
 
 (enable-console-print!)
 
-(defn test-http [state word]
-  (go (let [ch (:input-chan state)
-            response (<! (http/post "/add" {:for-params {:entry word}}))]
-(println response)))
-)
+;; (defn test-http [state word]
+;;   (go (let [ch (:input-chan state)
+;;             response (<! (http/post "/add" {:for-params {:entry word}}))]
+;; (println response)))
+;; )
 
 (defn show-list [state kw]
   (go (let [ch (:input-chan state)
         response (<! (http/get (str "/list/" kw) {:edn-params {:list kw}}))]
     (>! ch [:response response]))) 
-  state)
+  (assoc  state :mode :show-list))
+
+(defn show-search [state _]
+  (assoc state :mode :search-page))
+
+(defn show-enter [state _]
+  (assoc state :mode :enter-page))
 
 (defn lookup [state word]
   (go (let [ch (:input-chan state)
@@ -43,22 +49,27 @@
     (>! ch [:definitions response])))
   state)
 
-(defn add-new-word [state entry-index]
+(defn add-new-word [state entry]
+  (go (let [ch (:input-chan state)
+            response (<! (http/post "/add" {:form-params {:entry entry}} ))]
+        (>! ch [:definition-added response]))))
+
+(defn submit-selected [state entry-index]
   (go (let [entry (first (render/format-entry  
                           (get (vec (:dictionary state)) 
-                               (read-string (:entry  entry-index)))))
-            ch (:input-chan state)
-            response (<! (http/post "/add" {:form-params {:entry entry}} ))]
-            (>! ch [:definition-added response])
-            (dissoc state :dictionary))))
+                               (read-string (:entry  entry-index)))))]
+        (dissoc state :dictionary))))
       
+
+(defn submit-entered [state entered]
+  (add-new-word state entered)
+  state)
 
 (defn handle-response [state {:keys [status body]}]
   ( assoc state :list body ))
 
 (defn show-definitions [state {:keys [body]}]
-  (assoc state
-         :dictionary body))
+  (assoc state :dictionary body))
 
 
 (defn init-updates
@@ -88,12 +99,15 @@
                  };(or (store/load) (data/fresh))
                 )
    :functions {:nav print-entry
-               :add-new-word  add-new-word
+               :enter-page show-enter
                :definitions show-definitions
                :definition-added print-entry
                :response handle-response
                :search-term lookup
                :show-list show-list
+               :search-page show-search
+               :submit-entered  submit-entered
+               :submit-selected  submit-selected
                :answer print-entry}})
 
 (defn ^:export main
