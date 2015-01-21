@@ -14,7 +14,7 @@
 
 (def save-agent (agent nil))
 
-(defn save-data [data kw]
+(defn save-to-list [kw data]
   (let [file-name (name kw)
         tmp (str path file-name ".tmp")
         file (str path file-name ".edn")]
@@ -29,9 +29,8 @@
                     (str path file-name ".edn")))))
 
 (defn append-to-list [kw entry]
-   (-> (load-data kw)
-       (conj entry)
-       (save-data kw))
+   (->> (conj (load-data kw) entry)
+       (save-to-list kw))
    nil)
 
 ;(save-data data :daily)

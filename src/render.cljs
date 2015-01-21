@@ -4,8 +4,7 @@
             [quiescent :as q :include-macros true]
             [quiescent.dom :as d]
             [clojure.walk :refer [keywordize-keys]]
-             [clojure.string :refer [blank? capitalize split]]
-)
+             [clojure.string :refer [blank? capitalize split]])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (defn toArray [js-col]
@@ -43,9 +42,9 @@
 (q/defcomponent WordTable
   "A list of words rendered in table"
   [state input-chan]
-(println "WordTalbe: " state )
+;(println "WordTalbe: " state )
   (apply d/div {}
-         (map #(Wordrow % input-chan) (:list state))))
+         (map #(Wordrow % input-chan) (:words state))))
 
 ;; ---------- Preparing Dictionary for Display
 
@@ -70,16 +69,42 @@
     (go (>! input-chan [:submit-entered [ger eng]])))
   false)
 
-(defn format-entry [entry]
-(let [pair (split entry #" :: ")]
-          (map (fn [g e] (vector g e)) (split (first pair) #" \|")
-                     (split (second pair) #" \|"))))
-
-(defn format-entries 
-  "Takes list of entries, splits eng/ger in pairs,
+(defn format-entry   
+  "Takes entries, splits eng/ger in pairs,
   then splits the sublits and stiches them back together"
-  [dict]
+  [entry]
+  (let [pair (split entry #" :: ")]
+    (map (fn [g e] (vector g e)) (split (first pair) #" \|")
+         (split (second pair) #" \|"))))
+
+(defn format-entries [dict]
   (map format-entry dict))
+
+(defn toggle []
+  (let [g (.getElementById js/document "german")
+        e (.getElementById js/document "english")]
+    (println (aget g "style" "display"))
+
+    (if (= (aget g "style" "display")  "block")
+      (aset g "style" "display" "none" ) 
+      (aset g "style" "display" "block"))
+    
+    (if (= (aget e "style" "display")  "block")
+      (aset e "style" "display" "none" ) 
+      (aset e "style" "display" "block"))))
+    
+
+(q/defcomponent Review-Page [state]
+  (let [word (first (:words state))]
+    (d/div {:id "card"}
+           (d/div {:id "german" :style {"display" "block"}}
+                  (d/h2 nil (first word)))
+           (d/button {:onClick toggle} "Show")
+           (d/div {:id "english" :style {"display" "none"}}
+                  (d/p nil (second word))
+                  (d/button {:onClick #(go (>! (:input-chan state) [:right nil]))} "I remember")
+                  (d/button {:onClick #(go (>! (:input-chan state) [:wrong nil]))} "Wrong-o"))
+           )))
 
 
 (q/defcomponent Search-table-row [id top? g e]
@@ -89,7 +114,7 @@
         (d/td {} g)
         (d/td {} e)))
 
-(q/defcomponent Search [{:keys [input-chan dictionary]}]
+(q/defcomponent Search-Page [{:keys [input-chan dictionary]}]
   "Page to search for and add new word to list"
   (let [handle-search (partial handle-search-submit input-chan)
         handle-new-word (partial handle-new-word-submit input-chan)]
@@ -116,7 +141,7 @@
                 (d/button {:type "submit"} "Submit"))))))
 
 
-(q/defcomponent Enter-word [state]
+(q/defcomponent Enter-Page [state]
   "Page to enter a German Word and its definition if it is already known"
   (let [handle-enter-word (partial handle-enter-word-submit (:input-chan state))]
     (d/div nil
@@ -143,8 +168,9 @@
          (d/span {:onClick  #(go (>! ch [:enter-page nil]))} " Enter New Word ")
          (d/h1 nil "Deutsch lernen")
          (condp = (:mode state)
-           :search-page (Search state)
-           :enter-page (Enter-word state)
+           :enter-page (Enter-Page state)
+           :review-list (Review-Page state)
+           :search-page (Search-Page state)
            (WordTable state ch))))
 
 ;; Here we use an atom to tell us if we already have a render queued

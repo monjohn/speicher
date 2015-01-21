@@ -3,38 +3,83 @@
             [cljs.reader :refer [read-string]]
             [goog.events :as e]
             [goog.History]
-            [cljs.core.async :refer [>! <! chan]]
+            [cljs.core.async :refer [>! <!  chan]]
             [cljs-http.client :as http]
-            [render :as render]
-            )
+            [render :as render])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 ;; (repl/connect "http://localhost:9000/repl")
 
-;; (defn init-history
-;;   "Set up Google Closure history management"
-;;   [app]
-;;   (let [h (goog.History.)]
-;;     (.setEnabled h true)
-;;     (e/listen h goog.History.EventType.NAVIGATE
-;;               (fn [evt]
-;;                 (let [ch (-> app :state :input-chan)
-;;                       token (.-token evt)]
-;;                   (.setToken h token)
-;;                   (go (>! ch token)))))))
+(defn init-history
+  "Set up Google Closure history management"
+  [ch]
+  (let [h (goog.History.)]
+    (.setEnabled h true)
+    (e/listen h goog.History.EventType.NAVIGATE
+              (fn [evt]
+                (let [token (.-token evt)]
+                  (.setToken h token)
+                  (go (>! ch [:nav  token])))))))
 
 (enable-console-print!)
 
-;; (defn test-http [state word]
-;;   (go (let [ch (:input-chan state)
-;;             response (<! (http/post "/add" {:for-params {:entry word}}))]
-;; (println response)))
-;; )
+;; Going through the list of words, right or wrong, 
+;; adjusting state accordingling
+
+
+(defn fetch-list [state kw]
+  (go (let [ch (:input-chan state)
+            response (<! (http/get (str "/list/" kw) {:edn-params {:list kw}}))]
+        (>! ch [:response response]))))
+
+
+(def level-limit {:daily 6
+             :weekly 6
+             :monthly 11
+             :yearly 6})
+
+(def next-level {:daily :weekly
+                 :weekly :monthly
+                 :monthly :yearly})
+
+(defn level-complete? [level count]
+  (= (get level-limit level)
+     count))
+
+(defn level-up [state [ger eng c d]]
+  (let [next  (get next-level d)]
+    (-> state
+        (update-in [:words] rest)
+        (assoc-in [:next-level] [ger eng 0 next]))))
+
+(defn swap-entry [state entry]
+  (-> state
+      (update-in [:words] rest)
+      (assoc-in [:answered] entry)))
+
+(defn got-wrong [{:keys [words] :as state} _]
+  (swap-entry state (first words)))
+
+(defn got-right [{:keys [words] :as state} _]
+  (let [[ger eng c list-kw] (first words)]
+    (if (level-complete? list-kw c)
+      (level-up state [ger eng c list-kw])
+      (swap-entry state [ger eng (inc  c) list-kw]))))
+
+(defn review-list [state list-kw]
+  (fetch-list state list-kw)
+  (assoc state :mode :review-list 
+         :current-list list-kw
+         :answered []
+         :next-level []))
+
+;; Navigation and Communication with Server
 
 (defn show-list [state kw]
+  ;; replace all but last line with (fetch-list state kw)
   (go (let [ch (:input-chan state)
-        response (<! (http/get (str "/list/" kw) {:edn-params {:list kw}}))]
-    (>! ch [:response response]))) 
+            response (<! (http/get (str "/list/" kw) {:edn-params {:list kw}}))]
+        (>! ch [:response response]))) 
   (assoc  state :mode :show-list))
 
 (defn show-search [state _]
@@ -66,11 +111,12 @@
   state)
 
 (defn handle-response [state {:keys [status body]}]
-  ( assoc state :list body ))
+  ( assoc state :words body ))
 
 (defn show-definitions [state {:keys [body]}]
   (assoc state :dictionary body))
 
+;; Initial set up
 
 (defn init-updates
   "For every entry in a map of channel identifiers to consumers,
@@ -95,29 +141,32 @@
   "Return a map containing the initial application"
   []
   {:state (atom {:input-chan (chan)
-                 :mode :show-list; :search-page
+                 :mode :review-list
+                 :current-list :daily
                  };(or (store/load) (data/fresh))
                 )
-   :functions {:nav print-entry
-               :enter-page show-enter
+   :functions {:enter-page show-enter
                :definitions show-definitions
                :definition-added print-entry
                :response handle-response
+               :review-list review-list
+               :right got-right
+               :wrong got-wrong
                :search-term lookup
                :show-list show-list
                :search-page show-search
                :submit-entered  submit-entered
                :submit-selected  submit-selected
-               :answer print-entry}})
+               :nav print-entry}})
 
 (defn ^:export main
   "Application entry point"
   []
-  (let [app (load-app)]
+  (let [app (load-app)
+        state @(:state app)]
     ; (store/init-persistence app)
-  ;  (init-history app)
+    (init-history (:input-chan state))
     (init-updates app)
-  ;  (render/request-render app)
-    (show-list @(:state app) :daily)
+    (render/request-render state )
+    (go (>! (:input-chan state) [:review-list :daily]))
     ))
-

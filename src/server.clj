@@ -13,10 +13,12 @@
 
 (def current-list (atom []))
 
-(def level-limit {:daily 6
-             :weekly 6
-             :monthly 11
-             :yearly 6})
+(defn make-response [data & [status]]
+  {:status  (or status 200)
+   :headers {"Content-Type" "Application/edn"}
+   :body   (pr-str data)})
+
+
 
 (def next-level {:daily :weekly
                  :weekly :monthly
@@ -25,39 +27,34 @@
 (defn get-list [kw]
   (db/load-data kw))
 
-(defn level-complete? [level count]
-  (= (get level-limit level)
-       count))
 
-(defn level-up [[a b c d]]
-  (let [next-level  (get next-level d)]
-    (db/append-to-list next-level [a b 0 next-level])))
-
-(defn is-correct [[a b c d]]
-  (if (level-complete? d c)
-    (level-up [a b c d])
-    [a b (inc  c) d]))
+;; (defn test-list []
+;;   (let [words (get-list :daily)]
+;;     (->>
+;;      (map (fn [entry t-f]
+;;             (if-not t-f entry
+;;                     (is-correct entry))) words (cycle [true false]))
+;;      (filter (comp not nil?) )
+;;      (finished :daily))))
 
 
 
-(defn finished [kw data]
-  (db/save-data data :daily)
-  (println "You have completed the list. Ready for the next?"))
-
-(defn test-list []
-  (let [list (get-list :daily)]
-    (->>
-     (map (fn [entry t-f]
-            (if-not t-f entry
-                    (is-correct entry))) list (cycle [true false]))
-     (filter (comp not nil?) )
-     (finished :daily))))
-
-
-(defn make-response [data & [status]]
-  {:status  (or status 200)
-   :headers {"Content-Type" "Application/edn"}
-   :body   (pr-str data)})
+(defn save-list
+  "Checks data is a map, save current list, if sequential, save current list,
+  then append the entries in the next-level list"
+  ;; TODO: Get rid of check and receive a vector of current list, and entries for next-level,
+  ;; just be sure to check for nil in second entry
+  [req]
+  "checks if data has more than one list to save, otherwise saves single list"
+  (let [kw (-> req :route-params :list)
+        data (:params req)]
+    (println "kw: " kw)
+    (println "data: " data)
+    (if (sequential? data)
+      (do
+        (db/save-to-list kw (first data))
+        (map #(db/append-to-list (get next-level kw) (second data  )))))
+    (make-response "Saved" 201)))
 
 (defn search-for [req]
   (let [word (-> req :params :word)
@@ -68,15 +65,14 @@
           (doall (filter  #(re-seq pattern %) (line-seq rdr))))]
     (make-response finds)))
 
-(defn add-word [req]
-  (println req)
 
+(defn add-new-word [req]
   (let [entry  (-> req :params :entry)
-        _ (println "entry: " entry)
         ger (first entry)
         eng (second entry)]
   (db/append-to-list :daily [ger eng 0 :daily])
   (make-response "Saved" 201)))
+
 
 (defn list-request [req]
    (-> req  :route-params  :list
@@ -86,7 +82,8 @@
 
 
 (defroutes all-routes
-  (POST "/add" [] add-word)
+  (POST "/add" [] add-new-word)
+  (POST "/save/:list" [list] save-list)
   (GET "/list/:list" [list] list-request)
   (GET "/search/:word" [word] search-for)
   (GET "/" []
