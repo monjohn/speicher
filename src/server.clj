@@ -44,16 +44,13 @@
 (defn save-list
   "Checks data is a map, save current list, if sequential, save current list,
   then append the entries in the next-level list"
-  ;; TODO: Get rid of check and receive a vector of current list, and entries for next-level,
   [{:keys [edn-params route-params]}]
   (let [kw (:current-list edn-params)
         next-list (:next-list edn-params)]
-    (println "data: " edn-params)
     (db/save-to-list kw (:answered edn-params))
-  ;  (when (seq next-list)
-      (db/append-to-list (get next-level kw) next-list)
-  (make-response "Saved" 201)))
-;)
+    (when (seq next-list)
+      (db/append-to-list (get next-level kw) next-list))
+    (make-response "Saved" 201)))
 
 (defn search-for [req]
   (let [word (-> req :params :word)
@@ -82,7 +79,7 @@
 
 (defroutes all-routes
   (POST "/add" [] add-new-word)
-  (POST "/save/:list" [list] save-list)
+  (POST "/save" [list] save-list)
   (GET "/list/:list" [list] list-request)
   (GET "/search/:word" [word] search-for)
   (GET "/" []

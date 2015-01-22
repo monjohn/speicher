@@ -42,17 +42,14 @@
                  :weekly :monthly
                  :monthly :yearly})
 
-(defn finished? [state]
-  (nil? (seq (:words state))))
 
 (defn finished-list [{:keys [answered next-list current-list input-chan] 
                       :as state}]
-  (println state)
-  (go (let [response (<! (http/post (str  "/save/" current-list) 
+  (go (let [response (<! (http/post "/save" 
                                     {:edn-params {:current-list current-list
                                                   :answered answered 
                                                   :next-list next-list}}))]
-        (>! input-chan [:saved-list response]))))
+         (>! input-chan [:saved-list response]))))
 
 (defn level-complete? [level count]
   (= (get level-limit level)
@@ -78,13 +75,18 @@
       (level-up state [ger eng c list-kw])
       (words->answered state [ger eng (inc  c) list-kw]))))
 
+(defn finished? [state]
+  (not (seq (:words state))))
+
 (defn answer [state r-or-w]
   (let [updated (if (= r-or-w :right)
-                   (got-right state)
-                   (got-wrong state))]
-      (when (finished? state) 
-        (finished-list updated))
-      updated))
+                  (got-right state)
+                  (got-wrong state))]
+    (if  (finished? updated)
+      (do
+        (finished-list updated)
+        (assoc updated :mode :next))
+      updated)))
 
 (defn review-list [state list-kw]
   (fetch-list state list-kw)
@@ -96,11 +98,8 @@
 ;; Navigation and Communication with Server
 
 (defn show-list [state kw]
-  ;; TODO: replace all but last line with (fetch-list state kw)
-  (go (let [ch (:input-chan state)
-            response (<! (http/get (str "/list/" kw) {:edn-params {:list kw}}))]
-        (>! ch [:response response]))) 
-  (assoc  state :mode :show-list))
+  (do (fetch-list state kw)
+   (assoc  state :mode :show-list)))
 
 (defn show-search [state _]
   (assoc state :mode :search-page))

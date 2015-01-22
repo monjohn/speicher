@@ -93,6 +93,7 @@
     
 ;; TODO: Check for empty list and save
 (q/defcomponent ReviewPage [state]
+(println "mode: " (:mode state))
   (let [word (first (:words state))]
     (d/div {:id "card"}
            (d/div {:id "german" :style {"display" "block"}}
@@ -154,6 +155,8 @@
                              :id "eng"
                              :placeholder "English Definition"})
                    (d/button {:type "submit"} "Submit")))))
+(q/defcomponent NextPage [state]
+  (d/h3 nil "Choose another list"))
 
 (q/defcomponent Page
   "The root of the application"
@@ -168,6 +171,7 @@
          (condp = (:mode state)
            :enter-page (EnterPage state)
            :review-list (ReviewPage state)
+           :next (NextPage state)
            :search-page (SearchPage state)
            (WordTable state ch))))
 
