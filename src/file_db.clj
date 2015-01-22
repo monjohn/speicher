@@ -3,13 +3,11 @@
 
 (def path "./resources/data/")
 
-
 (def data
    [["Tag" "day" 6 :daily]
      ["Woche" "week" 2 :daily ]
      ["Monat" "month" 3 :daily ]
      ["Jahr" "year" 2 :daily ]])
-
 
 
 (def save-agent (agent nil))
@@ -29,9 +27,9 @@
                     (str path file-name ".edn")))))
 
 (defn append-to-list [kw entry]
-   (->> (conj (load-data kw) entry)
-       (save-to-list kw))
-   nil)
+  (println "entry " entry)
+   (->> (concat (load-data kw) entry)
+       (save-to-list kw)))
 
 ;(save-data data :daily)
 

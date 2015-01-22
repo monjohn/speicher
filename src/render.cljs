@@ -7,6 +7,8 @@
              [clojure.string :refer [blank? capitalize split]])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
+(def data '("lernen | lernend | gelernt | ich lerne | du lernst | er/sie lernt | ich/er/sie lernte | er/sie hat/hatte gelernt | deutsch lernen :: to learn {learned, learnt; learned, learnt} | learning | learned; learnt | I learn | you learn | he/she learns | I/he/she learned; I/he/she learnt | he/she has/had learned; he/she has/had learnt | to learn German" "lernen; sich aneignen; aufschnappen :: to pick up"))
+
 (defn toArray [js-col]
   (-> (clj->js [])
       (.-slice)
@@ -48,7 +50,6 @@
 
 ;; ---------- Preparing Dictionary for Display
 
-(def data '("lernen | lernend | gelernt | ich lerne | du lernst | er/sie lernt | ich/er/sie lernte | er/sie hat/hatte gelernt | deutsch lernen :: to learn {learned, learnt; learned, learnt} | learning | learned; learnt | I learn | you learn | he/she learns | I/he/she learned; I/he/she learnt | he/she has/had learned; he/she has/had learnt | to learn German" "lernen; sich aneignen; aufschnappen :: to pick up"))
 
 
 (defn handle-search-submit [input-chan e]
@@ -83,18 +84,15 @@
 (defn toggle []
   (let [g (.getElementById js/document "german")
         e (.getElementById js/document "english")]
-    (println (aget g "style" "display"))
-
     (if (= (aget g "style" "display")  "block")
       (aset g "style" "display" "none" ) 
       (aset g "style" "display" "block"))
-    
     (if (= (aget e "style" "display")  "block")
       (aset e "style" "display" "none" ) 
       (aset e "style" "display" "block"))))
     
-
-(q/defcomponent Review-Page [state]
+;; TODO: Check for empty list and save
+(q/defcomponent ReviewPage [state]
   (let [word (first (:words state))]
     (d/div {:id "card"}
            (d/div {:id "german" :style {"display" "block"}}
@@ -102,46 +100,46 @@
            (d/button {:onClick toggle} "Show")
            (d/div {:id "english" :style {"display" "none"}}
                   (d/p nil (second word))
-                  (d/button {:onClick #(go (>! (:input-chan state) [:right nil]))} "I remember")
-                  (d/button {:onClick #(go (>! (:input-chan state) [:wrong nil]))} "Wrong-o"))
+                  (d/button {:onClick #( go (toggle) (>! (:input-chan state) [:answer :right])
+                                        )} "I remember")
+                  (d/button {:onClick #(go (>! (:input-chan state) [:answer :wrong]))} "Wrong-o"))
            )))
 
 
-(q/defcomponent Search-table-row [id top? g e]
-  (d/tr {}
-        (d/td {:className "check-column"}
+(q/defcomponent SearchTableRow [id top? g e]
+  (d/div {}
+        (d/span {:className "check-column"}
               (when top?  (d/input {:type "radio" :name "entry" :value (str id)})))
-        (d/td {} g)
-        (d/td {} e)))
+        (d/span {} g)
+        (d/span {} e)))
 
-(q/defcomponent Search-Page [{:keys [input-chan dictionary]}]
+(q/defcomponent SearchPage [{:keys [input-chan dictionary]}]
   "Page to search for and add new word to list"
   (let [handle-search (partial handle-search-submit input-chan)
         handle-new-word (partial handle-new-word-submit input-chan)]
     (d/div {}
            (d/form {} (d/input {:name "search" :id "term" :placeholder "enter new word"})
-                  (d/button {:onClick handle-search} "Submit" ))
-      (d/br)
-      (when dictionary 
-        (d/form {:action "#" :onSubmit handle-new-word}  
-                (d/fieldset {}
-                            (d/legend {} "Pick the definition which fits best"))
-                (d/table {}
-                         (d/tr {}
-                               (d/th {} "Pick One")
-                               (d/th {} "German")
-                               (d/th {} "English"))
-                         (apply d/tbody {}
-                                (map-indexed (fn [i0 entry] 
-                                               (apply d/tbody {} 
-                                                      (map-indexed 
-                                                       (fn [i1 [g e]] 
-                                                         (Search-table-row i0 (= 0 i1) g e)) entry)))
-                                             (format-entries dictionary))))
-                (d/button {:type "submit"} "Submit"))))))
+                   (d/button {:onClick handle-search} "Submit" )
+                   (d/br)
+                   (when dictionary 
+                     (d/form {:action "#" :onSubmit handle-new-word}  
+                             (d/fieldset {}
+                                         (d/legend {} "Pick the definition which fits best")
+                                         (d/p {}
+                                              (d/span {} "Pick One ")
+                                              (d/span {} "German ")
+                                              (d/span {} "English "))
+                                         (apply d/div {}
+                                                (map-indexed (fn [i0 entry] 
+                                                               (apply d/p {} 
+                                                                      (map-indexed 
+                                                                       (fn [i1 [g e]] 
+                                                                         (SearchTableRow i0 (zero? i1) g e)) entry)))
+                                                             (format-entries dictionary))))))
+                   (d/button {:type "submit"} "Submit")))))
 
 
-(q/defcomponent Enter-Page [state]
+(q/defcomponent EnterPage [state]
   "Page to enter a German Word and its definition if it is already known"
   (let [handle-enter-word (partial handle-enter-word-submit (:input-chan state))]
     (d/div nil
@@ -168,9 +166,9 @@
          (d/span {:onClick  #(go (>! ch [:enter-page nil]))} " Enter New Word ")
          (d/h1 nil "Deutsch lernen")
          (condp = (:mode state)
-           :enter-page (Enter-Page state)
-           :review-list (Review-Page state)
-           :search-page (Search-Page state)
+           :enter-page (EnterPage state)
+           :review-list (ReviewPage state)
+           :search-page (SearchPage state)
            (WordTable state ch))))
 
 ;; Here we use an atom to tell us if we already have a render queued

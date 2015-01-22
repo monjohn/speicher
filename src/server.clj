@@ -4,9 +4,11 @@
         [compojure.route :only [files not-found]]
         [compojure.handler :only [site]] ; form, query params decode; cookie; session, etc
         [compojure.core :only [defroutes GET POST DELETE ANY context]]
+        [ring.middleware.edn]
         [org.httpkit.server]
         [org.httpkit.client :only [get] :rename {get http-get}])
   (:require [ring.middleware.reload :as reload]
+
             [clojure.data.json :as json]
             [clojure.edn :as edn]
             [file-db :as db]))
@@ -37,24 +39,21 @@
 ;;      (filter (comp not nil?) )
 ;;      (finished :daily))))
 
-
+; curl -X POST -H "Content-Type: application/edn" http://localhost:8080/save/:daily -d "{:data [{:db-name scratch} ["ger" "eng" 0 :daily]]}"
 
 (defn save-list
   "Checks data is a map, save current list, if sequential, save current list,
   then append the entries in the next-level list"
   ;; TODO: Get rid of check and receive a vector of current list, and entries for next-level,
-  ;; just be sure to check for nil in second entry
-  [req]
-  "checks if data has more than one list to save, otherwise saves single list"
-  (let [kw (-> req :route-params :list)
-        data (:params req)]
-    (println "kw: " kw)
-    (println "data: " data)
-    (if (sequential? data)
-      (do
-        (db/save-to-list kw (first data))
-        (map #(db/append-to-list (get next-level kw) (second data  )))))
-    (make-response "Saved" 201)))
+  [{:keys [edn-params route-params]}]
+  (let [kw (:current-list edn-params)
+        next-list (:next-list edn-params)]
+    (println "data: " edn-params)
+    (db/save-to-list kw (:answered edn-params))
+  ;  (when (seq next-list)
+      (db/append-to-list (get next-level kw) next-list)
+  (make-response "Saved" 201)))
+;)
 
 (defn search-for [req]
   (let [word (-> req :params :word)
@@ -100,7 +99,9 @@
 
 (defn handler []
   (if (= :dev :dev)
-    (reload/wrap-reload (site #'all-routes)) ;; only reload when dev
+    (->  (site #'all-routes)
+         reload/wrap-reload
+         wrap-edn-params) ;; only reload when dev
     (site all-routes)))
 
 (defn -main [& args]

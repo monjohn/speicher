@@ -42,6 +42,18 @@
                  :weekly :monthly
                  :monthly :yearly})
 
+(defn finished? [state]
+  (nil? (seq (:words state))))
+
+(defn finished-list [{:keys [answered next-list current-list input-chan] 
+                      :as state}]
+  (println state)
+  (go (let [response (<! (http/post (str  "/save/" current-list) 
+                                    {:edn-params {:current-list current-list
+                                                  :answered answered 
+                                                  :next-list next-list}}))]
+        (>! input-chan [:saved-list response]))))
+
 (defn level-complete? [level count]
   (= (get level-limit level)
      count))
@@ -50,33 +62,41 @@
   (let [next  (get next-level d)]
     (-> state
         (update-in [:words] rest)
-        (assoc-in [:next-level] [ger eng 0 next]))))
+        (update-in [:next-list] conj [ger eng 0 next]))))
 
-(defn swap-entry [state entry]
+(defn words->answered [state entry]
   (-> state
       (update-in [:words] rest)
-      (assoc-in [:answered] entry)))
+      (update-in [:answered] conj entry)))
 
-(defn got-wrong [{:keys [words] :as state} _]
-  (swap-entry state (first words)))
+(defn got-wrong [{:keys [words] :as state}]
+  (words->answered state (first words)))
 
-(defn got-right [{:keys [words] :as state} _]
+(defn got-right [{:keys [words] :as state}]
   (let [[ger eng c list-kw] (first words)]
     (if (level-complete? list-kw c)
       (level-up state [ger eng c list-kw])
-      (swap-entry state [ger eng (inc  c) list-kw]))))
+      (words->answered state [ger eng (inc  c) list-kw]))))
+
+(defn answer [state r-or-w]
+  (let [updated (if (= r-or-w :right)
+                   (got-right state)
+                   (got-wrong state))]
+      (when (finished? state) 
+        (finished-list updated))
+      updated))
 
 (defn review-list [state list-kw]
   (fetch-list state list-kw)
   (assoc state :mode :review-list 
          :current-list list-kw
          :answered []
-         :next-level []))
+         :next-list []))
 
 ;; Navigation and Communication with Server
 
 (defn show-list [state kw]
-  ;; replace all but last line with (fetch-list state kw)
+  ;; TODO: replace all but last line with (fetch-list state kw)
   (go (let [ch (:input-chan state)
             response (<! (http/get (str "/list/" kw) {:edn-params {:list kw}}))]
         (>! ch [:response response]))) 
@@ -92,7 +112,7 @@
   (go (let [ch (:input-chan state)
         response (<! (http/get (str "/search/" word)))]
     (>! ch [:definitions response])))
-  state)
+  (dissoc state :dictionary))
 
 (defn add-new-word [state entry]
   (go (let [ch (:input-chan state)
@@ -145,13 +165,13 @@
                  :current-list :daily
                  };(or (store/load) (data/fresh))
                 )
-   :functions {:enter-page show-enter
+   :functions {:answer answer
+               :enter-page show-enter
                :definitions show-definitions
                :definition-added print-entry
                :response handle-response
                :review-list review-list
-               :right got-right
-               :wrong got-wrong
+               :saved-list print-entry
                :search-term lookup
                :show-list show-list
                :search-page show-search

@@ -5,6 +5,7 @@
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [compojure "1.2.1"]
                  [ring/ring "1.3.0"]
+                 [fogus/ring-edn "0.2.0"]
                  [http-kit "2.1.16"]
                  [org.clojure/data.json "0.2.5"]
                  ;clientside dependencies
