@@ -12,7 +12,8 @@
                  [org.clojure/clojurescript "0.0-2665"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [quiescent "0.1.4"]
-                 [cljs-http "0.1.24"]]
+                 [cljs-http "0.1.24"]
+                 [figwheel "0.2.2-SNAPSHOT"]]
 
   :target-path "target/%s"
   :main ^{:skip-aot true} server
@@ -20,7 +21,9 @@
 
   :node-dependencies [[source-map-support "0.2.8"]]
 
-  :plugins [[lein-cljsbuild "1.0.4"] [lein-npm "0.4.0"]]
+  :plugins [[lein-cljsbuild "1.0.4"]
+            [lein-npm "0.4.0"]
+            [lein-figwheel "0.2.2-SNAPSHOT"]]
 
   :repositories
   {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}

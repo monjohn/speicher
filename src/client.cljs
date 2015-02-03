@@ -2,6 +2,7 @@
   (:require [clojure.browser.repl :as repl]
             [cljs.reader :refer [read-string]]
             [goog.events :as e]
+            [figwheel.client :as fw]
             [goog.History]
             [cljs.core.async :refer [>! <!  chan]]
             [cljs-http.client :as http]
@@ -9,6 +10,11 @@
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 ;; (repl/connect "http://localhost:9000/repl")
+
+(fw/start {
+  :websocket-url   "ws://localhost:3449/figwheel-ws"
+  :on-jsload (fn [] (print "reloaded"))
+})
 
 (defn init-history
   "Set up Google Closure history management"
@@ -23,7 +29,7 @@
 
 (enable-console-print!)
 
-;; Going through the list of words, right or wrong, 
+;; Going through the list of words, right or wrong,
 ;; adjusting state accordingling
 
 
@@ -31,6 +37,15 @@
   (go (let [ch (:input-chan state)
             response (<! (http/get (str "/list/" kw) {:edn-params {:list kw}}))]
         (>! ch [:response response]))))
+
+;; (defn fetch-list
+;;   "For client-side development purposes only"
+;;   [state kw]
+;;   (let [data
+;;     [["Anlässlich" "on the occasion of" 0 :daily] ["Jahr" "year" 0 :daily] ["erwägen" "consider" 0 :daily]]
+;;   ]
+;;         (go (>! (:input-chan state) [:response {:body data}]))))
+
 
 
 (def level-limit {:daily 6
@@ -43,11 +58,11 @@
                  :monthly :yearly})
 
 
-(defn finished-list [{:keys [answered next-list current-list input-chan] 
+(defn finished-list [{:keys [answered next-list current-list input-chan]
                       :as state}]
-  (go (let [response (<! (http/post "/save" 
+  (go (let [response (<! (http/post "/save"
                                     {:edn-params {:current-list current-list
-                                                  :answered answered 
+                                                  :answered answered
                                                   :next-list next-list}}))]
          (>! input-chan [:saved-list response]))))
 
@@ -90,7 +105,7 @@
 
 (defn review-list [state list-kw]
   (fetch-list state list-kw)
-  (assoc state :mode :review-list 
+  (assoc state :mode :review-list
          :current-list list-kw
          :answered []
          :next-list []))
@@ -119,17 +134,18 @@
         (>! ch [:definition-added response]))))
 
 (defn submit-selected [state entry-index]
-  (go (let [entry (first (render/format-entry  
-                          (get (vec (:dictionary state)) 
+  (go (let [entry (first (render/format-entry
+                          (get (vec (:dictionary state))
                                (read-string (:entry  entry-index)))))]
         (dissoc state :dictionary))))
-      
+
 
 (defn submit-entered [state entered]
   (add-new-word state entered)
   state)
 
 (defn handle-response [state {:keys [status body]}]
+ ; (println "handle response: " (assoc state :words body))
   ( assoc state :words body ))
 
 (defn show-definitions [state {:keys [body]}]

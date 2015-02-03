@@ -55,7 +55,7 @@
 (defn handle-search-submit [input-chan e]
 ;; TODO: send message when a word less than 3 letters get submitted
   (let [term (.-value (.getElementById js/document "term"))]
-    (go 
+    (go
       (when (< 2 (count term)) (>! input-chan [:search-term  term]))))
   false)
 
@@ -70,7 +70,7 @@
     (go (>! input-chan [:submit-entered [ger eng]])))
   false)
 
-(defn format-entry   
+(defn format-entry
   "Takes entries, splits eng/ger in pairs,
   then splits the sublits and stiches them back together"
   [entry]
@@ -85,25 +85,27 @@
   (let [g (.getElementById js/document "german")
         e (.getElementById js/document "english")]
     (if (= (aget g "style" "display")  "block")
-      (aset g "style" "display" "none" ) 
+      (aset g "style" "display" "none" )
       (aset g "style" "display" "block"))
     (if (= (aget e "style" "display")  "block")
-      (aset e "style" "display" "none" ) 
+      (aset e "style" "display" "none" )
       (aset e "style" "display" "block"))))
-    
+
 ;; TODO: Check for empty list and save
 (q/defcomponent ReviewPage [state]
-(println "mode: " (:mode state))
+;(println "ReviewPage: " (:words state))
   (let [word (first (:words state))]
     (d/div {:id "card"}
            (d/div {:id "german" :style {"display" "block"}}
-                  (d/h2 nil (first word)))
-           (d/button {:onClick toggle} "Show")
+                  (d/h2 nil (first word))
+                  (d/button {:onClick toggle} "Show"))
+
            (d/div {:id "english" :style {"display" "none"}}
                   (d/p nil (second word))
-                  (d/button {:onClick #( go (toggle) (>! (:input-chan state) [:answer :right])
-                                        )} "I remember")
-                  (d/button {:onClick #(go (>! (:input-chan state) [:answer :wrong]))} "Wrong-o"))
+                  (d/button {:onClick #(go (toggle)
+                                         (>! (:input-chan state) [:answer :right]) )} "I remember")
+                  (d/button {:onClick #(go (toggle)
+                                           (>! (:input-chan state) [:answer :wrong]))} "Wrong-o"))
            )))
 
 
@@ -122,8 +124,8 @@
            (d/form {} (d/input {:name "search" :id "term" :placeholder "enter new word"})
                    (d/button {:onClick handle-search} "Submit" )
                    (d/br)
-                   (when dictionary 
-                     (d/form {:action "#" :onSubmit handle-new-word}  
+                   (when dictionary
+                     (d/form {:action "#" :onSubmit handle-new-word}
                              (d/fieldset {}
                                          (d/legend {} "Pick the definition which fits best")
                                          (d/p {}
@@ -131,10 +133,10 @@
                                               (d/span {} "German ")
                                               (d/span {} "English "))
                                          (apply d/div {}
-                                                (map-indexed (fn [i0 entry] 
-                                                               (apply d/p {} 
-                                                                      (map-indexed 
-                                                                       (fn [i1 [g e]] 
+                                                (map-indexed (fn [i0 entry]
+                                                               (apply d/p {}
+                                                                      (map-indexed
+                                                                       (fn [i1 [g e]]
                                                                          (SearchTableRow i0 (zero? i1) g e)) entry)))
                                                              (format-entries dictionary))))))
                    (d/button {:type "submit"} "Submit")))))
@@ -161,6 +163,7 @@
 (q/defcomponent Page
   "The root of the application"
   [state ch]
+  (println state)
   (d/div {}
          (d/span {:onClick  #(go (>! ch [:show-list :daily]))} "Daily ")
          (d/span {:onClick  #(go (>! ch [:show-list :weekly]))} "Weekly ")

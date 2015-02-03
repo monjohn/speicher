@@ -1,0 +1,45 @@
+Figwheel: focusing on build-ids (dev)
+[0mCompiling "resources/public/js/speicher.js" from ["src"]...
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 0.154 seconds.[0m
+notifying browser that file changed:  /js/speicher.js
+notifying browser that file changed:  /js/out/goog/deps.js
+notifying browser that file changed:  /js/out/client.js
+notifying browser that file changed:  /js/out/render.js
+[0mCompiling "resources/public/js/speicher.js" from ["src"]...
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 0.889 seconds.[0m
+notifying browser that file changed:  /js/out/client.js
+[0mCompiling "resources/public/js/speicher.js" from ["src"]...
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 0.622 seconds.[0m
+notifying browser that file changed:  /js/out/client.js
+[0mCompiling "resources/public/js/speicher.js" from ["src"]...
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 0.575 seconds.[0m
+notifying browser that file changed:  /js/out/client.js
+[0mCompiling "resources/public/js/speicher.js" from ["src"]...
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 0.639 seconds.[0m
+notifying browser that file changed:  /js/out/render.js
+[0mCompiling "resources/public/js/speicher.js" from ["src"]...
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 0.59 seconds.[0m
+notifying browser that file changed:  /js/out/render.js
+[0mCompiling "resources/public/js/speicher.js" from ["src"]...
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 0.577 seconds.[0m
+notifying browser that file changed:  /js/out/client.js
+[0mCompiling "resources/public/js/speicher.js" from ["src"]...
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 0.58 seconds.[0m
+notifying browser that file changed:  /js/out/client.js
+Figwheel: focusing on build-ids (dev)
+[0mCompiling "resources/public/js/speicher.js" from ["src"]...
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 0.159 seconds.[0m
+notifying browser that file changed:  /js/speicher.js
+notifying browser that file changed:  /js/out/goog/deps.js
+notifying browser that file changed:  /js/out/client.js
+notifying browser that file changed:  /js/out/render.js
+[0mCompiling "resources/public/js/speicher.js" from ["src"]...
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 0.169 seconds.[0m
+notifying browser that file changed:  /js/out/client.js
+Figwheel: focusing on build-ids (dev)
+[0mCompiling "resources/public/js/speicher.js" from ["src"]...
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 0.161 seconds.[0m
+notifying browser that file changed:  /js/speicher.js
+notifying browser that file changed:  /js/out/goog/deps.js
+notifying browser that file changed:  /js/out/client.js
+notifying browser that file changed:  /js/out/render.js
