@@ -4,3 +4,4 @@ out/
 .lein-repl-history
 *-init.clj
 figweel_server.log
+bower_components/
