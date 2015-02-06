@@ -3,3 +3,4 @@ resources/public/js/out/
 out/
 .lein-repl-history
 *-init.clj
+figweel_server.log

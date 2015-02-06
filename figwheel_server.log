@@ -43,3 +43,12 @@ notifying browser that file changed:  /js/speicher.js
 notifying browser that file changed:  /js/out/goog/deps.js
 notifying browser that file changed:  /js/out/client.js
 notifying browser that file changed:  /js/out/render.js
+[0mCompiling "resources/public/js/speicher.js" from ["src"]...
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 0.302 seconds.[0m
+notifying browser that file changed:  /js/out/client.js
+[0mCompiling "resources/public/js/speicher.js" from ["src"]...
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 0.922 seconds.[0m
+notifying browser that file changed:  /js/out/client.js
+[0mCompiling "resources/public/js/speicher.js" from ["src"]...
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 0.66 seconds.[0m
+notifying browser that file changed:  /js/out/render.js

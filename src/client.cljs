@@ -11,21 +11,21 @@
 
 ;; (repl/connect "http://localhost:9000/repl")
 
-(fw/start {
-  :websocket-url   "ws://localhost:3449/figwheel-ws"
-  :on-jsload (fn [] (print "reloaded"))
-})
+;; (fw/start {
+;;   :websocket-url   "ws://localhost:3449/figwheel-ws"
+;;   :on-jsload (fn [] (print "reloaded"))
+;; })
 
-(defn init-history
-  "Set up Google Closure history management"
-  [ch]
-  (let [h (goog.History.)]
-    (.setEnabled h true)
-    (e/listen h goog.History.EventType.NAVIGATE
-              (fn [evt]
-                (let [token (.-token evt)]
-                  (.setToken h token)
-                  (go (>! ch [:nav  token])))))))
+;; (defn init-history
+;;   "Set up Google Closure history management"
+;;   [ch]
+;;   (let [h (goog.History.)]
+;;     (.setEnabled h true)
+;;     (e/listen h goog.History.EventType.NAVIGATE
+;;               (fn [evt]
+;;                 (let [token (.-token evt)]
+;;                   (.setToken h token)
+;;                   (go (>! ch [:nav  token])))))))
 
 (enable-console-print!)
 
@@ -175,9 +175,17 @@
 (defn load-app
   "Return a map containing the initial application"
   []
+  (let [f7 (js/Framework7.)
+        main (.addView f7 ".view-main" #js {;:dynamicNavbar true
+
+                                            })
+        ]
   {:state (atom {:input-chan (chan)
                  :mode :review-list
                  :current-list :daily
+                 :router router
+                 :f7 f7
+                 :main-view main
                  };(or (store/load) (data/fresh))
                 )
    :functions {:answer answer
@@ -192,7 +200,7 @@
                :search-page show-search
                :submit-entered  submit-entered
                :submit-selected  submit-selected
-               :nav print-entry}})
+               :nav print-entry}}))
 
 (defn ^:export main
   "Application entry point"
@@ -200,7 +208,7 @@
   (let [app (load-app)
         state @(:state app)]
     ; (store/init-persistence app)
-    (init-history (:input-chan state))
+ ;   (init-history (:input-chan state))
     (init-updates app)
     (render/request-render state )
     (go (>! (:input-chan state) [:review-list :daily]))

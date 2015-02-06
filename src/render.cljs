@@ -4,7 +4,7 @@
             [quiescent :as q :include-macros true]
             [quiescent.dom :as d]
             [clojure.walk :refer [keywordize-keys]]
-             [clojure.string :refer [blank? capitalize split]])
+            [clojure.string :refer [blank? capitalize split]])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (def data '("lernen | lernend | gelernt | ich lerne | du lernst | er/sie lernt | ich/er/sie lernte | er/sie hat/hatte gelernt | deutsch lernen :: to learn {learned, learnt; learned, learnt} | learning | learned; learnt | I learn | you learn | he/she learns | I/he/she learned; I/he/she learnt | he/she has/had learned; he/she has/had learnt | to learn German" "lernen; sich aneignen; aufschnappen :: to pick up"))
@@ -27,6 +27,19 @@
    keywordize-keys))
 
 
+(q/defcomponent Nav [state title]
+  (d/div {:className "navbar"}
+         (d/div {:className "navbar-inner"}
+                (d/div {:className "left"}
+                       (d/a {:href "#" :className "back link"}
+                            (d/i {:className "icon icon-back"})
+                            (d/span nil "Back")))
+                (d/div {:className "center" :style {:left "22px"}
+                        } title )
+                (d/div {:className "right"}
+                       (d/a {:href "contact.html" :className "link icon-only"}
+                            (d/i {:className "icon icon-plus"}"+"))))))
+
 (q/defcomponent Word
   "The components for the words"
   [state input-chan]
@@ -36,32 +49,37 @@
                    "Recognized it")))
 
 (q/defcomponent Wordrow [row input-chan]
-  (d/dl {}
-        (d/dt {} (first row))
-        (d/dd {} (second row))))
+  (d/div {}
+         (d/dt {} (first row))
+         (d/dd {} (second row))))
 
 
 (q/defcomponent WordTable
   "A list of words rendered in table"
   [state input-chan]
-;(println "WordTalbe: " state )
-  (apply d/div {}
-         (map #(Wordrow % input-chan) (:words state))))
+  (d/div nil
+         (Nav state "Review")
+         (d/div {:className "page-content"}
+
+
+                (d/div {:className "content-block"}
+                       (apply d/dl {:className "content-block-inner"}
+                              (map #(Wordrow % input-chan) (:words state)))))))
 
 ;; ---------- Preparing Dictionary for Display
 
 
 
 (defn handle-search-submit [input-chan e]
-;; TODO: send message when a word less than 3 letters get submitted
+  ;; TODO: send message when a word less than 3 letters get submitted
   (let [term (.-value (.getElementById js/document "term"))]
     (go
-      (when (< 2 (count term)) (>! input-chan [:search-term  term]))))
+     (when (< 2 (count term)) (>! input-chan [:search-term  term]))))
   false)
 
 (defn handle-new-word-submit [input-chan e]
   (let [form (serialize-form e)]
-      (go (>! input-chan [:submit-selected form ]))
+    (go (>! input-chan [:submit-selected form ]))
     false))
 
 (defn handle-enter-word-submit [input-chan _]
@@ -93,7 +111,7 @@
 
 ;; TODO: Check for empty list and save
 (q/defcomponent ReviewPage [state]
-;(println "ReviewPage: " (:words state))
+
   (let [word (first (:words state))]
     (d/div {:id "card"}
            (d/div {:id "german" :style {"display" "block"}}
@@ -103,7 +121,7 @@
            (d/div {:id "english" :style {"display" "none"}}
                   (d/p nil (second word))
                   (d/button {:onClick #(go (toggle)
-                                         (>! (:input-chan state) [:answer :right]) )} "I remember")
+                                           (>! (:input-chan state) [:answer :right]) )} "I remember")
                   (d/button {:onClick #(go (toggle)
                                            (>! (:input-chan state) [:answer :wrong]))} "Wrong-o"))
            )))
@@ -111,10 +129,10 @@
 
 (q/defcomponent SearchTableRow [id top? g e]
   (d/div {}
-        (d/span {:className "check-column"}
-              (when top?  (d/input {:type "radio" :name "entry" :value (str id)})))
-        (d/span {} g)
-        (d/span {} e)))
+         (d/span {:className "check-column"}
+                 (when top?  (d/input {:type "radio" :name "entry" :value (str id)})))
+         (d/span {} g)
+         (d/span {} e)))
 
 (q/defcomponent SearchPage [{:keys [input-chan dictionary]}]
   "Page to search for and add new word to list"
@@ -160,23 +178,59 @@
 (q/defcomponent NextPage [state]
   (d/h3 nil "Choose another list"))
 
+
+(q/defcomponent Link [state]
+  (d/a {:className "link"
+        :onClick  #(go
+                    (let [mv (:main-view state)
+                          ch (:input-chan state)]
+                      (.. mv -router (loadPage "review.html"))
+                      (>! ch [:show-list :daily])) false )} "Show List "))
+
+(q/defcomponent HomePage [state]
+  (d/div {}
+         (d/div {:className "content-block-title"} "What about simple navigation?")
+         (d/div {:className "list-block"}
+                (d/ul nil
+                      (d/li nil (d/a {:href "#"  :className "item-link"
+                                      :onClick  #(go
+                                                  (let [mv (:main-view state)
+                                                        ch (:input-chan state)]
+                                                    (.. mv -router (loadPage "review.html"))
+                                                    (>! ch [:show-list :daily])) false )
+
+                                      }
+                                     (d/div {:className "item-content"}
+                                            (d/div {:className "item-inner"}
+                                                   (d/div {:className "item-title"} "Review")))))
+                      (d/li nil (d/a {:href "#" :className "item-link"}
+                                     (d/div {:className "item-content"}
+                                            (d/div {:className "item-inner"}
+                                                   (d/div {:className "item-title"} "Look up new word in Dictionary")))))
+                      (d/li nil (d/a {:href "#" :className "item-link"}
+                                     (d/div {:className "item-content"}
+                                            (d/div {:className "item-inner"}
+                                                   (d/div {:className "item-title"} "Enter new word and definition")))))))))
+
+
 (q/defcomponent Page
   "The root of the application"
   [state ch]
-  (println state)
+  ; (println state)
   (d/div {}
-         (d/span {:onClick  #(go (>! ch [:show-list :daily]))} "Daily ")
-         (d/span {:onClick  #(go (>! ch [:show-list :weekly]))} "Weekly ")
-         (d/span {:onClick  #(go (>! ch [:show-list :monthly]))} "Monthly ")
-         (d/span {:onClick  #(go (>! ch [:search-page nil]))} "Add Word using dictionary -")
-         (d/span {:onClick  #(go (>! ch [:enter-page nil]))} " Enter New Word ")
-         (d/h1 nil "Deutsch lernen")
+         ;;          (d/span {:onClick  #(go (>! ch [:show-list :daily]))} "Daily ")
+         ;;          (d/span {:onClick  #(go (>! ch [:show-list :weekly]))} "Weekly ")
+         ;;          (d/span {:onClick  #(go (>! ch [:show-list :monthly]))} "Monthly ")
+         ;;          (d/span {:onClick  #(go (>! ch [:search-page nil]))} "Add Word using dictionary -")
+         ;;          (d/span {:onClick  #(go (>! ch [:enter-page nil]))} " Enter New Word ")
          (condp = (:mode state)
            :enter-page (EnterPage state)
            :review-list (ReviewPage state)
            :next (NextPage state)
            :search-page (SearchPage state)
            (WordTable state ch))))
+
+
 
 ;; Here we use an atom to tell us if we already have a render queued
 ;; up; if so, requesting another render is a no-op
@@ -187,6 +241,11 @@
     (when (compare-and-set! render-pending? false true)
       (.requestAnimationFrame js/window
                               (fn []
-                                (q/render (Page state (:input-chan state))
-                                          (.getElementById js/document "speicher"))
+                                (when-let [el (.getElementById js/document "nav-options")]
+                                  (q/render (HomePage state) el))
+                                (when-let [el (.getElementById js/document "review-page")]
+                                  (do
+                                    ;   (q/render (Nav state "Review") (.getElementById js/document "review-navbar"))
+                                    (q/render (Page state (:input-chan state)) el)
+                                    ))
                                 (reset! render-pending? false))))))
