@@ -9,22 +9,22 @@
                  [http-kit "2.1.16"]
                  [org.clojure/data.json "0.2.5"]
                  ;clientside dependencies
-                 [org.clojure/clojurescript "0.0-2665"]
+                 [org.clojure/clojurescript "0.0-2727"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [quiescent "0.1.4"]
                  [cljs-http "0.1.24"]
-                 [figwheel "0.2.2-SNAPSHOT"]]
+                 [figwheel "0.2.3-SNAPSHOT"]]
 
   :target-path "target/%s"
-  :main ^{:skip-aot true} server
+  :main ^{:skip-aot true} speicher.server
 
 
   :node-dependencies [[source-map-support "0.2.8"]]
 
   :plugins [
-            ;[lein-cljsbuild "1.0.4"]
-            ;[lein-npm "0.4.0"]
-            ;[lein-figwheel "0.2.2-SNAPSHOT"]
+            [lein-cljsbuild "1.0.4"]
+            [lein-npm "0.4.0"]
+            [lein-figwheel "0.2.3-SNAPSHOT"]
             ]
 
   :repositories
@@ -36,13 +36,16 @@
 
   :cljsbuild {
               :builds [{:id "dev"
-                        :source-paths ["src"]
+                        :source-paths ["src" "dev_src"]
                         :compiler {
                                    :output-to "resources/public/js/speicher.js"
                                    :output-dir "resources/public/js/out"
+                                   :main speicher.dev
                                    :optimizations :none
+                                   :asset-path "/js/out"
                                    :cache-analysis true
-                                   :source-map true}}
+                                   :source-map true
+                                   :source-map-timestamp true}}
                        {:id "release"
                         :source-paths ["src"]
                         :compiler {
