@@ -104,5 +104,5 @@
 (defn -main [& args]
   (let [port (Integer/parseInt (get (System/getenv) "OPENSHIFT_CLOJURE_HTTP_PORT" "8080"))
         ip (get (System/getenv) "OPENSHIFT_CLOJURE_HTTP_IP" "0.0.0.0")]
-    (println "App started")
+    (println "App started on " ip port)
     (run-server (handler) {:ip ip :port port})))
