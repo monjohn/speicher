@@ -9,29 +9,10 @@
             [speicher.render :as render])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
-;; (repl/connect "http://localhost:9000/repl")
-
-;; (fw/start {
-;;   :websocket-url   "ws://localhost:3449/figwheel-ws"
-;;   :on-jsload (fn [] (print "reloaded"))
-;; })
-
-;; (defn init-history
-;;   "Set up Google Closure history management"
-;;   [ch]
-;;   (let [h (goog.History.)]
-;;     (.setEnabled h true)
-;;     (e/listen h goog.History.EventType.NAVIGATE
-;;               (fn [evt]
-;;                 (let [token (.-token evt)]
-;;                   (.setToken h token)
-;;                   (go (>! ch [:nav  token])))))))
-
 (enable-console-print!)
 
 ;; Going through the list of words, right or wrong,
 ;; adjusting state accordingling
-
 
 (defn fetch-list [state kw]
   (go (let [ch (:input-chan state)
@@ -137,6 +118,7 @@
   (go (let [entry (first (render/format-entry
                           (get (vec (:dictionary state))
                                (read-string (:entry  entry-index)))))]
+        (add-new-word state entry)
         (dissoc state :dictionary))))
 
 
@@ -172,16 +154,25 @@
   (println data)
   state)
 
+
+
+
 (defn load-app
   "Return a map containing the initial application"
   []
-  (let [f7 (js/Framework7.)
-        main (.addView f7 ".view-main" #js {;:dynamicNavbar true
-
-                                            })
-        ]
-  {:state (atom {:input-chan (chan)
-                 :mode :review-list
+  (let [ch (chan)
+        f7 (js/Framework7.
+            #js {:onPageInit (fn [app, page]
+                               (case (.-name page)
+                                 "index" (println "home page loaded")
+                                 "review" (go (>! ch [:review-list :daily]))
+                                 "show" (go (>! ch [:show-list :daily]))
+                                 "search" (go (>! ch [:search-page nil]))
+                                 (println "Nothing found ")))
+                                })
+        main (.addView f7 ".view-main")]
+  {:state (atom {:input-chan ch
+                 :mode :start
                  :current-list :daily
                  :f7 f7
                  :main-view main
@@ -207,8 +198,7 @@
   (let [app (load-app)
         state @(:state app)]
     ; (store/init-persistence app)
- ;   (init-history (:input-chan state))
     (init-updates app)
-    (render/request-render state )
-    (go (>! (:input-chan state) [:review-list :daily]))
+    (render/request-render state)
+  ;  (go (>! (:input-chan state) [:show-list :daily]))
     ))

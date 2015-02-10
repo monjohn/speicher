@@ -1,6 +1,6 @@
 (defproject speicher "0.1.0-SNAPSHOT"
   :description "My own personal German Flashcard maker"
-  :url "http://temperature-monjohn.rhcloud.com/"
+  :url "http://speicher-monjohn.rhcloud.com/"
 
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [compojure "1.2.1"]
@@ -24,19 +24,20 @@
   :plugins [
             [lein-cljsbuild "1.0.4"]
             [lein-npm "0.4.0"]
-            [lein-figwheel "0.2.3-SNAPSHOT"]
+;;            [lein-figwheel "0.2.3-SNAPSHOT"]
             ]
 
   :repositories
   {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
 
-  :source-paths ["src" "target/classes"]
+  :source-paths ["src" ; "target/classes"
+                 ]
 
   :clean-targets ["out" "speicher.js" "speicher.min.js"]
 
   :cljsbuild {
               :builds [{:id "dev"
-                        :source-paths ["src" "dev_src"]
+                        :source-paths ["src" "dev_src" ]
                         :compiler {
                                    :output-to "resources/public/js/speicher.js"
                                    :output-dir "resources/public/js/out"
@@ -50,7 +51,7 @@
                         :source-paths ["src"]
                         :compiler {
                                    :output-to "resources/public/js/speicher.min.js"
-                                   :preamble ["react-0.10.0-dev.js"]
-                       :externs ["react-externs-0.10.0.js"]
+                                   :preamble ["react-0.10.0-dev.js" "resources/public/dist/js/framework7.js"]
+                                   :externs ["react-externs-0.10.0.js" "resources/public/dist/js/framework7.js"]
                                    :pretty-print false
                                    :optimizations :advanced}}]})

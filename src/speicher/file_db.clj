@@ -28,7 +28,7 @@
 
 (defn append-to-list [kw entry]
   (println "entry " entry)
-   (->> (concat (load-data kw) entry)
+   (->> (conj (load-data kw) entry)
        (save-to-list kw)))
 
 ;(save-data data :daily)

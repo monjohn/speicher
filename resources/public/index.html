@@ -8,8 +8,51 @@
         <title>Speicher</title>
         <link rel="stylesheet" href="/dist/css/framework7.min.css">
         <style type="text/css">
-            #card .hidden { display: none;}
-            #card .visible { display: block;}
+           .swiper-custom {
+  position:relative;
+  height:100%;
+}
+.swiper-container {
+  height:100%;
+}
+.swiper-slide {
+  background: #fff;
+}
+.swiper-slide span {
+  text-align:center;
+  display:block;
+  margin: 20px;
+  font-size:21px;
+}
+.swiper-prev-button, .swiper-next-button {
+  position: absolute;
+  width:44px;
+  background: rgba(0,0,0,0.7);
+  top: 50%;
+  margin-top: -22px;
+  line-height: 44px;
+  text-align:center;
+  z-index: 10;
+}
+.swiper-prev-button {
+  left:0;
+}
+.swiper-next-button {
+  right:0;
+}
+.swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background: none;
+  border:1px solid #aaa;
+  border-radius: 0 0 0 0;
+  opacity:1;
+  cursor: pointer;
+}
+.swiper-pagination-bullet-active {
+  background: #007aff;
+  border-color: #007aff;
+}
         </style>
     </head>
     <body>
@@ -26,7 +69,8 @@
                 <p>Right panel content goes here</p>
             </div>
         </div>
-        <div class="popup popup-add">
+        <div id="popup"></div>
+<!--         <div class="popup popup-add">
             <div class="content-block">
                 <div class="content-block-title">Add Words</div>
                 <div class="list-block">
@@ -60,7 +104,7 @@
                 </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- Views-->
         <div class="views">
@@ -90,16 +134,35 @@
 
                             <div id="nav-options"></div>
 
-                        <div class="content-block-title">Side panels</div>
-                            <div class="content-block">
-                                <div class="row">
-                                    <div class="col-50"><a href="#" data-panel="left" class="button open-panel">Left Panel</a></div>
-                                    <div class="col-50"><a href="#" data-panel="right" class="button open-panel">Right Panel</a></div>
-                                </div>
-
-                            </div>
-
+                       <div class="content-block-title">What about simple navigation?</div>
+              <div class="list-block">
+                <ul>
+                  <li><a href="review.html" class="item-link">
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title">Review Daily</div>
                         </div>
+                      </div></a></li>
+                    <li><a href="show.html" class="item-link">
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title">Show List</div>
+                        </div>
+                      </div></a></li>
+                  <li><a href="search.html" class="item-link">
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title">Search for definition</div>
+                        </div>
+                      </div></a></li>
+                  <li><a href="#" data-popup=".popup-add" class="item-link open-popup">
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title">Add word with your definition</div>
+                        </div>
+                      </div></a></li>
+                </ul>
+              </div>
                         <div class="toolbar">
                             <div class="toolbar-inner"><div id="link">Link 1</div><a href="#" data-popup=".popup-add" class="link open-popup">+</a></div>
                         </div>
