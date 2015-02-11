@@ -13,18 +13,17 @@
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [quiescent "0.1.4"]
                  [cljs-http "0.1.24"]
-                 [figwheel "0.2.3-SNAPSHOT"]]
+                 [figwheel "0.2.3-SNAPSHOT"]
+                 [cljsjs/react "0.12.2-5"]]
 
   :target-path "target/%s"
   :main ^{:skip-aot true} speicher.server
-
-
   :node-dependencies [[source-map-support "0.2.8"]]
 
   :plugins [
-;;             [lein-cljsbuild "1.0.4"]
-;;             [lein-npm "0.4.0"]
-;;            [lein-figwheel "0.2.3-SNAPSHOT"]
+            [lein-cljsbuild "1.0.4"]
+            [lein-npm "0.4.0"]
+           [lein-figwheel "0.2.3-SNAPSHOT"]
             ]
 
   :repositories
@@ -33,7 +32,7 @@
   :source-paths ["src" ; "target/classes"
                  ]
 
-  :clean-targets ["out" "speicher.js" "speicher.min.js"]
+  :clean-targets ["out" "resources/public/js/speicher.js" "resources/public/js/speicher.min.js"]
 
   :cljsbuild {
               :builds [{:id "dev"
@@ -51,7 +50,7 @@
                         :source-paths ["src"]
                         :compiler {
                                    :output-to "resources/public/js/speicher.min.js"
-                                   :preamble ["react-0.10.0-dev.js" "resources/public/dist/js/framework7.js"]
-                                   :externs ["react-externs-0.10.0.js" "resources/public/dist/js/framework7.js"]
+            ;                       :preamble ["react-0.10.0-dev.js" "resources/public/dist/js/framework7.js"]
+            ;                       :externs ["react-externs-0.10.0.js" "resources/public/dist/js/framework7.js"]
                                    :pretty-print false
                                    :optimizations :advanced}}]})

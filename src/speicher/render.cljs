@@ -1,6 +1,7 @@
 (ns speicher.render
   (:require [cljs.core.async :refer [>!]]
             [cljs.reader :refer [read-string]]
+            [cljsjs.react]
             [quiescent :as q :include-macros true]
             [quiescent.dom :as d]
             [clojure.walk :refer [keywordize-keys]]
