@@ -41,13 +41,7 @@
                        ;(d/a {:href "contact.html" :className "link icon-only"} (d/i {:className "icon icon-plus"}"+"))
                        ))))
 
-(q/defcomponent Word
-  "The components for the words"
-  [state input-chan]
-  (d/div {} (d/p {:className "german"} "German Word")
-         (d/button {:id "clear-completed"
-                    :onClick #(go (>! input-chan [:right nil]))}
-                   "Recognized it")))
+
 
 (q/defcomponent Wordrow [row input-chan]
   (d/div {:className "accordion-item"}
@@ -111,56 +105,54 @@
 (defn format-entries [dict]
   (map format-entry dict))
 
-(defn toggle []
-  (let [g (.getElementById js/document "german")
-        e (.getElementById js/document "english")]
-    (if (= (aget g "style" "display")  "block")
-      (aset g "style" "display" "none" )
-      (aset g "style" "display" "block"))
-    (if (= (aget e "style" "display")  "block")
-      (aset e "style" "display" "none" )
-      (aset e "style" "display" "block"))))
+;; (defn toggle []
+;;   (let [g (.getElementById js/document "german")
+;;         e (.getElementById js/document "english")]
+;;     (if (= (aget g "style" "display")  "block")
+;;       (aset g "style" "display" "none" )
+;;       (aset g "style" "display" "block"))
+;;     (if (= (aget e "style" "display")  "block")
+;;       (aset e "style" "display" "none" )
+;;       (aset e "style" "display" "block"))))
 
 (defn init-slider [state]
-  (let [app (:f7 state)
-        swiper  (.slider app ".swiper-container")]
-    ))
+  (let [app (:f7 state)]
+    (.swiper app ".swiper-container" #js {:nextButton ".swiper-next-button"
+                                          :prevButton ".swiper-prev-button"})))
+
+(q/defcomponent Slides
+  "The components for the words"
+  [ch idx word]
+  (if (even? idx)
+    (d/div {:className "swiper-slide"} (d/span nil word))
+    (d/div {:className "swiper-slide"}
+           (d/span nil  word)
+           (d/br nil)
+           (d/button {:className "button button-big  color-green"
+                      :onClick #(go
+                                 (>! ch [:answer :right]) )} "I remember"))))
 
 ;; TODO: Check for empty list and save
 (q/defcomponent ReviewPage [state]
-  (let [word (first (:words state))]
-  ;  (init-slider state)
-    (d/div nil
+  (apply d/div {:className "swiper-wrapper"}
+         (map-indexed (fn [idx word] (Slides (:input-chan state) idx word))
+                      (flatten (map (fn [x] [(first x) (second x)]) (:words state))))))
+
+;; (q/defcomponent ReviewPage-old [state]
+;;   (let [word (first (:words state))]
+;;     (d/div nil
 ;;            (Nav(capitalize (name (:current-list state))))
-;;            (d/div {:className "page-content"}
-;;                   (d/div {:className "slider-custom"}
-;;                          (d/div {:className "swiper-container swiper-init"}
-;;                                 (d/div {:className "swiper-wrapper"}
-;;                                        (d/div {:className "swiper-slide"}(d/span nil (first word)))
-;;                                        (d/div {:className "swiper-slide"}(d/span nil (second word))
-;;                                               ))
-;;                                 (d/a {:href "#" :className "slider-prev-button"}(d/i {:className "icon icon-prev"}))
-;;                                 (d/a {:href "#" :className "slider-next-button"}(d/i {:className "icon icon-next"}))
-;;                                 )
-                         )));))
+;;            (d/div {:id "card" :className "page-content"}
+;;                   (d/div {:id "german" :className "content-block" :style {"display" "block"}}
+;;                          (d/h2 {:className "center"} (first word))
+;;                          (d/button {:onClick toggle} "Show"))
 
-;; TODO: Check for empty list and save
-(q/defcomponent ReviewPage-old [state]
-  (let [word (first (:words state))]
-    (d/div nil
-           (Nav(capitalize (name (:current-list state))))
-           (d/div {:id "card" :className "page-content"}
-                  (d/div {:id "german" :className "content-block" :style {"display" "block"}}
-                         (d/h2 {:className "center"} (first word))
-                         (d/button {:onClick toggle} "Show"))
-
-                  (d/div {:id "english" :className "content-block" :style {"display" "none"}}
-                         (d/h2 nil (second word))
-                         (d/button {:onClick #(go (toggle)
-                                                  (>! (:input-chan state) [:answer :right]) )} "I remember")
-                         (d/button {:onClick #(go (toggle)
-                                                  (>! (:input-chan state) [:answer :wrong]))} "Wrong-o"))
-                  ))))
+;;                   (d/div {:id "english" :className "content-block" :style {"display" "none"}}
+;;                          (d/h2 nil (second word))
+;;                          (d/button {:onClick #(go (toggle)
+;;                                                   (>! (:input-chan state) [:answer :right]) )} "I remember")
+;;                          (d/button {:onClick #(go (toggle)
+;;                                                   (>! (:input-chan state) [:answer :wrong]))} "Wrong-o"))))))
 
 
 (q/defcomponent SearchTableRow [id top? g e]
@@ -197,22 +189,6 @@
                                                (format-entries dictionary)))))
              ))))
 
-
-;; (q/defcomponent EnterPage [state]
-;;   "Page to enter a German Word and its definition if it is already known"
-;;   (let [handle-enter-word (partial handle-enter-word-submit (:input-chan state))]
-;;     (d/div nil
-;;            (d/form {:action "#"
-;;                     :onSubmit handle-enter-word}
-;;                    (d/input {:type "text"
-;;                              :name "ger"
-;;                              :id "ger"
-;;                              :placeholder "German Word"})
-;;                    (d/input {:type "text"
-;;                              :name "eng"
-;;                              :id "eng"
-;;                              :placeholder "English Definition"})
-;;                    (d/button {:type "submit"} "Submit")))))
 
 (q/defcomponent NextPage [state]
   (d/h3 nil "Choose another list"))
@@ -312,11 +288,13 @@
             (q/render (Popup state) el))
             (condp = (:mode state)
               :show-list (q/render (WordList state) (.getElementById js/document "show-page"))
-              :review-list (q/render (ReviewPage state) (.getElementById js/document "review-page"))
+              :review-list (do
+                             (q/render (ReviewPage state) (.getElementById js/document "swiper"))
+                             (when (and (:words state) (false? (:swiper-init? state)) (go (>! (:input-chan state) [:init-swiper nil])))))
               :search-page (q/render (SearchPage state) (.getElementById js/document "search-page"))
               :next (NextPage state)
-              :start (WordList state (:input-chan state) (.getElementById js/document "nav-options")))
-            )
-                              )
-      (reset! render-pending? false))))
+              :start (WordList state (:input-chan state) (.getElementById js/document "nav-options"))) ) )
+      (reset! render-pending? false)
+
+  )))
 

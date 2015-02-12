@@ -82,11 +82,20 @@
       (do
         (finished-list updated)
         (assoc updated :mode :next))
-      updated)))
+      (do (.slideNext (:swiper state))
+      updated))))
+
+(defn init-swiper [state _]
+  (assoc state :swiper-init? true
+        :swiper  (.swiper (:f7 state) ".swiper-container"
+                          #js {:nextButton ".swiper-next-button"
+                               :prevButton ".swiper-prev-button"})))
+
 
 (defn review-list [state list-kw]
   (fetch-list state list-kw)
   (assoc state :mode :review-list
+    :swiper-init? false
          :current-list list-kw
          :answered []
          :next-list []))
@@ -170,18 +179,22 @@
                                  "search" (go (>! ch [:search-page nil]))
                                  (println "Nothing found ")))
                                 })
-        main (.addView f7 ".view-main")]
+        main (.addView f7 ".view-main")
+
+        ]
   {:state (atom {:input-chan ch
                  :mode :start
                  :current-list :daily
                  :f7 f7
                  :main-view main
+                 ;:swiper swiper
                  };(or (store/load) (data/fresh))
                 )
    :functions {:answer answer
                :enter-page show-enter
                :definitions show-definitions
                :definition-added print-entry
+               :init-swiper init-swiper
                :response handle-response
                :review-list review-list
                :saved-list print-entry

@@ -6,53 +6,54 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
         <title>Speicher</title>
-        <link rel="stylesheet" href="/dist/css/framework7.min.css">
+        <link rel="stylesheet" href="framework7.css">
         <style type="text/css">
-           .swiper-custom {
-  position:relative;
-  height:100%;
-}
-.swiper-container {
-  height:100%;
-}
-.swiper-slide {
+            /*            .swiper-custom { position:relative; height:100%; } */
+            .swiper-container, .swiper-wrapper, .swiper-custom {
+                height:100%;
+            }
+            .swiper-slide  {
+                  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
   background: #fff;
-}
-.swiper-slide span {
-  text-align:center;
-  display:block;
-  margin: 20px;
-  font-size:21px;
-}
-.swiper-prev-button, .swiper-next-button {
-  position: absolute;
-  width:44px;
-  background: rgba(0,0,0,0.7);
-  top: 50%;
-  margin-top: -22px;
-  line-height: 44px;
-  text-align:center;
-  z-index: 10;
-}
-.swiper-prev-button {
-  left:0;
-}
-.swiper-next-button {
-  right:0;
-}
-.swiper-pagination-bullet {
-  width: 10px;
-  height: 10px;
-  background: none;
-  border:1px solid #aaa;
-  border-radius: 0 0 0 0;
-  opacity:1;
-  cursor: pointer;
-}
-.swiper-pagination-bullet-active {
-  background: #007aff;
-  border-color: #007aff;
-}
+
+
+            }
+            .swiper-slide span {
+                text-align:center;
+                display:block;
+                margin: 20px;
+                font-size:21px;
+
+            }
+            .swiper-slide button {
+                position:absolute;
+                bottom: 25%;
+                left:50%
+                }
+            .swiper-prev-button, .swiper-next-button {
+                position: absolute;
+                width:44px;
+/*                 background: rgba(0,0,0,0.7); */
+                top: 50%;
+                margin-top: -22px;
+                line-height: 44px;
+                text-align:center;
+                z-index: 10;
+            }
+            .swiper-prev-button { left:0; }
+            .swiper-next-button { right:0; }
+
         </style>
     </head>
     <body>
@@ -70,41 +71,6 @@
             </div>
         </div>
         <div id="popup"></div>
-<!--         <div class="popup popup-add">
-            <div class="content-block">
-                <div class="content-block-title">Add Words</div>
-                <div class="list-block">
-                  <ul>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-input">
-                            <input type="text" placeholder="German Word" name="ger">
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-input">
-                            <input type="text" placeholder="English Word" name="eng">
-                          </div>
-                        </div>
-                      </div>
-                    </li></ul></div>
-                	<div class="content-block">
-                	  <div class="row">
-                	    <div class="col-50"><a href="#" class="button button-big button-fill color-red close-popup">Cancel</a></div>
-                	    <div class="col-50">
-                	      <input type="submit" value="Submit" class="button button-big button-fill color-green">
-                	    </div>
-                	  </div>
-                	</div>
-                </div>
-                </div>
-            </div>
-        </div> -->
 
         <!-- Views-->
         <div class="views">
@@ -112,15 +78,15 @@
                 <div class="pages navbar-fixed toolbar-fixed">
                     <div data-page="index" class="page">
 
-                         <div class="navbar">
-                    <div id="index-navbar" class="navbar-inner">
-                        <div class="center">Speicher</div>
-                        <div class="right">
-                            <!-- Right link contains only icon - additional "icon-only" class-->
-                            <a href="#" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
+                        <div class="navbar">
+                            <div id="index-navbar" class="navbar-inner">
+                                <div class="center">Speicher</div>
+                                <div class="right">
+                                    <!-- Right link contains only icon - additional "icon-only" class-->
+                                    <a href="#" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
                         <!-- Scrollable page content-->
 
@@ -134,50 +100,45 @@
 
                             <div id="nav-options"></div>
 
-                       <div class="content-block-title">What about simple navigation?</div>
-              <div class="list-block">
-                <ul>
-                  <li><a href="review.html" class="item-link">
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title">Review Daily</div>
+                            <div class="content-block-title">What about simple navigation?</div>
+                            <div class="list-block">
+                                <ul>
+                                    <li><a href="review.html" class="item-link">
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title">Review Daily</div>
+                                            </div>
+                                        </div></a></li>
+                                    <li><a href="show.html" class="item-link">
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title">Show List</div>
+                                            </div>
+                                        </div></a></li>
+                                    <li><a href="search.html" class="item-link">
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title">Search for definition</div>
+                                            </div>
+                                        </div></a></li>
+                                    <li><a href="#" data-popup=".popup-add" class="item-link open-popup">
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title">Add word with your definition</div>
+                                            </div>
+                                        </div></a></li>
+                                </ul>
+                            </div>
+                            <div class="toolbar">
+                                <div class="toolbar-inner"><div id="link">Link 1</div><a href="#" data-popup=".popup-add" class="link open-popup">+</a></div>
+                            </div>
                         </div>
-                      </div></a></li>
-                    <li><a href="show.html" class="item-link">
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title">Show List</div>
-                        </div>
-                      </div></a></li>
-                  <li><a href="search.html" class="item-link">
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title">Search for definition</div>
-                        </div>
-                      </div></a></li>
-                  <li><a href="#" data-popup=".popup-add" class="item-link open-popup">
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title">Add word with your definition</div>
-                        </div>
-                      </div></a></li>
-                </ul>
-              </div>
-                        <div class="toolbar">
-                            <div class="toolbar-inner"><div id="link">Link 1</div><a href="#" data-popup=".popup-add" class="link open-popup">+</a></div>
-                        </div>
+
                     </div>
-
                 </div>
-            </div>
 
-
-
-        <script type="text/javascript" src="dist/js/framework7.min.js"></script>
-<!--         <script src="/js/react-0.10.0-dev.js"></script> -->
-        <script src="/js/speicher.js" type="text/javascript"></script>
-<!--         <script src="/js/out/goog/base.js" type="text/javascript"></script>
-        <script type="text/javascript">goog.require("client");</script>
-        <script>client.main();</script>-->
-    </body>
-</html>
+                <script type="text/javascript" src="/js/framework7.js"></script>
+                <!--         <script src="/js/react-0.10.0-dev.js"></script> -->
+                <script src="/js/speicher.js" type="text/javascript"></script>
+            </body>
+        </html>
