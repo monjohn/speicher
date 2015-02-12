@@ -2,7 +2,7 @@
   (:require [clojure.browser.repl :as repl]
             [cljs.reader :refer [read-string]]
             [goog.events :as e]
-            [figwheel.client :as fw]
+         ;   [figwheel.client :as fw]
             [goog.History]
             [cljs.core.async :refer [>! <!  chan]]
             [cljs-http.client :as http]
@@ -47,43 +47,54 @@
                                                   :next-list next-list}}))]
          (>! input-chan [:saved-list response]))))
 
+
+
+;; (defn words->answered [state entry]
+;;   (-> state
+;;       (update-in [:words] rest)
+;;       (update-in [:answered] conj entry)))
+
+;; (defn got-wrong [{:keys [words] :as state}]
+;;   (words->answered state (first words)))
+
+;; (defn got-right [{:keys [words] :as state}]
+;;   (let [[ger eng c list-kw] (first words)]
+;;     (if (level-complete? list-kw c)
+;;       (level-up state [ger eng c list-kw])
+;;       (words->answered state [ger eng (inc  c) list-kw]))))
+
+(defn finished? [state]
+  (not (seq (:words state))))
+
+;; (defn answer [state r-or-w]
+;;   (let [updated (if (= r-or-w :right)
+;;                   (got-right state)
+;;                   (got-wrong state))]
+;;     (if  (finished? updated)
+;;       (do
+;;         (finished-list updated)
+;;         (assoc updated :mode :next))
+;;       (do (.slideNext (:swiper state))
+;;       updated))))
+
+
 (defn level-complete? [level count]
   (= (get level-limit level)
      count))
 
 (defn level-up [state [ger eng c d]]
-  (let [next  (get next-level d)]
+  (let [next-l  (get next-level d)]
     (-> state
-        (update-in [:words] rest)
-        (update-in [:next-list] conj [ger eng 0 next]))))
+        (assoc-in [:words 0] nil)
+        (update-in [:next-list] conj [ger eng 0 next-l]))))
 
-(defn words->answered [state entry]
-  (-> state
-      (update-in [:words] rest)
-      (update-in [:answered] conj entry)))
-
-(defn got-wrong [{:keys [words] :as state}]
-  (words->answered state (first words)))
-
-(defn got-right [{:keys [words] :as state}]
-  (let [[ger eng c list-kw] (first words)]
+(defn correct [state idx]
+ (let [[ger eng c list-kw] (get-in state [:words idx])]
+   (.slideNext (:swiper state))
     (if (level-complete? list-kw c)
       (level-up state [ger eng c list-kw])
-      (words->answered state [ger eng (inc  c) list-kw]))))
+      (assoc-in state [:words idx] [ger eng (inc  c) list-kw]) )))
 
-(defn finished? [state]
-  (not (seq (:words state))))
-
-(defn answer [state r-or-w]
-  (let [updated (if (= r-or-w :right)
-                  (got-right state)
-                  (got-wrong state))]
-    (if  (finished? updated)
-      (do
-        (finished-list updated)
-        (assoc updated :mode :next))
-      (do (.slideNext (:swiper state))
-      updated))))
 
 (defn init-swiper [state _]
   (assoc state :swiper-init? true
@@ -142,7 +153,8 @@
 (defn show-definitions [state {:keys [body]}]
   (assoc state :dictionary body))
 
-;; Initial set up
+
+;;; ----------- Initialization ----------
 
 (defn init-updates
   "For every entry in a map of channel identifiers to consumers,
@@ -162,7 +174,6 @@
 (defn print-entry [state data]
   (println data)
   state)
-
 
 
 
@@ -190,7 +201,8 @@
                  ;:swiper swiper
                  };(or (store/load) (data/fresh))
                 )
-   :functions {:answer answer
+   :functions {;:answer answer
+               :correct correct
                :enter-page show-enter
                :definitions show-definitions
                :definition-added print-entry

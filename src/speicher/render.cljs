@@ -86,7 +86,7 @@
         eng (.getElementById js/document "eng")
         g (.-value ger)
         e (.-value eng) ]
-    (println (.-value ger))
+    ;(println (.-value ger))
     (when-not (or (blank? g) (blank? e))
       (do
         (go (>! input-chan [:submit-entered [g e]]))
@@ -105,15 +105,6 @@
 (defn format-entries [dict]
   (map format-entry dict))
 
-;; (defn toggle []
-;;   (let [g (.getElementById js/document "german")
-;;         e (.getElementById js/document "english")]
-;;     (if (= (aget g "style" "display")  "block")
-;;       (aset g "style" "display" "none" )
-;;       (aset g "style" "display" "block"))
-;;     (if (= (aget e "style" "display")  "block")
-;;       (aset e "style" "display" "none" )
-;;       (aset e "style" "display" "block"))))
 
 (defn init-slider [state]
   (let [app (:f7 state)]
@@ -130,39 +121,25 @@
            (d/br nil)
            (d/button {:className "button button-big  color-green"
                       :onClick #(go
-                                 (>! ch [:answer :right]) )} "I remember"))))
+                                 (>! ch [:correct (quot idx 2)]) )} "I remember"))))
 
 ;; TODO: Check for empty list and save
 (q/defcomponent ReviewPage [state]
-  (apply d/div {:className "swiper-wrapper"}
-         (map-indexed (fn [idx word] (Slides (:input-chan state) idx word))
-                      (flatten (map (fn [x] [(first x) (second x)]) (:words state))))))
-
-;; (q/defcomponent ReviewPage-old [state]
-;;   (let [word (first (:words state))]
-;;     (d/div nil
-;;            (Nav(capitalize (name (:current-list state))))
-;;            (d/div {:id "card" :className "page-content"}
-;;                   (d/div {:id "german" :className "content-block" :style {"display" "block"}}
-;;                          (d/h2 {:className "center"} (first word))
-;;                          (d/button {:onClick toggle} "Show"))
-
-;;                   (d/div {:id "english" :className "content-block" :style {"display" "none"}}
-;;                          (d/h2 nil (second word))
-;;                          (d/button {:onClick #(go (toggle)
-;;                                                   (>! (:input-chan state) [:answer :right]) )} "I remember")
-;;                          (d/button {:onClick #(go (toggle)
-;;                                                   (>! (:input-chan state) [:answer :wrong]))} "Wrong-o"))))))
+ ; (d/div {:className "swiper-custom"}
+      ;   (Nav "Daily")
+  ;       (d/div {:className "slider-container"}
+                (apply d/div {:className "swiper-wrapper"}
+                       (map-indexed (fn [idx word] (Slides (:input-chan state) idx word))
+                                    (flatten (map (fn [x] [(first x) (second x)]) (:words state))))))
+;))
 
 
 (q/defcomponent SearchTableRow [id top? g e]
-  (do (println (type g) " - " e)
-    (d/li {:className "accordion-item"}
-  (d/div {:className "item-content"}
-         (d/div  {:className "item-inner"}
-               ;  (when top?  (d/input {:type "radio" :name "entry" :value (str id)})
-                 (d/div {:className "item-title"} g)
-                 (d/div {:className "item-after"} e))))))
+  (d/li {:className "accordion-item"}
+        (d/div {:className "item-content"}
+               (d/div  {:className "item-inner"}
+                       (d/div {:className "item-title"} g)
+                       (d/div {:className "item-after"} e)))))
 
 (q/defcomponent SearchPage [{:keys [input-chan dictionary]}]
   "Page to search for and add new word to list"
@@ -234,7 +211,6 @@
 (q/defcomponent HomePage [{:keys [input-chan main-view]}]
   (letfn [(load-page [file] (.. main-view -router (loadPage file)))]
   (d/div nil
-
          (d/div {:className "content-block-title"} "What would you like to do?")
          (d/div {:className "list-block"}
                 (d/ul nil
@@ -254,9 +230,7 @@
                       (d/li nil (d/a {:href "#" :className "item-link"}
                                      (d/div {:className "item-content"}
                                             (d/div {:className "item-inner"}
-                                                   (d/div {:className "item-title"} "Enter new word and definition")))))))
-
-         )))
+                                                   (d/div {:className "item-title"} "Enter new word and definition"))))))))))
 
 
 (q/defcomponent Page
@@ -264,10 +238,7 @@
   [state]
   (d/div {}
          ;;          (d/span {:onClick  #(go (>! ch [:show-list :monthly]))} "Monthly ")
-         ;;          (d/span {:onClick  #(go (>! ch [:search-page nil]))} "Add Word using dictionary -")
-         ;;          (d/span {:onClick  #(go (>! ch [:enter-page nil]))} " Enter New Word ")
          (condp = (:mode state)
-;           :enter-page (EnterPage state)
            :review-list (ReviewPage state)
            :next (NextPage state)
            :search-page (SearchPage state)
@@ -290,11 +261,11 @@
               :show-list (q/render (WordList state) (.getElementById js/document "show-page"))
               :review-list (do
                              (q/render (ReviewPage state) (.getElementById js/document "swiper"))
-                             (when (and (:words state) (false? (:swiper-init? state)) (go (>! (:input-chan state) [:init-swiper nil])))))
+                             (when (and (:words state)
+                                        (false? (:swiper-init? state)))
+                                        (go (>! (:input-chan state) [:init-swiper nil]))))
               :search-page (q/render (SearchPage state) (.getElementById js/document "search-page"))
               :next (NextPage state)
               :start (WordList state (:input-chan state) (.getElementById js/document "nav-options"))) ) )
-      (reset! render-pending? false)
-
-  )))
+      (reset! render-pending? false))))
 

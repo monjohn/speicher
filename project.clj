@@ -21,7 +21,7 @@
   :node-dependencies [[source-map-support "0.2.8"]]
 
   :plugins [
-         ;   [lein-cljsbuild "1.0.4"]
+         ;  [lein-cljsbuild "1.0.4"]
          ;   [lein-npm "0.4.0"]
          ;  [lein-figwheel "0.2.3-SNAPSHOT"]
             ]
@@ -32,7 +32,7 @@
   :source-paths ["src" ; "target/classes"
                  ]
 
-  :clean-targets ["out" "resources/public/js/speicher.js" "resources/public/js/speicher.min.js"]
+  :clean-targets  ^{:protect false} ["out" "resources/public/js/speicher.js" "resources/public/js/speicher.min.js"]
 
   :cljsbuild {
               :builds [{:id "dev"
@@ -50,7 +50,7 @@
                         :source-paths ["src"]
                         :compiler {
                                    :output-to "resources/public/js/speicher.min.js"
-            ;                       :preamble ["react-0.10.0-dev.js" "resources/public/dist/js/framework7.js"]
-            ;                       :externs ["react-externs-0.10.0.js" "resources/public/dist/js/framework7.js"]
+                                   :preamble ["resources/public/js/framework7.js"]
+                                   :externs  ["resources/public/js/framework7.js"]
                                    :pretty-print false
                                    :optimizations :advanced}}]})
