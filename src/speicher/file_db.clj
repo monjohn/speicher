@@ -4,6 +4,8 @@
 (def path (or (get (System/getenv) "OPENSHIFT_DATA_DIR")
            "./resources/data/"))
 
+(println (get (System/getenv) "OPENSHIFT_DATA_DIR"))
+
 (def data
    [["Tag" "day" 6 :daily]
      ["Woche" "week" 2 :daily ]
@@ -32,6 +34,6 @@
    (->> (conj (load-data kw) entry)
        (save-to-list kw)))
 
-;(save-data data :daily)
+(println (load-data :daily))
 
 

@@ -19,12 +19,11 @@
   :target-path "target/%s"
   :main ^{:skip-aot true} speicher.server
   :node-dependencies [[source-map-support "0.2.8"]]
-
-  :plugins [
-         ;  [lein-cljsbuild "1.0.4"]
-         ;   [lein-npm "0.4.0"]
-         ;  [lein-figwheel "0.2.3-SNAPSHOT"]
-            ]
+  :profiles {:dev {:plugins [
+           [lein-cljsbuild "1.0.4"]
+            [lein-npm "0.4.0"]
+           [lein-figwheel "0.2.3-SNAPSHOT"]
+            ]}}
 
   :repositories
   {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
