@@ -125,7 +125,6 @@
 
 ;; TODO: Check for empty list and save
 (q/defcomponent ReviewPage [state]
-  (println (type (:words state)))
  ; (d/div {:className "swiper-custom"}
       ;   (Nav "Daily")
   ;       (d/div {:className "slider-container"}
