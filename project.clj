@@ -48,8 +48,8 @@
                        {:id "release"
                         :source-paths ["src"]
                         :compiler {
-                                   :output-to "resources/public/js/speicher.min.js"
+                                   :output-to "resources/public/js/speicher.js"
                                  ;  :preamble ["framework7.js"]
                                    :externs  ["externs.js"]
                                    :pretty-print false
-                                   :optimizations :whitespace}}]})
+                                   :optimizations :simple}}]})
