@@ -5,4 +5,4 @@ goog.require('figwheel.client');
 goog.require('speicher.client');
 speicher.client.main.call(null);
 
-//# sourceMappingURL=dev.js.map?rel=1423859527541
+//# sourceMappingURL=dev.js.map?rel=1423866347358

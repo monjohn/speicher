@@ -2,7 +2,6 @@
   (:require [clojure.browser.repl :as repl]
             [cljs.reader :refer [read-string]]
             [goog.events :as e]
-         ;   [figwheel.client :as fw]
             [goog.History]
             [cljs.core.async :refer [>! <!  chan]]
             [cljs-http.client :as http]
@@ -15,6 +14,7 @@
 ;; adjusting state accordingling
 
 (defn fetch-list [state kw]
+  (println "fetch-list")
   (go (let [ch (:input-chan state)
             response (<! (http/get (str "/list/" kw) ;{:edn-params {:list kw}}
                                    ))]
@@ -191,14 +191,14 @@
   []
   (let [ch (chan)
         f7 (js/Framework7.
-            #js {:onPageInit (fn [app, page]
+            #js {:onPageInit (fn init-callback [app, page]
                                (case (.-name page)
-                                 "index" (println "home page loaded")
+                                 "index" (str "index")
                                  "review" (go (>! ch [:review-list :weekly]))
                                  "next" (go (>! ch [:review-done nil]))
                                  "show" (go (>! ch [:show-list :daily]))
                                  "search" (go (>! ch [:search-page nil]))
-                                 (println "Nothing found ")))
+                                 (str "Nothing found ")))
                                 })
         main (.addView f7 ".view-main")
 

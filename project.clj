@@ -50,6 +50,6 @@
                         :compiler {
                                    :output-to "resources/public/js/speicher.min.js"
                                  ;  :preamble ["framework7.js"]
-                                   :externs  ["framework7.js"]
+                                   :externs  ["externs.js"]
                                    :pretty-print false
-                                   :optimizations :simple}}]})
+                                   :optimizations :whitespace}}]})
