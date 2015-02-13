@@ -16,7 +16,7 @@
 
 (defn fetch-list [state kw]
   (go (let [ch (:input-chan state)
-            response (<! (http/get (str "/list/" kw) ;{:edn-params {:list kw}}
+            response (<! (http/get (str "http://http://temperature-monjohn.rhcloud.com/list/" kw) ;{:edn-params {:list kw}}
                                    ))]
         (>! ch [:response response]))))
 
