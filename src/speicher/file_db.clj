@@ -4,7 +4,7 @@
 (def path (or (get (System/getenv) "OPENSHIFT_DATA_DIR")
            "./resources/data/"))
 
-(println (get (System/getenv) "OPENSHIFT_DATA_DIR"))
+(println path )
 
 (def data
    [["Tag" "day" 6 :daily]
