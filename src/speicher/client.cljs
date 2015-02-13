@@ -16,8 +16,8 @@
 
 (defn fetch-list [state kw]
   (go (let [ch (:input-chan state)
-            response (<! (http/get (str "/list/" kw) {:timeout 200
-                                                      :edn-params {:list kw}}))]
+            response (<! (http/get (str "/list/" kw) ;{:edn-params {:list kw}}
+                                   ))]
         (>! ch [:response response]))))
 
 ;; (defn fetch-list
