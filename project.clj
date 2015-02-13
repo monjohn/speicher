@@ -52,4 +52,4 @@
                                    :preamble ["resources/public/js/framework7.js"]
                                    :externs  ["resources/public/js/framework7.js"]
                                    :pretty-print false
-                                   :optimizations :advanced}}]})
+                                   :optimizations :simple}}]})

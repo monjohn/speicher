@@ -41,12 +41,12 @@
 ;;      (finished :daily))))
 
 ; curl -X POST -H "Content-Type: application/edn" http://localhost:8080/save/:daily -d "{:data [{:db-name scratch} ["ger" "eng" 0 :daily]]}"
-
+; curl
 (defn save-list
   "Checks data is a map, save current list, if sequential, save current list,
   then append the entries in the next-level list"
   [{:keys [edn-params route-params]}]
-  (println edn-params)
+;  (println edn-params)
   (let [kw (:current-list edn-params)
         next-list (:next-list edn-params)]
     (db/save-to-list kw (:answered edn-params))
