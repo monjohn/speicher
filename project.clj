@@ -49,7 +49,7 @@
                        {:id "release"
                         :source-paths ["src"]
                         :compiler {
-                                   :output-to "resources/public/js/speicher.min.js"
+                                   :output-to "resources/public/js/speicher.js"
                                    :preamble ["resources/public/js/framework7.js"]
                                    :externs  ["resources/public/js/framework7.js"]
                                    :pretty-print false

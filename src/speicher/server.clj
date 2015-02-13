@@ -45,6 +45,7 @@
   "Checks data is a map, save current list, if sequential, save current list,
   then append the entries in the next-level list"
   [{:keys [edn-params route-params]}]
+  (println edn-params)
   (let [kw (:current-list edn-params)
         next-list (:next-list edn-params)]
     (db/save-to-list kw (:answered edn-params))
@@ -56,8 +57,8 @@
   (let [word (-> req :params :word)
         _ (println "Searching for: " word)
         pattern (re-pattern (str "^" word))
-        finds
-        (with-open [rdr (reader "./resources/data/de-en.txt")]
+        finds (with-open
+                [rdr (reader "./resources/data/de-en.txt")]
           (doall (filter  #(re-seq pattern %) (line-seq rdr))))]
     (make-response finds)))
 
@@ -71,6 +72,7 @@
 
 
 (defn list-request [req]
+  (println req)
    (-> req  :route-params  :list
        edn/read-string
        get-list
@@ -83,13 +85,9 @@
   (GET "/list/:list" [list] list-request)
   (GET "/search/:word" [word] search-for)
   (GET "/" []
-    (->
-     (ring.util.response/file-response "/public/index.html"
-                                       {:root "resources"})
+       (-> (ring.util.response/file-response "/public/index.html"
+                                             {:root "resources"})
            (ring.util.response/content-type "text/html")))
-  ;;   (context "/user/:id" []
-  ;;            (GET / [] get-user-by-id)
-  ;;            (POST / [] update-userinfo))
   (files "/" {:root "resources/public/"} )
   (not-found "<p>Page not found.</p>"))
 

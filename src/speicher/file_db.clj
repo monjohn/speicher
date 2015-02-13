@@ -1,7 +1,8 @@
 (ns speicher.file-db)
 (import 'java.io.File)
 
-(def path "./resources/data/")
+(def path (or (get (System/getenv) "OPENSHIFT_DATA_DIR")
+           "./resources/data/"))
 
 (def data
    [["Tag" "day" 6 :daily]

@@ -125,12 +125,15 @@
 
 ;; TODO: Check for empty list and save
 (q/defcomponent ReviewPage [state]
+  (println (type (:words state)))
  ; (d/div {:className "swiper-custom"}
       ;   (Nav "Daily")
   ;       (d/div {:className "slider-container"}
                 (apply d/div {:className "swiper-wrapper"}
+
                        (map-indexed (fn [idx word] (Slides (:input-chan state) idx word))
-                                    (flatten (map (fn [x] [(first x) (second x)]) (:words state))))))
+                                    (flatten (map (fn [x] [(first x) (second x)]) (:words state))))
+                       ))
 ;))
 
 

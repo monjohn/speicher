@@ -39,11 +39,11 @@
                  :monthly :yearly})
 
 
-(defn finished-list [{:keys [answered next-list current-list input-chan]
+(defn save-lists! [{:keys [words next-list current-list input-chan]
                       :as state}]
   (go (let [response (<! (http/post "/save"
                                     {:edn-params {:current-list current-list
-                                                  :answered answered
+                                                  :answered words
                                                   :next-list next-list}}))]
          (>! input-chan [:saved-list response]))))
 
@@ -63,8 +63,12 @@
 ;;       (level-up state [ger eng c list-kw])
 ;;       (words->answered state [ger eng (inc  c) list-kw]))))
 
-(defn finished? [state]
-  (not (seq (:words state))))
+(defn finished [state]
+  (.destroy (:swiper state))
+  (save-lists! state)
+  (-> state
+      (dissoc  :words :current-list :next-list :swiper)
+      (assoc  :mode :start)))
 
 ;; (defn answer [state r-or-w]
 ;;   (let [updated (if (= r-or-w :right)
@@ -97,10 +101,14 @@
 
 
 (defn init-swiper [state _]
-  (assoc state :swiper-init? true
-        :swiper  (.swiper (:f7 state) ".swiper-container"
-                          #js {:nextButton ".swiper-next-button"
-                               :prevButton ".swiper-prev-button"})))
+  (let [swiper (.swiper (:f7 state) ".swiper-container"
+                        #js {:nextButton ".swiper-next-button"
+                             :prevButton ".swiper-prev-button"})
+        html "<div class='swiper-slide'><span>All Done? <br><a href=\"next.html\" class=\"button\"} >Save</a>
+        </span></div>" ]
+    (.append (js/Dom7 ".swiper-wrapper") html)
+    (.update swiper)
+    (assoc state :swiper-init? true :swiper swiper )))
 
 
 (defn review-list [state list-kw]
@@ -185,7 +193,8 @@
             #js {:onPageInit (fn [app, page]
                                (case (.-name page)
                                  "index" (println "home page loaded")
-                                 "review" (go (>! ch [:review-list :daily]))
+                                 "review" (go (>! ch [:review-list :weekly]))
+                                 "next" (go (>! ch [:review-done nil]))
                                  "show" (go (>! ch [:show-list :daily]))
                                  "search" (go (>! ch [:search-page nil]))
                                  (println "Nothing found ")))
@@ -215,7 +224,7 @@
                :search-page show-search
                :submit-entered  submit-entered
                :submit-selected  submit-selected
-               :nav print-entry}}))
+               :review-done finished}}))
 
 (defn ^:export main
   "Application entry point"
