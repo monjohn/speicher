@@ -1,0 +1,2 @@
+;; Analyzed by ClojureScript 0.0-2727
+{:name speicher.dev, :doc nil, :excludes #{}, :use-macros nil, :require-macros nil, :uses nil, :requires {fw figwheel.client, figwheel.client figwheel.client, speicher.client speicher.client, cl speicher.client}, :imports nil}
