@@ -34,6 +34,6 @@
    (->> (conj (load-data kw) entry)
        (save-to-list kw)))
 
-(println (load-data :daily))
+;(println (load-data :daily))
 
 

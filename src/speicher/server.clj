@@ -16,6 +16,7 @@
 (def current-list (atom []))
 
 (defn make-response [data & [status]]
+  (println "make-reponse" data)
   {:status  (or status 200)
    :headers {"Content-Type" "Application/edn"}
    :body   (pr-str data)})
