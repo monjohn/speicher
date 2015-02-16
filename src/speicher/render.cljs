@@ -125,7 +125,6 @@
 
 ;; TODO: Check for empty list and save
 (q/defcomponent ReviewPage [state]
-  (println (type (:words state)))
  ; (d/div {:className "swiper-custom"}
       ;   (Nav "Daily")
   ;       (d/div {:className "slider-container"}
@@ -164,7 +163,7 @@
                                   ;;                                                 (map-indexed (fn [i0 entry] (apply d/p {} (map-indexed (fn [i1 [g e]]
                                   ;;                                                                          (SearchTableRow i0 (zero? i1) g e)) entry)))
                                   (map-indexed (fn [ind entry]
-                                                 (println entry)
+                                                 (println "Search Page" entry)
                                                  (SearchTableRow ind nil (ffirst entry ) (second (first entry))))
                                                (format-entries dictionary)))))
              ))))

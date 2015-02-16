@@ -47,6 +47,6 @@
                         :source-paths ["src"]
                         :compiler {;:main speicher.client
                                    :output-to "resources/public/js/speicher.min.js"
-                                   :externs  ["Framework7.js"]
+                                   :externs  ["externs.js"]
                                    :pretty-print true
                                    :optimizations :advanced}}]})
