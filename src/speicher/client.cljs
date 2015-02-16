@@ -14,10 +14,8 @@
 ;; adjusting state accordingling
 
 (defn fetch-list [state kw]
-  (println "fetch-list")
   (go (let [ch (:input-chan state)
-            response (<! (http/get (str "/list/" kw) ;{:edn-params {:list kw}}
-                                   ))]
+            response (<! (http/get (str "/list/" kw)))]
         (>! ch [:response response]))))
 
 ;; (defn fetch-list
@@ -181,7 +179,7 @@
             (render/request-render @state))))))
 
 (defn print-entry [state data]
-  (println data)
+  (println "print entry" data)
   state)
 
 
@@ -193,13 +191,12 @@
         f7 (js/Framework7.
             #js {:onPageInit (fn init-callback [app, page]
                                (case (.-name page)
-                                 "index" (str "index")
-                                 "review" (go (>! ch [:review-list :weekly]))
+                                 "index" (.log js/console "index page called")
+                                 "review" (go (>! ch [:review-list :daily]))
                                  "next" (go (>! ch [:review-done nil]))
                                  "show" (go (>! ch [:show-list :daily]))
                                  "search" (go (>! ch [:search-page nil]))
-                                 (str "Nothing found ")))
-                                })
+                                 (println "Nothing found ")))})
         main (.addView f7 ".view-main")
 
         ]
@@ -225,7 +222,8 @@
                :search-page show-search
                :submit-entered  submit-entered
                :submit-selected  submit-selected
-               :review-done finished}}))
+               :review-done finished
+               :nav print-entry}}))
 
 (defn ^:export main
   "Application entry point"
@@ -235,5 +233,5 @@
     ; (store/init-persistence app)
     (init-updates app)
     (render/request-render state)
-  ;  (go (>! (:input-chan state) [:show-list :daily]))
+   ; (go (>! (:input-chan state) [:nav "Test"]))
     ))

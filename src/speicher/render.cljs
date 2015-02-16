@@ -163,7 +163,7 @@
                                   ;;                                                 (map-indexed (fn [i0 entry] (apply d/p {} (map-indexed (fn [i1 [g e]]
                                   ;;                                                                          (SearchTableRow i0 (zero? i1) g e)) entry)))
                                   (map-indexed (fn [ind entry]
-                                                 (println entry)
+                                                 (println "Search Page" entry)
                                                  (SearchTableRow ind nil (ffirst entry ) (second (first entry))))
                                                (format-entries dictionary)))))
              ))))
@@ -221,7 +221,13 @@
                                                     (>! input-chan [:show-list :daily]))}
                                      (d/div {:className "item-content"}
                                             (d/div {:className "item-inner"}
-                                                   (d/div {:className "item-title"} "Review")))))
+                                                   (d/div {:className "item-title"} "Review Daily List")))))
+                      (d/li nil (d/a {:href "#"  :className "item-link"
+                                      :onClick  #(go (load-page "review.html")
+                                                    (>! input-chan [:show-list :weekly]))}
+                                     (d/div {:className "item-content"}
+                                            (d/div {:className "item-inner"}
+                                                   (d/div {:className "item-title"} "Review Weekly List")))))
                       (d/li nil (d/a {:href "#" :className "item-link"
                                       :onClick #(go (load-page "search.html")
                                                   ;  (>! input-chan [:search-page nil])

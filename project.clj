@@ -9,7 +9,7 @@
                  [http-kit "2.1.16"]
                  [org.clojure/data.json "0.2.5"]
                  ;clientside dependencies
-                 [org.clojure/clojurescript "0.0-2727"]
+                 [org.clojure/clojurescript "0.0-2850"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [quiescent "0.1.4"]
                  [cljs-http "0.1.24"]
@@ -19,17 +19,13 @@
   :target-path "target/%s"
   :main ^{:skip-aot true} speicher.server
   :node-dependencies [[source-map-support "0.2.8"]]
-  :profiles {:dev {:plugins [
-           [lein-cljsbuild "1.0.4"]
-            [lein-npm "0.4.0"]
-           [lein-figwheel "0.2.3-SNAPSHOT"]
-            ]}}
-
+  :profiles {:dev { :plugins [ [lein-cljsbuild "1.0.4"]
+                             [lein-npm "0.4.0"]
+                             [lein-figwheel "0.2.3-SNAPSHOT"] ]}}
   :repositories
   {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
 
-  :source-paths ["src" ; "target/classes"
-                 ]
+  :source-paths ["src"  "target/classes"]
 
   :clean-targets  ^{:protect false} ["out" "resources/public/js/speicher.js" "resources/public/js/speicher.min.js"]
 
@@ -44,12 +40,12 @@
                                    :asset-path "/js/out"
                                    :cache-analysis true
                                    :source-map true
-                                   :source-map-timestamp true}}
+                                   :source-map-timestamp true
+                                   :pretty-print true}}
                        {:id "release"
                         :source-paths ["src"]
-                        :compiler {
+                        :compiler {;:main speicher.client
                                    :output-to "resources/public/js/speicher.js"
-                                 ;  :preamble ["framework7.js"]
                                    :externs  ["externs.js"]
-                                   :pretty-print false
-                                   :optimizations :simple}}]})
+                                   :pretty-print true
+                                   :optimizations :advanced}}]})
