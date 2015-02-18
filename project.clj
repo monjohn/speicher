@@ -14,38 +14,43 @@
                  [quiescent "0.1.4"]
                  [cljs-http "0.1.24"]
                  [figwheel "0.2.3-SNAPSHOT"]
-                 [cljsjs/react "0.12.2-5"]]
+                 [cljsjs/react "0.12.2-5"]
+                 [com.cemerick/clojurescript.test "0.3.3"]
+                 ]
 
   :target-path "target/%s"
   :main ^{:skip-aot true} speicher.server
   :node-dependencies [[source-map-support "0.2.8"]]
   :profiles {:dev { :plugins [ [lein-cljsbuild "1.0.4"]
-                             [lein-npm "0.4.0"]
-                             [lein-figwheel "0.2.3-SNAPSHOT"] ]}}
-  :repositories
-  {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
+                               [lein-npm "0.4.0"]
+                               [lein-figwheel "0.2.3-SNAPSHOT"]
+                               [com.cemerick/clojurescript.test "0.3.3"]]}}
+  :repositories {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
 
   :source-paths ["src"  "target/classes"]
+  :clean-targets  ^{:protect false} ["out" "resources/public/js/speicher.js"
+                                     "resources/public/js/speicher.min.js"]
 
-  :clean-targets  ^{:protect false} ["out" "resources/public/js/speicher.js" "resources/public/js/speicher.min.js"]
-
-  :cljsbuild {
-              :builds [{:id "dev"
-                        :source-paths ["src" "dev_src" ]
+  :cljsbuild {:builds [{:id "dev"
+                        :source-paths ["src" "test"]
                         :compiler {
                                    :output-to "resources/public/js/speicher.js"
                                    :output-dir "resources/public/js/out"
                                    :main speicher.dev
-                                   :optimizations :none
+                                   :optimizations :whitespace
                                    :asset-path "/js/out"
                                    :cache-analysis true
-                                   :source-map true
+                                 ;  :source-map true
                                    :source-map-timestamp true
-                                   :pretty-print true}}
+                                   :pretty-print true}
+
+                        }
                        {:id "release"
                         :source-paths ["src"]
                         :compiler {;:main speicher.client
-                                   :output-to "resources/public/js/speicher.js"
+                                   :output-to "resources/public/js/speicher.min.js"
                                    :externs  ["externs.js"]
                                    :pretty-print true
-                                   :optimizations :advanced}}]})
+                                   :optimizations :advanced}}]
+              :test-commands {"unit-tests" ["phantomjs" :runner "resources/public/js/speicher.js"]}}
+  )

@@ -4,3 +4,4 @@ out/
 *-init.clj
 figweel_server.log
 bower_components/
+resources/public/js/out

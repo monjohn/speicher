@@ -1,11 +1,11 @@
 (ns ^:figwheel-always speicher.client
-  (:require [clojure.browser.repl :as repl]
+  (:require ;[clojure.browser.repl :as repl]
             [cljs.reader :refer [read-string]]
-            [goog.events :as e]
-            [goog.History]
             [cljs.core.async :refer [>! <!  chan]]
             [cljs-http.client :as http]
-            [speicher.render :as render])
+            [speicher.render :as render]
+   )
+
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (enable-console-print!)

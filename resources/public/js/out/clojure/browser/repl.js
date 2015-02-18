@@ -1,6 +1,7 @@
-// Compiled by ClojureScript 0.0-2727 {}
+// Compiled by ClojureScript 0.0-2850 {}
 goog.provide('clojure.browser.repl');
 goog.require('cljs.core');
+goog.require('cljs.repl');
 goog.require('clojure.browser.event');
 goog.require('clojure.browser.net');
 clojure.browser.repl.xpc_connection = cljs.core.atom.call(null,null);
@@ -18,7 +19,7 @@ return null;
 */
 clojure.browser.repl.evaluate_javascript = (function evaluate_javascript(conn,block){
 var result = (function (){try{return new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"status","status",-1997798413),new cljs.core.Keyword(null,"success","success",1890645906),new cljs.core.Keyword(null,"value","value",305978217),[cljs.core.str(eval(block))].join('')], null);
-}catch (e12831){var e = e12831;
+}catch (e17456){var e = e17456;
 return new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"status","status",-1997798413),new cljs.core.Keyword(null,"exception","exception",-335277064),new cljs.core.Keyword(null,"value","value",305978217),cljs.core.pr_str.call(null,e),new cljs.core.Keyword(null,"stacktrace","stacktrace",-95588394),(cljs.core.truth_(e.hasOwnProperty("stack"))?e.stack:"No stacktrace available.")], null);
 }})();
 return cljs.core.pr_str.call(null,result);
@@ -119,11 +120,57 @@ return clojure.browser.net.transmit.call(null,repl_connection,new cljs.core.Keyw
 });})(repl_connection))
 );
 
-return clojure.browser.net.connect.call(null,repl_connection,cljs.core.constantly.call(null,null),((function (repl_connection){
+clojure.browser.net.connect.call(null,repl_connection,cljs.core.constantly.call(null,null),((function (repl_connection){
 return (function (iframe){
 return iframe.style.display = "none";
 });})(repl_connection))
 );
-});
 
-//# sourceMappingURL=repl.js.map?rel=1423280660258
+if(cljs.core.truth_(COMPILED)){
+return null;
+} else {
+cljs.core._STAR_loaded_libs_STAR_ = (function (){var gntp = goog.dependencies_.nameToPath;
+return cljs.core.into.call(null,cljs.core.PersistentHashSet.EMPTY,cljs.core.filter.call(null,((function (gntp,repl_connection){
+return (function (name){
+return (goog.dependencies_.visited[(gntp[name])]);
+});})(gntp,repl_connection))
+,cljs.core.js_keys.call(null,gntp)));
+})();
+
+goog.isProvided_ = ((function (repl_connection){
+return (function (_){
+return false;
+});})(repl_connection))
+;
+
+return goog.require = ((function (repl_connection){
+return (function (name,reload){
+if(cljs.core.truth_((function (){var or__7504__auto__ = !(cljs.core.contains_QMARK_.call(null,cljs.core._STAR_loaded_libs_STAR_,name));
+if(or__7504__auto__){
+return or__7504__auto__;
+} else {
+return reload;
+}
+})())){
+cljs.core._STAR_loaded_libs_STAR_ = cljs.core.conj.call(null,(function (){var or__7504__auto__ = cljs.core._STAR_loaded_libs_STAR_;
+if(cljs.core.truth_(or__7504__auto__)){
+return or__7504__auto__;
+} else {
+return cljs.core.PersistentHashSet.EMPTY;
+}
+})(),name);
+
+return document.body.appendChild((function (){var script = document.createElement("script");
+script.type = "text/javascript";
+
+script.src = [cljs.core.str("goog/"),cljs.core.str((goog.dependencies_.nameToPath[name]))].join('');
+
+return script;
+})());
+} else {
+return null;
+}
+});})(repl_connection))
+;
+}
+});

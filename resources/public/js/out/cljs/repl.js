@@ -1,4 +1,4 @@
-// Compiled by ClojureScript 0.0-2727 {}
+// Compiled by ClojureScript 0.0-2850 {}
 goog.provide('cljs.repl');
 goog.require('cljs.core');
 cljs.repl.print_doc = (function print_doc(m){
@@ -14,55 +14,55 @@ return null;
 })()),cljs.core.str(new cljs.core.Keyword(null,"name","name",1843675177).cljs$core$IFn$_invoke$arity$1(m))].join(''));
 
 if(cljs.core.truth_(new cljs.core.Keyword(null,"forms","forms",2045992350).cljs$core$IFn$_invoke$arity$1(m))){
-var seq__23442_23446 = cljs.core.seq.call(null,new cljs.core.Keyword(null,"forms","forms",2045992350).cljs$core$IFn$_invoke$arity$1(m));
-var chunk__23443_23447 = null;
-var count__23444_23448 = (0);
-var i__23445_23449 = (0);
+var seq__17471_17475 = cljs.core.seq.call(null,new cljs.core.Keyword(null,"forms","forms",2045992350).cljs$core$IFn$_invoke$arity$1(m));
+var chunk__17472_17476 = null;
+var count__17473_17477 = (0);
+var i__17474_17478 = (0);
 while(true){
-if((i__23445_23449 < count__23444_23448)){
-var f_23450 = cljs.core._nth.call(null,chunk__23443_23447,i__23445_23449);
+if((i__17474_17478 < count__17473_17477)){
+var f_17479 = cljs.core._nth.call(null,chunk__17472_17476,i__17474_17478);
 cljs.core.print.call(null,"  ");
 
-cljs.core.prn.call(null,f_23450);
+cljs.core.prn.call(null,f_17479);
 
-var G__23451 = seq__23442_23446;
-var G__23452 = chunk__23443_23447;
-var G__23453 = count__23444_23448;
-var G__23454 = (i__23445_23449 + (1));
-seq__23442_23446 = G__23451;
-chunk__23443_23447 = G__23452;
-count__23444_23448 = G__23453;
-i__23445_23449 = G__23454;
+var G__17480 = seq__17471_17475;
+var G__17481 = chunk__17472_17476;
+var G__17482 = count__17473_17477;
+var G__17483 = (i__17474_17478 + (1));
+seq__17471_17475 = G__17480;
+chunk__17472_17476 = G__17481;
+count__17473_17477 = G__17482;
+i__17474_17478 = G__17483;
 continue;
 } else {
-var temp__4126__auto___23455 = cljs.core.seq.call(null,seq__23442_23446);
-if(temp__4126__auto___23455){
-var seq__23442_23456__$1 = temp__4126__auto___23455;
-if(cljs.core.chunked_seq_QMARK_.call(null,seq__23442_23456__$1)){
-var c__4559__auto___23457 = cljs.core.chunk_first.call(null,seq__23442_23456__$1);
-var G__23458 = cljs.core.chunk_rest.call(null,seq__23442_23456__$1);
-var G__23459 = c__4559__auto___23457;
-var G__23460 = cljs.core.count.call(null,c__4559__auto___23457);
-var G__23461 = (0);
-seq__23442_23446 = G__23458;
-chunk__23443_23447 = G__23459;
-count__23444_23448 = G__23460;
-i__23445_23449 = G__23461;
+var temp__4126__auto___17484 = cljs.core.seq.call(null,seq__17471_17475);
+if(temp__4126__auto___17484){
+var seq__17471_17485__$1 = temp__4126__auto___17484;
+if(cljs.core.chunked_seq_QMARK_.call(null,seq__17471_17485__$1)){
+var c__8291__auto___17486 = cljs.core.chunk_first.call(null,seq__17471_17485__$1);
+var G__17487 = cljs.core.chunk_rest.call(null,seq__17471_17485__$1);
+var G__17488 = c__8291__auto___17486;
+var G__17489 = cljs.core.count.call(null,c__8291__auto___17486);
+var G__17490 = (0);
+seq__17471_17475 = G__17487;
+chunk__17472_17476 = G__17488;
+count__17473_17477 = G__17489;
+i__17474_17478 = G__17490;
 continue;
 } else {
-var f_23462 = cljs.core.first.call(null,seq__23442_23456__$1);
+var f_17491 = cljs.core.first.call(null,seq__17471_17485__$1);
 cljs.core.print.call(null,"  ");
 
-cljs.core.prn.call(null,f_23462);
+cljs.core.prn.call(null,f_17491);
 
-var G__23463 = cljs.core.next.call(null,seq__23442_23456__$1);
-var G__23464 = null;
-var G__23465 = (0);
-var G__23466 = (0);
-seq__23442_23446 = G__23463;
-chunk__23443_23447 = G__23464;
-count__23444_23448 = G__23465;
-i__23445_23449 = G__23466;
+var G__17492 = cljs.core.next.call(null,seq__17471_17485__$1);
+var G__17493 = null;
+var G__17494 = (0);
+var G__17495 = (0);
+seq__17471_17475 = G__17492;
+chunk__17472_17476 = G__17493;
+count__17473_17477 = G__17494;
+i__17474_17478 = G__17495;
 continue;
 }
 } else {
@@ -100,5 +100,3 @@ cljs.core.println.call(null,"Macro");
 return cljs.core.println.call(null," ",new cljs.core.Keyword(null,"doc","doc",1913296891).cljs$core$IFn$_invoke$arity$1(m));
 }
 });
-
-//# sourceMappingURL=repl.js.map?rel=1423280678549
