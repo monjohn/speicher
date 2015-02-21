@@ -1,11 +1,8 @@
 (ns ^:figwheel-always speicher.client
-  (:require ;[clojure.browser.repl :as repl]
-            [cljs.reader :refer [read-string]]
+  (:require [cljs.reader :refer [read-string]]
             [cljs.core.async :refer [>! <!  chan]]
             [cljs-http.client :as http]
-            [speicher.render :as render]
-   )
-
+            [speicher.render :as render])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (enable-console-print!)
@@ -17,16 +14,6 @@
   (go (let [ch (:input-chan state)
             response (<! (http/get (str "/list/" kw)))]
         (>! ch [:response response]))))
-
-;; (defn fetch-list
-;;   "For client-side development purposes only"
-;;   [state kw]
-;;   (let [data
-;;     [["Anlässlich" "on the occasion of" 0 :daily] ["Jahr" "year" 0 :daily] ["erwägen" "consider" 0 :daily]]
-;;   ]
-;;         (go (>! (:input-chan state) [:response {:body data}]))))
-
-
 
 (def level-limit {:daily 6
              :weekly 6
@@ -66,8 +53,8 @@
   (.destroy (:swiper state))
   (save-lists! state)
   (-> state
-      (dissoc  :words :current-list :next-list :swiper)
-      (assoc  :mode :start)))
+      (dissoc  :words :next-list :swiper)
+      (assoc  :mode :next)))
 
 ;; (defn answer [state r-or-w]
 ;;   (let [updated (if (= r-or-w :right)
@@ -161,6 +148,9 @@
   (assoc state :dictionary body))
 
 
+(defn print-entry [state data]
+  (println "print entry" data)
+  state)
 ;;; ----------- Initialization ----------
 
 (defn init-updates
@@ -178,38 +168,27 @@
              (swap! state update-fn msg-data)
             (render/request-render @state))))))
 
-(defn print-entry [state data]
-  (println "print entry" data)
-  state)
-
-
-
-(defn load-app
-  "Return a map containing the initial application"
-  []
+(defn load-app []
   (let [ch (chan)
         f7 (js/Framework7.
             #js {:onPageInit (fn init-callback [app, page]
                                (case (.-name page)
                                  "index" (.log js/console "index page called")
-                                 "review" (go (>! ch [:review-list :daily]))
+                                 "review"  (go (let [list (keyword (aget page "query" "list"))] 
+                                                 (>! ch [:review-list list])))
                                  "next" (go (>! ch [:review-done nil]))
                                  "show" (go (>! ch [:show-list :daily]))
                                  "search" (go (>! ch [:search-page nil]))
                                  (println "Nothing found ")))})
-        main (.addView f7 ".view-main")
-
-        ]
+        main (.addView f7 ".view-main")]
   {:state (atom {:input-chan ch
                  :mode :start
                  :current-list :daily
                  :f7 f7
                  :main-view main
-                 ;:swiper swiper
                  };(or (store/load) (data/fresh))
                 )
-   :functions {;:answer answer
-               :correct correct
+   :functions {:correct correct
                :enter-page show-enter
                :definitions show-definitions
                :definition-added print-entry

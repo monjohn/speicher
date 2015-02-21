@@ -8,7 +8,6 @@
             [clojure.string :refer [blank? capitalize split]])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
-(def data '("lernen | lernend | gelernt | ich lerne | du lernst | er/sie lernt | ich/er/sie lernte | er/sie hat/hatte gelernt | deutsch lernen :: to learn {learned, learnt; learned, learnt} | learning | learned; learnt | I learn | you learn | he/she learns | I/he/she learned; I/he/she learnt | he/she has/had learned; he/she has/had learnt | to learn German" "lernen; sich aneignen; aufschnappen :: to pick up"))
 
 (defn toArray [js-col]
   (-> (clj->js [])
@@ -37,10 +36,7 @@
                             (d/span nil "Back")))
                 (d/div {:className "center" :style {:left "22px"}
                         } title )
-                (d/div {:className "right"}
-                       ;(d/a {:href "contact.html" :className "link icon-only"} (d/i {:className "icon icon-plus"}"+"))
-                       ))))
-
+                (d/div {:className "right"}))))
 
 
 (q/defcomponent Wordrow [row input-chan]
@@ -48,9 +44,9 @@
          (d/div {:className "accordion-item-toggle"}
                 (d/a {:href "#" :className "item-content item-link"}
                      (d/div {:className "item-inner"}
-                            (d/div {:className "item-title"}(first row)))))
+                            (d/div {:className "item-title"} (first row)))))
          (d/div {:className "accordion-item-content"}
-                (d/div {:className "content-block"}(second row)))))
+                (d/div {:className "content-block"} (second row)))))
 
 
 (q/defcomponent WordList
@@ -66,7 +62,6 @@
 ;; ---------- Preparing Dictionary for Display
 
 
-
 (defn handle-search-submit [input-chan e]
   ;; TODO: send message when a word less than 3 letters get submitted
   (let [term (.-value (.getElementById js/document "term"))]
@@ -78,7 +73,6 @@
   (let [form (serialize-form e)]
     (go (>! input-chan [:submit-selected form ]))
     false))
-
 
 ;; TODO: Add error message
 (defn handle-enter-word-submit [input-chan e]
@@ -147,7 +141,6 @@
   "Page to search for and add new word to list"
   (let [handle-search (partial handle-search-submit input-chan)
         handle-new-word (partial handle-new-word-submit input-chan)]
-
     (d/div nil
            (Nav "Enter German Word")
            (d/form {:className "searchbar"
@@ -160,17 +153,24 @@
              (d/div {:className "page-content"}
                     (d/div {:className "accordion-item list-block"}
                            (apply d/ul {}
-                                  ;;                                                 (map-indexed (fn [i0 entry] (apply d/p {} (map-indexed (fn [i1 [g e]]
-                                  ;;                                                                          (SearchTableRow i0 (zero? i1) g e)) entry)))
                                   (map-indexed (fn [ind entry]
                                                  (println "Search Page" entry)
                                                  (SearchTableRow ind nil (ffirst entry ) (second (first entry))))
-                                               (format-entries dictionary)))))
-             ))))
+                                               (format-entries dictionary)))))))))
 
 
 (q/defcomponent NextPage [state]
-  (d/h3 nil "Choose another list"))
+  (d/div nil 
+         (d/div {:className "navbar"}
+                (d/div {:className "navbar-inner"}
+                       (d/div {:className "left"}
+                              (d/a {:href "index.html" :className "link"}
+                                   (d/i {:className "icon icon-home"})
+                                   (d/span nil "Home")))
+                       (d/div {:className "center" :style {:left "22px"}
+                               } "Choose another list" )
+                       (d/div {:className "right"})))
+         (d/a {:href "review.html?list=weekly"} "Weekly")))
 
 
 (q/defcomponent Link [state]
@@ -180,6 +180,7 @@
                           ch (:input-chan state)]
                       (.. mv -router (loadPage "review.html"))
                       (>! ch [:show-list :daily])) false )} "Show List "))
+
 
 (q/defcomponent Popup [{ch :input-chan}]
     (let [handle-enter-word (partial handle-enter-word-submit ch)]
@@ -241,16 +242,16 @@
                                                    (d/div {:className "item-title"} "Enter new word and definition"))))))))))
 
 
-(q/defcomponent Page
-  "The root of the application"
-  [state]
-  (d/div {}
-         ;;          (d/span {:onClick  #(go (>! ch [:show-list :monthly]))} "Monthly ")
-         (condp = (:mode state)
-           :review-list (ReviewPage state)
-           :next (NextPage state)
-           :search-page (SearchPage state)
-           (WordList state (:input-chan state)))))
+;; (q/defcomponent page
+;;   "the root of the application"
+;;   [state]
+;;   (d/div {}
+;;          ;;          (d/span {:onclick  #(go (>! ch [:show-list :monthly]))} "monthly ")
+;;          (condp = (:mode state)
+;;            :review-list (reviewpage state)
+;;            :next (nextpage state)
+;;            :search-page (searchpage state)
+;;            (wordlist state (:input-chan state)))))
 
 
 
@@ -273,7 +274,7 @@
                                         (false? (:swiper-init? state)))
                                         (go (>! (:input-chan state) [:init-swiper nil]))))
               :search-page (q/render (SearchPage state) (.getElementById js/document "search-page"))
-              :next (NextPage state)
+              :next (q/render  (NextPage state)  (.getElementById js/document "next-page"))
               :start (WordList state (:input-chan state) (.getElementById js/document "nav-options"))) ) )
       (reset! render-pending? false))))
 

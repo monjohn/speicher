@@ -15,8 +15,7 @@
                  [cljs-http "0.1.24"]
                  [figwheel "0.2.3-SNAPSHOT"]
                  [cljsjs/react "0.12.2-5"]
-                 [com.cemerick/clojurescript.test "0.3.3"]
-                 ]
+                 [com.cemerick/clojurescript.test "0.3.3"]]
 
   :target-path "target/%s"
   :main ^{:skip-aot true} speicher.server
@@ -33,24 +32,20 @@
 
   :cljsbuild {:builds [{:id "dev"
                         :source-paths ["src" "test"]
-                        :compiler {
-                                   :output-to "resources/public/js/speicher.js"
+                        :compiler {:output-to "resources/public/js/speicher.js"
                                    :output-dir "resources/public/js/out"
                                    :main speicher.dev
-                                   :optimizations :whitespace
+                                   :optimizations :none
                                    :asset-path "/js/out"
                                    :cache-analysis true
                                  ;  :source-map true
                                    :source-map-timestamp true
-                                   :pretty-print true}
-
-                        }
+                                   :pretty-print true}}
                        {:id "release"
                         :source-paths ["src"]
-                        :compiler {;:main speicher.client
-                                   :output-to "resources/public/js/speicher.min.js"
+                        :compiler {:output-to "resources/public/js/speicher.min.js"
                                    :externs  ["externs.js"]
                                    :pretty-print true
                                    :optimizations :advanced}}]
-              :test-commands {"unit-tests" ["phantomjs" :runner "resources/public/js/speicher.js"]}}
+              :test-commands {"unit-tests" ["slimerjs"  :runner "resources/public/js/speicher.js"]}}
   )
