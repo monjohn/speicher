@@ -35,37 +35,12 @@
 
 
 
-;; (defn words->answered [state entry]
-;;   (-> state
-;;       (update-in [:words] rest)
-;;       (update-in [:answered] conj entry)))
-
-;; (defn got-wrong [{:keys [words] :as state}]
-;;   (words->answered state (first words)))
-
-;; (defn got-right [{:keys [words] :as state}]
-;;   (let [[ger eng c list-kw] (first words)]
-;;     (if (level-complete? list-kw c)
-;;       (level-up state [ger eng c list-kw])
-;;       (words->answered state [ger eng (inc  c) list-kw]))))
-
 (defn finished [state]
   (.destroy (:swiper state))
   (save-lists! state)
   (-> state
       (dissoc  :words :next-list :swiper)
       (assoc  :mode :next)))
-
-;; (defn answer [state r-or-w]
-;;   (let [updated (if (= r-or-w :right)
-;;                   (got-right state)
-;;                   (got-wrong state))]
-;;     (if  (finished? updated)
-;;       (do
-;;         (finished-list updated)
-;;         (assoc updated :mode :next))
-;;       (do (.slideNext (:swiper state))
-;;       updated))))
 
 
 (defn level-complete? [level count]

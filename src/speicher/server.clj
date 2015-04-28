@@ -15,12 +15,15 @@
 
 (def current-list (atom []))
 
-(defn make-response [data & [status]]
+(defn edn-response [data & [status]]
   {:status  (or status 200)
    :headers {"Content-Type" "Application/edn"}
    :body   (pr-str data)})
 
-
+(defn json-response [data & [status]]
+  {:status  (or status 200)
+   :headers {"Content-Type" "Application/json"}
+   :body   (pr-str data)})
 
 (def next-level {:daily :weekly
                  :weekly :monthly
@@ -51,7 +54,31 @@
     (db/save-to-list kw (:answered edn-params))
     (when (seq next-list)
       (db/append-to-list (get next-level kw) next-list))
-    (make-response "Saved" 201)))
+    (edn-response "Saved" 201)))
+
+
+(defn format-entry
+  "Takes entries, splits eng/ger in pairs,
+  then splits the sublits and stiches them back together"
+  [entry]
+  (let [pair (split entry #" :: ")]
+    (json/write-str
+    (map (fn [g e] (vector g e)) (split (first pair) #" \|")
+         (split (second pair) #" \|")))))
+
+(defn format-entries [dict]
+  (map format-entry dict))
+
+(defn search-json [req]
+  (let [word (-> req :params :word)
+        _ (println "Searching for: " word)
+        pattern (re-pattern (str "^" word))
+        finds (with-open
+                [rdr (reader "./resources/data/de-en.txt")]
+          (doall (filter  #(re-seq pattern %) (line-seq rdr))))]
+    (-> finds
+        format-entries
+        edn-response)))
 
 (defn search-for [req]
   (let [word (-> req :params :word)
@@ -60,7 +87,7 @@
         finds (with-open
                 [rdr (reader "./resources/data/de-en.txt")]
           (doall (filter  #(re-seq pattern %) (line-seq rdr))))]
-    (make-response finds)))
+    (edn-response finds)))
 
 
 (defn add-new-word [req]
@@ -68,7 +95,7 @@
         ger (first entry)
         eng (second entry)]
   (db/append-to-list :daily [ger eng 0 :daily])
-  (make-response "Saved" 201)))
+  (edn-response "Saved" 201)))
 
 
 (defn list-request [req]
@@ -76,7 +103,7 @@
    (-> req  :route-params  :list
        edn/read-string
        get-list
-       make-response))
+       edn-response))
 
 
 (defroutes all-routes
@@ -84,6 +111,7 @@
   (POST "/save" [list] save-list)
   (GET "/list/:list" [list] list-request)
   (GET "/search/:word" [word] search-for)
+  (GET "/json/:word" [word] search-json)
   (GET "/" []
        (-> (ring.util.response/file-response "/public/index.html"
                                              {:root "resources"})

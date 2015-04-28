@@ -19,7 +19,9 @@
         (is (= false (level-complete? :weekly 1)))
         (is (= false (level-complete? :monthly 1)))))
 
-(deftest simple-addition
-  (testing "simple-addition"
-  (is (= 17 (+ 11 6)))))
+(deftest level-up
+  (testing "Leveling up"
+    (is (= {:words [nil]
+            :next-level [["Tag" "day" 0 :weekly]]} (level-up {:words ["a"] :next-list []} ["Tag" "day" 6 :daily])))))
+
 

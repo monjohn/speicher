@@ -35,7 +35,7 @@
                         :compiler {:output-to "resources/public/js/speicher.js"
                                    :output-dir "resources/public/js/out"
                                    :main speicher.dev
-                                   :optimizations :none
+                                   :optimizations :simple
                                    :asset-path "/js/out"
                                    :cache-analysis true
                                  ;  :source-map true
