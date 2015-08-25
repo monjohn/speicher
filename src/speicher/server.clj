@@ -1,6 +1,7 @@
 (ns speicher.server
   (:use [clojure.java.io :only (reader)]
         [clojure.pprint :only [pprint]]
+        [clojure.string :refer [blank? capitalize split]]
         [compojure.route :only [files not-found]]
         [compojure.handler :only [site]] ; form, query params decode; cookie; session, etc
         [compojure.core :only [defroutes GET POST DELETE ANY context]]
@@ -21,9 +22,11 @@
    :body   (pr-str data)})
 
 (defn json-response [data & [status]]
+  (do
+    (pprint    (json/write-str data))
   {:status  (or status 200)
    :headers {"Content-Type" "Application/json"}
-   :body   (pr-str data)})
+   :body    (json/write-str data)}))
 
 (def next-level {:daily :weekly
                  :weekly :monthly
@@ -62,12 +65,12 @@
   then splits the sublits and stiches them back together"
   [entry]
   (let [pair (split entry #" :: ")]
-    (json/write-str
     (map (fn [g e] (vector g e)) (split (first pair) #" \|")
-         (split (second pair) #" \|")))))
+         (split (second pair) #" \|"))))
 
 (defn format-entries [dict]
-  (map format-entry dict))
+  (first
+  (map format-entry dict)))
 
 (defn search-json [req]
   (let [word (-> req :params :word)
@@ -78,7 +81,7 @@
           (doall (filter  #(re-seq pattern %) (line-seq rdr))))]
     (-> finds
         format-entries
-        edn-response)))
+        json-response)))
 
 (defn search-for [req]
   (let [word (-> req :params :word)
