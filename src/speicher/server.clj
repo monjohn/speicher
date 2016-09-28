@@ -132,5 +132,5 @@
 
 (defn -main [& [port]]
   (let [port (Integer. (or port (env :port) 5000))]
-    (println "App started on " ip port)
+    (println "App started on " port)
     (run-server (handler) {:join? false :port port})))
