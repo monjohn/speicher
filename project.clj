@@ -8,6 +8,7 @@
                  [fogus/ring-edn "0.2.0"]
                  [http-kit "2.1.16"]
                  [org.clojure/data.json "0.2.5"]
+                 [environ "1.0.0"]
                  ;clientside dependencies
                  [org.clojure/clojurescript "0.0-2850"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
@@ -24,6 +25,14 @@
                                [lein-npm "0.4.0"]
                                [lein-figwheel "0.2.3-SNAPSHOT"]
                                [com.cemerick/clojurescript.test "0.3.3"]]}}
+            {:production {:env {:production true}}}
+  :plugins [[environ/environ.lein "0.3.1"]]
+  :hooks [environ.leiningen.hooks]
+  :uberjar-name "clojure-getting-started-standalone.jar"
+  :plugins [[environ/environ.lein "0.3.1"]]
+  :hooks [environ.leiningen.hooks]
+  :uberjar-name "speicher.jar"
+
   :repositories {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
 
   :source-paths ["src"  "target/classes"]

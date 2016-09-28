@@ -9,7 +9,7 @@
         [org.httpkit.server]
         [org.httpkit.client :only [get] :rename {get http-get}])
   (:require [ring.middleware.reload :as reload]
-
+            [environ.core :refer [env]]
             [clojure.data.json :as json]
             [clojure.edn :as edn]
             [speicher.file-db :as db]))
@@ -130,8 +130,7 @@
          wrap-edn-params) ;; only reload when dev
     (site all-routes)))
 
-(defn -main [& args]
-  (let [port (Integer/parseInt (get (System/getenv) "OPENSHIFT_CLOJURE_HTTP_PORT" "8080"))
-        ip (get (System/getenv) "OPENSHIFT_CLOJURE_HTTP_IP" "0.0.0.0")]
+(defn -main [& [port]]
+  (let [port (Integer. (or port (env :port) 5000))]
     (println "App started on " ip port)
-    (run-server (handler) {:ip ip :port port})))
+    (run-server (handler) {:join? false :port port})))
