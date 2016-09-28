@@ -47,5 +47,4 @@
                                    :externs  ["externs.js"]
                                    :pretty-print true
                                    :optimizations :advanced}}]
-              :test-commands {"unit-tests" ["slimerjs"  :runner "resources/public/js/speicher.js"]}}
-  )
+              :test-commands {"unit-tests" ["slimerjs"  :runner "resources/public/js/speicher.js"]}})

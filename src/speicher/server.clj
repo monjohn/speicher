@@ -24,9 +24,9 @@
 (defn json-response [data & [status]]
   (do
     (pprint    (json/write-str data))
-  {:status  (or status 200)
-   :headers {"Content-Type" "Application/json"}
-   :body    (json/write-str data)}))
+   {:status  (or status 200)
+    :headers {"Content-Type" "Application/json"}
+    :body    (json/write-str data)}))
 
 (def next-level {:daily :weekly
                  :weekly :monthly
@@ -70,7 +70,7 @@
 
 (defn format-entries [dict]
   (first
-  (map format-entry dict)))
+   (map format-entry dict)))
 
 (defn search-json [req]
   (let [word (-> req :params :word)
@@ -78,7 +78,7 @@
         pattern (re-pattern (str "^" word))
         finds (with-open
                 [rdr (reader "./resources/data/de-en.txt")]
-          (doall (filter  #(re-seq pattern %) (line-seq rdr))))]
+               (doall (filter  #(re-seq pattern %) (line-seq rdr))))]
     (-> finds
         format-entries
         json-response)))
@@ -89,7 +89,7 @@
         pattern (re-pattern (str "^" word))
         finds (with-open
                 [rdr (reader "./resources/data/de-en.txt")]
-          (doall (filter  #(re-seq pattern %) (line-seq rdr))))]
+               (doall (filter  #(re-seq pattern %) (line-seq rdr))))]
     (edn-response finds)))
 
 
@@ -97,16 +97,16 @@
   (let [entry  (-> req :params :entry)
         ger (first entry)
         eng (second entry)]
-  (db/append-to-list :daily [ger eng 0 :daily])
-  (edn-response "Saved" 201)))
+   (db/append-to-list :daily [ger eng 0 :daily])
+   (edn-response "Saved" 201)))
 
 
 (defn list-request [req]
   (println req)
-   (-> req  :route-params  :list
-       edn/read-string
-       get-list
-       edn-response))
+  (-> req  :route-params  :list
+      edn/read-string
+      get-list
+      edn-response))
 
 
 (defroutes all-routes
@@ -119,7 +119,7 @@
        (-> (ring.util.response/file-response "/public/index.html"
                                              {:root "resources"})
            (ring.util.response/content-type "text/html")))
-  (files "/" {:root "resources/public/"} )
+  (files "/" {:root "resources/public/"})
   (not-found "<p>Page not found.</p>"))
 
 

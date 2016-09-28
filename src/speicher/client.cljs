@@ -16,9 +16,9 @@
         (>! ch [:response response]))))
 
 (def level-limit {:daily 6
-             :weekly 6
-             :monthly 11
-             :yearly 6})
+                  :weekly 6
+                  :monthly 11
+                  :yearly 6})
 
 (def next-level {:daily :weekly
                  :weekly :monthly
@@ -56,9 +56,9 @@
 (defn correct [state idx]
  (let [[ger eng c list-kw] (get-in state [:words idx])]
    (.slideNext (:swiper state))
-    (if (level-complete? list-kw c)
-      (level-up state [ger eng c list-kw])
-      (assoc-in state [:words idx] [ger eng (inc  c) list-kw]) )))
+   (if (level-complete? list-kw c)
+     (level-up state [ger eng c list-kw])
+     (assoc-in state [:words idx] [ger eng (inc  c) list-kw]))))
 
 
 (defn init-swiper [state _]
@@ -66,10 +66,10 @@
                         #js {:nextButton ".swiper-next-button"
                              :prevButton ".swiper-prev-button"})
         html "<div class='swiper-slide'><span>All Done? <br><a href=\"next.html\" class=\"button\"} >Save</a>
-        </span></div>" ]
+        </span></div>"]
     (.append (js/Dom7 ".swiper-wrapper") html)
     (.update swiper)
-    (assoc state :swiper-init? true :swiper swiper )))
+    (assoc state :swiper-init? true :swiper swiper)))
 
 
 (defn review-list [state list-kw]
@@ -94,13 +94,13 @@
 
 (defn lookup [state word]
   (go (let [ch (:input-chan state)
-        response (<! (http/get (str "/search/" word)))]
-    (>! ch [:definitions response])))
+            response (<! (http/get (str "/search/" word)))]
+       (>! ch [:definitions response])))
   (dissoc state :dictionary))
 
 (defn add-new-word [state entry]
   (go (let [ch (:input-chan state)
-            response (<! (http/post "/add" {:form-params {:entry entry}} ))]
+            response (<! (http/post "/add" {:form-params {:entry entry}}))]
         (>! ch [:definition-added response]))))
 
 (defn submit-selected [state entry-index]
@@ -117,7 +117,7 @@
 
 (defn handle-response [state {:keys [status body]}]
  ; (println "handle response: " (assoc state :words body))
-  ( assoc state :words body ))
+  ( assoc state :words body))
 
 (defn show-definitions [state {:keys [body]}]
   (assoc state :dictionary body))
@@ -136,7 +136,7 @@
   [{:keys [state functions]}]
   (let [input-chan (:input-chan @state)]
     (go (while true
-          (let [[msg-name msg-data] (<! input-chan )
+          (let [[msg-name msg-data] (<! input-chan)
                 _ (.log js/console (str "on channel [" msg-name "], received value [" msg-data "]"))
                 update-fn  (get functions msg-name)]
 
@@ -149,35 +149,35 @@
             #js {:onPageInit (fn init-callback [app, page]
                                (case (.-name page)
                                  "index" (.log js/console "index page called")
-                                 "review"  (go (let [list (keyword (aget page "query" "list"))] 
+                                 "review"  (go (let [list (keyword (aget page "query" "list"))]
                                                  (>! ch [:review-list list])))
                                  "next" (go (>! ch [:review-done nil]))
                                  "show" (go (>! ch [:show-list :daily]))
                                  "search" (go (>! ch [:search-page nil]))
                                  (println "Nothing found ")))})
         main (.addView f7 ".view-main")]
-  {:state (atom {:input-chan ch
-                 :mode :start
-                 :current-list :daily
-                 :f7 f7
-                 :main-view main
-                 };(or (store/load) (data/fresh))
-                )
-   :functions {:correct correct
-               :enter-page show-enter
-               :definitions show-definitions
-               :definition-added print-entry
-               :init-swiper init-swiper
-               :response handle-response
-               :review-list review-list
-               :saved-list print-entry
-               :search-term lookup
-               :show-list show-list
-               :search-page show-search
-               :submit-entered  submit-entered
-               :submit-selected  submit-selected
-               :review-done finished
-               :nav print-entry}}))
+   {:state (atom {:input-chan ch
+                  :mode :start
+                  :current-list :daily
+                  :f7 f7
+                  :main-view main})
+                 ;(or (store/load) (data/fresh))
+
+    :functions {:correct correct
+                :enter-page show-enter
+                :definitions show-definitions
+                :definition-added print-entry
+                :init-swiper init-swiper
+                :response handle-response
+                :review-list review-list
+                :saved-list print-entry
+                :search-term lookup
+                :show-list show-list
+                :search-page show-search
+                :submit-entered  submit-entered
+                :submit-selected  submit-selected
+                :review-done finished
+                :nav print-entry}}))
 
 (defn ^:export main
   "Application entry point"
@@ -186,6 +186,5 @@
         state @(:state app)]
     ; (store/init-persistence app)
     (init-updates app)
-    (render/request-render state)
+    (render/request-render state)))
    ; (go (>! (:input-chan state) [:nav "Test"]))
-    ))

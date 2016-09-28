@@ -23,7 +23,7 @@
    (reduce
     #(let [k (.-name %2)
            v (.-value %2)]
-       (assoc %1 k v)) {} )
+       (assoc %1 k v)) {})
    keywordize-keys))
 
 
@@ -34,8 +34,8 @@
                        (d/a {:href "#" :className "back link"}
                             (d/i {:className "icon icon-back"})
                             (d/span nil "Back")))
-                (d/div {:className "center" :style {:left "22px"}
-                        } title )
+                (d/div {:className "center" :style {:left "22px"}}
+                       title)
                 (d/div {:className "right"}))))
 
 
@@ -71,7 +71,7 @@
 
 (defn handle-new-word-submit [input-chan e]
   (let [form (serialize-form e)]
-    (go (>! input-chan [:submit-selected form ]))
+    (go (>! input-chan [:submit-selected form]))
     false))
 
 ;; TODO: Add error message
@@ -79,7 +79,7 @@
   (let [ger (.getElementById js/document "ger")
         eng (.getElementById js/document "eng")
         g (.-value ger)
-        e (.-value eng) ]
+        e (.-value eng)]
     ;(println (.-value ger))
     (when-not (or (blank? g) (blank? e))
       (do
@@ -125,8 +125,8 @@
                 (apply d/div {:className "swiper-wrapper"}
 
                        (map-indexed (fn [idx word] (Slides (:input-chan state) idx word))
-                                    (flatten (map (fn [x] [(first x) (second x)]) (:words state))))
-                       ))
+                                    (flatten (map (fn [x] [(first x) (second x)]) (:words state))))))
+
 ;))
 
 
@@ -148,7 +148,7 @@
                    (d/div {:className "searchbar-input"}
                           (d/input {:type "search" :name "search" :id "term" :placeholder "Search"})
                           (d/a {:href "#" :className "searchbar-clear"}))
-                          (d/button {:type "submit" :className "button button-round"} ">"))
+                   (d/button {:type "submit" :className "button button-round"} ">"))
            (when dictionary
              (d/div {:className "page-content"}
                     (d/div {:className "accordion-item list-block"}
@@ -160,15 +160,15 @@
 
 
 (q/defcomponent NextPage [state]
-  (d/div nil 
+  (d/div nil
          (d/div {:className "navbar"}
                 (d/div {:className "navbar-inner"}
                        (d/div {:className "left"}
                               (d/a {:href "index.html" :className "link"}
                                    (d/i {:className "icon icon-home"})
                                    (d/span nil "Home")))
-                       (d/div {:className "center" :style {:left "22px"}
-                               } "Choose another list" )
+                       (d/div {:className "center" :style {:left "22px"}}
+                              "Choose another list")
                        (d/div {:className "right"})))
          (d/a {:href "review.html?list=weekly"} "Weekly")))
 
@@ -184,62 +184,62 @@
 
 (q/defcomponent Popup [{ch :input-chan}]
     (let [handle-enter-word (partial handle-enter-word-submit ch)]
-  (d/div {:className "popup popup-add"}
-         (d/div {:className "content-block"}
-                (d/div {:className "content-block-title"} "Add Words")
-                (d/div {:className "list-block"}
-                       (d/form {:onSubmit handle-enter-word :name "new-word"}
-                       (d/ul nil
-                             (d/li nil
-                                   (d/div {:className "item-content"}
-                                          (d/div {:className "item-inner"}
-                                                 (d/div {:className "item-input"}
-                                                        (d/input {:type "text" :placeholder "German Word"
-                                                                  :name "ger" :id "ger"})))))
-                             (d/li nil
-                                   (d/div {:className "item-content"}
-                                          (d/div {:className "item-inner"}
-                                                 (d/div {:className "item-input"}
-                                                        (d/input {:type "text" :placeholder "English Word"
-                                                                  :name "eng" :id "eng"}))))))
-                       (d/div {:className "content-block"}
-                              (d/div {:className "row"}
-                                     (d/div {:className "col-50"}
-                                            (d/a {:href "#" :className "button button-big button-fill color-red close-popup"}
-                                                 "Cancel"))
-                                     (d/div {:className "col-50"}
-                                            (d/input {:type "submit" :value "Submit"
-                                                      :className "close-popup button button-big button-fill color-green"}))))))))))
+     (d/div {:className "popup popup-add"}
+            (d/div {:className "content-block"}
+                   (d/div {:className "content-block-title"} "Add Words")
+                   (d/div {:className "list-block"}
+                          (d/form {:onSubmit handle-enter-word :name "new-word"}
+                           (d/ul nil
+                                 (d/li nil
+                                       (d/div {:className "item-content"}
+                                              (d/div {:className "item-inner"}
+                                                     (d/div {:className "item-input"}
+                                                            (d/input {:type "text" :placeholder "German Word"
+                                                                      :name "ger" :id "ger"})))))
+                                 (d/li nil
+                                       (d/div {:className "item-content"}
+                                              (d/div {:className "item-inner"}
+                                                     (d/div {:className "item-input"}
+                                                            (d/input {:type "text" :placeholder "English Word"
+                                                                      :name "eng" :id "eng"}))))))
+                           (d/div {:className "content-block"}
+                                  (d/div {:className "row"}
+                                         (d/div {:className "col-50"}
+                                                (d/a {:href "#" :className "button button-big button-fill color-red close-popup"}
+                                                     "Cancel"))
+                                         (d/div {:className "col-50"}
+                                                (d/input {:type "submit" :value "Submit"
+                                                          :className "close-popup button button-big button-fill color-green"}))))))))))
 
 (q/defcomponent HomePage [{:keys [input-chan main-view]}]
   (letfn [(load-page [file] (.. main-view -router (loadPage file)))]
-  (d/div nil
-         (d/div {:className "content-block-title"} "What would you like to do?")
-         (d/div {:className "list-block"}
-                (d/ul nil
-                      (d/li nil (d/a {:href "#"  :className "item-link"
-                                      :onClick  #(go (load-page "review.html")
-                                                    (>! input-chan [:show-list :daily]))}
-                                     (d/div {:className "item-content"}
-                                            (d/div {:className "item-inner"}
-                                                   (d/div {:className "item-title"} "Review Daily List")))))
-                      (d/li nil (d/a {:href "#"  :className "item-link"
-                                      :onClick  #(go (load-page "review.html")
-                                                    (>! input-chan [:show-list :weekly]))}
-                                     (d/div {:className "item-content"}
-                                            (d/div {:className "item-inner"}
-                                                   (d/div {:className "item-title"} "Review Weekly List")))))
-                      (d/li nil (d/a {:href "#" :className "item-link"
-                                      :onClick #(go (load-page "search.html")
+   (d/div nil
+          (d/div {:className "content-block-title"} "What would you like to do?")
+          (d/div {:className "list-block"}
+                 (d/ul nil
+                       (d/li nil (d/a {:href "#"  :className "item-link"
+                                       :onClick  #(go (load-page "review.html")
+                                                     (>! input-chan [:show-list :daily]))}
+                                      (d/div {:className "item-content"}
+                                             (d/div {:className "item-inner"}
+                                                    (d/div {:className "item-title"} "Review Daily List")))))
+                       (d/li nil (d/a {:href "#"  :className "item-link"
+                                       :onClick  #(go (load-page "review.html")
+                                                     (>! input-chan [:show-list :weekly]))}
+                                      (d/div {:className "item-content"}
+                                             (d/div {:className "item-inner"}
+                                                    (d/div {:className "item-title"} "Review Weekly List")))))
+                       (d/li nil (d/a {:href "#" :className "item-link"
+                                       :onClick #(go (load-page "search.html"))}
                                                   ;  (>! input-chan [:search-page nil])
-                                                    )}
-                                     (d/div {:className "item-content"}
-                                            (d/div {:className "item-inner"}
-                                                   (d/div {:className "item-title"} "Look up new word in Dictionary")))))
-                      (d/li nil (d/a {:href "#" :className "item-link"}
-                                     (d/div {:className "item-content"}
-                                            (d/div {:className "item-inner"}
-                                                   (d/div {:className "item-title"} "Enter new word and definition"))))))))))
+
+                                      (d/div {:className "item-content"}
+                                             (d/div {:className "item-inner"}
+                                                    (d/div {:className "item-title"} "Look up new word in Dictionary")))))
+                       (d/li nil (d/a {:href "#" :className "item-link"}
+                                      (d/div {:className "item-content"}
+                                             (d/div {:className "item-inner"}
+                                                    (d/div {:className "item-title"} "Enter new word and definition"))))))))))
 
 
 ;; (q/defcomponent page
@@ -265,16 +265,15 @@
       (.requestAnimationFrame js/window
           (fn []
             (when-let [el (.getElementById js/document "popup")]
-            (q/render (Popup state) el))
+             (q/render (Popup state) el))
             (condp = (:mode state)
               :show-list (q/render (WordList state) (.getElementById js/document "show-page"))
               :review-list (do
                              (q/render (ReviewPage state) (.getElementById js/document "swiper"))
                              (when (and (:words state)
                                         (false? (:swiper-init? state)))
-                                        (go (>! (:input-chan state) [:init-swiper nil]))))
+                                   (go (>! (:input-chan state) [:init-swiper nil]))))
               :search-page (q/render (SearchPage state) (.getElementById js/document "search-page"))
               :next (q/render  (NextPage state)  (.getElementById js/document "next-page"))
-              :start (WordList state (:input-chan state) (.getElementById js/document "nav-options"))) ) )
+              :start (WordList state (:input-chan state) (.getElementById js/document "nav-options")))))
       (reset! render-pending? false))))
-

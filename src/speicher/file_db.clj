@@ -7,9 +7,9 @@
 
 (def data
    [["Tag" "day" 6 :daily]
-     ["Woche" "week" 2 :daily ]
-     ["Monat" "month" 3 :daily ]
-     ["Jahr" "year" 2 :daily ]])
+    ["Woche" "week" 2 :daily]
+    ["Monat" "month" 3 :daily]
+    ["Jahr" "year" 2 :daily]])
 
 
 (def save-agent (agent nil))
@@ -30,9 +30,7 @@
 
 (defn append-to-list [kw entry]
   (println "entry " entry)
-   (->> (conj (load-data kw) entry)
-       (save-to-list kw)))
+  (->> (conj (load-data kw) entry)
+      (save-to-list kw)))
 
 ;(println (load-data :daily))
-
-
