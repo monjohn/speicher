@@ -2,20 +2,21 @@
   :description "My own personal German Flashcard maker"
   :url "http://speicher-monjohn.rhcloud.com/"
 
-  :dependencies [[org.clojure/clojure "1.6.0"]
-                 [compojure "1.2.1"]
-                 [ring/ring "1.3.0"]
-                 [fogus/ring-edn "0.2.0"]
-                 [http-kit "2.1.16"]
-                 [org.clojure/data.json "0.2.5"]
+  :dependencies [
+                 [org.clojure/clojure "1.8.0"]
+                 [compojure "1.5.1"]
+                 [ring/ring "1.5.0"]
+                 [fogus/ring-edn "0.3.0"]
+                 [http-kit "2.2.0"]
+                 [org.clojure/data.json "0.2.6"]
                  [environ "1.1.0"]
                  ;clientside dependencies
-                 [org.clojure/clojurescript "0.0-2850"]
-                 [org.clojure/core.async "0.1.346.0-17112a-alpha"]
-                 [quiescent "0.1.4"]
-                 [cljs-http "0.1.24"]
-                 [figwheel "0.2.3-SNAPSHOT"]
-                 [cljsjs/react "0.12.2-5"]
+                 [org.clojure/clojurescript "1.9.229"]
+                 [org.clojure/core.async "0.2.391"]
+                 [quiescent "0.3.2"]
+                 [cljs-http "0.1.41"]
+                 [figwheel "0.5.8"]
+                 [cljsjs/react "15.3.1-0"]
                  [com.cemerick/clojurescript.test "0.3.3"]]
 
   :target-path "target/%s"
@@ -27,7 +28,8 @@
                                [com.cemerick/clojurescript.test "0.3.3"]]
                     :env {:production false}}
               :production {:env {:production true}}}
-  :plugins [[lein-environ "1.1.0"]]
+  :plugins [[lein-environ "1.1.0"]
+            [lein-ancient "0.6.10"]]
   :uberjar-name "speicher.jar"
 
   :repositories {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
