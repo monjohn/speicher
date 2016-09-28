@@ -1,0 +1,5 @@
+{
+  "name": "Speicher",
+  "description": "An app for generating and reviewing German flashcards",
+  "image": "heroku/clojure",
+}
