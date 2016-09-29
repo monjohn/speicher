@@ -1,5 +1,5 @@
 (ns speicher.client-test
-  (:require [cljs.test :refer-macros (deftest testing is run-tests)])
+  (:require-macros [cljs.test :refer (deftest testing is run-tests)])
   (:require [speicher.client :refer (level-complete?)]))
 
 (enable-console-print!)

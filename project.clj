@@ -13,6 +13,7 @@
                  [org.clojure/clojurescript "1.9.229"]
                  [org.clojure/core.async "0.2.391"]
                  [quiescent "0.3.2"]
+                 [lein-doo "0.1.7"]
                  [cljs-http "0.1.41"]
                  [figwheel "0.5.8"]
                  [cljsjs/react "15.3.1-0"]]
@@ -28,7 +29,9 @@
               :production {:env {:production true}}
               :uberjar {:aot :all}}
   :plugins [[lein-environ "1.1.0"]
-            [lein-ancient "0.6.10"]]
+            [lein-ancient "0.6.10"]
+            [lein-doo "0.1.7"]]
+
   :uberjar-name "speicher.jar"
 
   :repositories {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
@@ -48,6 +51,11 @@
                                  ;  :source-map true
                                    :source-map-timestamp true
                                    :pretty-print true}}
+                       {:id "test"
+                         :source-paths ["src" "test"]
+                         :compiler {:output-to "resources/public/js/browser_tests.js"
+                                    :main 'speicher.runner
+                                    :optimizations :none}}
                        {:id "release"
                         :source-paths ["src"]
                         :compiler {:output-to "resources/public/js/speicher.min.js"
