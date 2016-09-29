@@ -1,5 +1,5 @@
 (ns speicher.runner
     (:require [doo.runner :refer-macros [doo-tests]]
-              [your-project.core-test]))
+              [speicher.client-test]))
 
 (doo-tests 'speicher.client-test)

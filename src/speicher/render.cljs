@@ -2,7 +2,7 @@
   (:require [cljs.core.async :refer [>!]]
             [cljs.reader :refer [read-string]]
             [cljsjs.react]
-            [quiescent :as q :include-macros true]
+            [quiescent.core :as q :include-macros true]
             [quiescent.dom :as d]
             [clojure.walk :refer [keywordize-keys]]
             [clojure.string :refer [blank? capitalize split]])
@@ -119,6 +119,7 @@
 
 ;; TODO: Check for empty list and save
 (q/defcomponent ReviewPage [state]
+
  ; (d/div {:className "swiper-custom"}
       ;   (Nav "Daily")
   ;       (d/div {:className "slider-container"}

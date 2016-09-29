@@ -16,17 +16,17 @@
                  [lein-doo "0.1.7"]
                  [cljs-http "0.1.41"]
                  [figwheel "0.5.8"]
-                 [cljsjs/react "15.3.1-0"]]
+                 [figwheel "0.5.8"]]
 
   :target-path "target/%s"
   :main ^{:skip-aot true} speicher.server
   :node-dependencies [[source-map-support "0.2.8"]]
-  :profiles {:dev { :plugins [ [lein-cljsbuild "1.0.4"]
+  :profiles { :dev { :plugins [ [lein-cljsbuild "1.0.4"]
                                [lein-npm "0.4.0"]
                                [lein-figwheel "0.2.3-SNAPSHOT"]
-                               [com.cemerick/clojurescript.test "0.3.3"]]
-                    :env {:production false}}
-              :production {:env {:production true}}
+                               [com.cemerick/clojurescript.test "0.3.3"]]}
+
+              :production {:env {:environ :production}}
               :uberjar {:aot :all}}
   :plugins [[lein-environ "1.1.0"]
             [lein-ancient "0.6.10"]
