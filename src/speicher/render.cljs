@@ -27,18 +27,6 @@
    keywordize-keys))
 
 
-(q/defcomponent Nav [title]
-  (d/div {:className "navbar"}
-         (d/div {:className "navbar-inner"}
-                (d/div {:className "left"}
-                       (d/a {:href "#" :className "back link"}
-                            (d/i {:className "icon icon-back"})
-                            (d/span nil "Back")))
-                (d/div {:className "center" :style {:left "22px"}}
-                       title)
-                (d/div {:className "right"}))))
-
-
 (q/defcomponent Wordrow [row input-chan]
   (d/div {:className "accordion-item"}
          (d/div {:className "accordion-item-toggle"}
@@ -53,7 +41,6 @@
   "A list of words rendered in table"
   [state input-chan]
   (d/div nil
-         (Nav "Review")
          (d/div {:className "page-content"}
                 (d/div {:className "accordion-list list-block"}
                        (apply d/ul nil
@@ -143,7 +130,7 @@
   (let [handle-search (partial handle-search-submit input-chan)
         handle-new-word (partial handle-new-word-submit input-chan)]
     (d/div nil
-           (Nav "Enter German Word")
+           (d/div "Enter German Word")
            (d/form {:className "searchbar"
                     :onSubmit handle-search}
                    (d/div {:className "searchbar-input"}
@@ -212,49 +199,21 @@
                                                 (d/input {:type "submit" :value "Submit"
                                                           :className "close-popup button button-big button-fill color-green"}))))))))))
 
-(q/defcomponent HomePage [{:keys [input-chan main-view]}]
-  (letfn [(load-page [file] (.. main-view -router (loadPage file)))]
-   (d/div nil
-          (d/div {:className "content-block-title"} "What would you like to do?")
-          (d/div {:className "list-block"}
-                 (d/ul nil
-                       (d/li nil (d/a {:href "#"  :className "item-link"
-                                       :onClick  #(go (load-page "review.html")
-                                                     (>! input-chan [:show-list :daily]))}
-                                      (d/div {:className "item-content"}
-                                             (d/div {:className "item-inner"}
-                                                    (d/div {:className "item-title"} "Review Daily List")))))
-                       (d/li nil (d/a {:href "#"  :className "item-link"
-                                       :onClick  #(go (load-page "review.html")
-                                                     (>! input-chan [:show-list :weekly]))}
-                                      (d/div {:className "item-content"}
-                                             (d/div {:className "item-inner"}
-                                                    (d/div {:className "item-title"} "Review Weekly List")))))
-                       (d/li nil (d/a {:href "#" :className "item-link"
-                                       :onClick #(go (load-page "search.html"))}
-                                                  ;  (>! input-chan [:search-page nil])
+(q/defcomponent Nav [state chans]
+  (d/nav {:className "nav"}
+    (d/div {:className "nav-left"}
+      (d/a {:className "nav-item is-brand" :href "#"} "SPEICHER"))
+    (d/div {:className "nav-center"})))
 
-                                      (d/div {:className "item-content"}
-                                             (d/div {:className "item-inner"}
-                                                    (d/div {:className "item-title"} "Look up new word in Dictionary")))))
-                       (d/li nil (d/a {:href "#" :className "item-link"}
-                                      (d/div {:className "item-content"}
-                                             (d/div {:className "item-inner"}
-                                                    (d/div {:className "item-title"} "Enter new word and definition"))))))))))
+(q/defcomponent Menu [state chans]
+  (d/aside {:className "menu"}
+    (d/p {:className "menu-label"} "Review")
+    (d/ul {:classNmae "menu-list"}
+      (d/li
+        (d/a {:href ""} "Review")))))
 
-
-;; (q/defcomponent page
-;;   "the root of the application"
-;;   [state]
-;;   (d/div {}
-;;          ;;          (d/span {:onclick  #(go (>! ch [:show-list :monthly]))} "monthly ")
-;;          (condp = (:mode state)
-;;            :review-list (reviewpage state)
-;;            :next (nextpage state)
-;;            :search-page (searchpage state)
-;;            (wordlist state (:input-chan state)))))
-
-
+(q/defcomponent Page [state chans]
+          (Menu state chans))
 
 ;; Here we use an atom to tell us if we already have a render queued
 ;; up; if so, requesting another render is a no-op
@@ -265,16 +224,6 @@
     (when (compare-and-set! render-pending? false true)
       (.requestAnimationFrame js/window
           (fn []
-            (when-let [el (.getElementById js/document "popup")]
-             (q/render (Popup state) el))
-            (condp = (:mode state)
-              :show-list (q/render (WordList state) (.getElementById js/document "show-page"))
-              :review-list (do
-                             (q/render (ReviewPage state) (.getElementById js/document "swiper"))
-                             (when (and (:words state)
-                                        (false? (:swiper-init? state)))
-                                   (go (>! (:input-chan state) [:init-swiper nil]))))
-              :search-page (q/render (SearchPage state) (.getElementById js/document "search-page"))
-              :next (q/render  (NextPage state)  (.getElementById js/document "next-page"))
-              :start (WordList state (:input-chan state) (.getElementById js/document "nav-options")))))
+            (q/render (Page (:state app) (:channels app
+                                          (.getElementById js/document "speicher"))))))
       (reset! render-pending? false))))

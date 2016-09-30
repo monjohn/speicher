@@ -1,0 +1,1129 @@
+[0mCompiling "resources/public/js/browser_tests.js" from ["src" "test"]...[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:44  column:11  ----[0m
+
+  [1mUse of undeclared Var speicher.render/Nav[0m
+
+  [36m40[0m  [36m(q/defcomponent WordList[0m
+  [36m41[0m  [36m  "A list of words rendered in table"[0m
+  [36m42[0m  [36m  [state input-chan][0m
+  [36m43[0m  [36m  (d/div nil[0m
+  [33m44[0m  [1m         (Nav "Review")[0m
+  [0m  [0m  [33m          ^--- Use of undeclared Var speicher.render/Nav[0m
+  [36m45[0m  [36m         (d/div {:className "page-content"}[0m
+  [36m46[0m  [36m                (d/div {:className "accordion-list list-block"}[0m
+  [36m47[0m  [36m                       (apply d/ul nil[0m
+  [36m48[0m  [36m                              (map #(Wordrow % input-chan) (:words state)))))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:134  column:13  ----[0m
+
+  [1mUse of undeclared Var speicher.render/Nav[0m
+
+  [36m130[0m  [36m"Page to search for and add new word to list"[0m
+  [36m131[0m  [36m(let [handle-search (partial handle-search-submit input-chan)[0m
+  [36m132[0m  [36m      handle-new-word (partial handle-new-word-submit input-chan)][0m
+  [36m133[0m  [36m  (d/div nil[0m
+  [33m134[0m  [1m         (Nav "Enter German Word")[0m
+  [0m   [0m  [33m          ^--- Use of undeclared Var speicher.render/Nav[0m
+  [36m135[0m  [36m         (d/form {:className "searchbar"[0m
+  [36m136[0m  [36m                  :onSubmit handle-search}[0m
+  [36m137[0m  [36m                 (d/div {:className "searchbar-input"}[0m
+  [36m138[0m  [36m                        (d/input {:type "search" :name "search" :id "term" :placeholder "Search"})[0m
+  [36m139[0m  [36m                        (d/a {:href "#" :className "searchbar-clear"}))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:206  column:55  ----[0m
+
+  [1mUse of undeclared Var speicher.render/SPEICHER[0m
+
+  [36m203[0m  [36m(q/defcomponent Nav [state chans][0m
+  [36m204[0m  [36m  (d/nav {:className "nav"}[0m
+  [36m205[0m  [36m    (d/div {:className "nav-left"}[0m
+  [33m206[0m  [1m      (d/a {:className "nav-item is-brand" :href "#"} SPEICHER))[0m
+  [0m   [0m  [33m                                                      ^--- Use of undeclared Var speicher.render/SPEICHER[0m
+  [36m207[0m  [36m    (d/div {:className "nav-center"})))[0m
+  [36m208[0m  [36m[0m
+  [36m209[0m  [36m(q/defcomponent Menu [state chans][0m
+  [36m210[0m  [36m  (d/aside {:className "menu"}[0m
+  [36m211[0m  [36m    (d/p {:className "menu-label"} Review)[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:211  column:36  ----[0m
+
+  [1mUse of undeclared Var speicher.render/Review[0m
+
+  [36m207[0m  [36m    (d/div {:className "nav-center"})))[0m
+  [36m208[0m  [36m[0m
+  [36m209[0m  [36m(q/defcomponent Menu [state chans][0m
+  [36m210[0m  [36m  (d/aside {:className "menu"}[0m
+  [33m211[0m  [1m    (d/p {:className "menu-label"} Review)[0m
+  [0m   [0m  [33m                                   ^--- Use of undeclared Var speicher.render/Review[0m
+  [36m212[0m  [36m    (d/ul {:classNmae "menu-list"}[0m
+  [36m213[0m  [36m      (d/li[0m
+  [36m214[0m  [36m        (d/a {:href ""} Review)))))[0m
+  [36m215[0m  [36m[0m
+  [36m216[0m  [36m(q/defcomponent Page [state chans][0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:214  column:25  ----[0m
+
+  [1mUse of undeclared Var speicher.render/Review[0m
+
+  [36m210[0m  [36m  (d/aside {:className "menu"}[0m
+  [36m211[0m  [36m    (d/p {:className "menu-label"} Review)[0m
+  [36m212[0m  [36m    (d/ul {:classNmae "menu-list"}[0m
+  [36m213[0m  [36m      (d/li[0m
+  [33m214[0m  [1m        (d/a {:href ""} Review)))))[0m
+  [0m   [0m  [33m                        ^--- Use of undeclared Var speicher.render/Review[0m
+  [36m215[0m  [36m[0m
+  [36m216[0m  [36m(q/defcomponent Page [state chans][0m
+  [36m217[0m  [36m          (Menu state chans))[0m
+  [36m218[0m  [36m[0m
+  [36m219[0m  [36m;; Here we use an atom to tell us if we already have a render queued[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:228  column:13  ----[0m
+
+  [1mWrong number of args (1) passed to quiescent.core/render[0m
+
+  [36m224[0m  [36m[state][0m
+  [36m225[0m  [36m(when (compare-and-set! render-pending? false true)[0m
+  [36m226[0m  [36m  (.requestAnimationFrame js/window[0m
+  [36m227[0m  [36m      (fn [][0m
+  [33m228[0m  [1m        (q/render (App @(:state app) (:channels app[0m
+  [0m   [0m  [33m        ^--- Wrong number of args (1) passed to quiescent.core/render[0m
+  [36m229[0m  [36m                                      (.getElementById js/document "speicher"))))))[0m
+  [36m230[0m  [36m  (reset! render-pending? false))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:228  column:24  ----[0m
+
+  [1mUse of undeclared Var speicher.render/App[0m
+
+  [36m224[0m  [36m[state][0m
+  [36m225[0m  [36m(when (compare-and-set! render-pending? false true)[0m
+  [36m226[0m  [36m  (.requestAnimationFrame js/window[0m
+  [36m227[0m  [36m      (fn [][0m
+  [33m228[0m  [1m        (q/render (App @(:state app) (:channels app[0m
+  [0m   [0m  [33m                   ^--- Use of undeclared Var speicher.render/App[0m
+  [36m229[0m  [36m                                      (.getElementById js/document "speicher"))))))[0m
+  [36m230[0m  [36m  (reset! render-pending? false))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:228  column:37  ----[0m
+
+  [1mUse of undeclared Var speicher.render/app[0m
+
+  [36m224[0m  [36m[state][0m
+  [36m225[0m  [36m(when (compare-and-set! render-pending? false true)[0m
+  [36m226[0m  [36m  (.requestAnimationFrame js/window[0m
+  [36m227[0m  [36m      (fn [][0m
+  [33m228[0m  [1m        (q/render (App @(:state app) (:channels app[0m
+  [0m   [0m  [33m                                ^--- Use of undeclared Var speicher.render/app[0m
+  [36m229[0m  [36m                                      (.getElementById js/document "speicher"))))))[0m
+  [36m230[0m  [36m  (reset! render-pending? false))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:228  column:53  ----[0m
+
+  [1mUse of undeclared Var speicher.render/app[0m
+
+  [36m224[0m  [36m[state][0m
+  [36m225[0m  [36m(when (compare-and-set! render-pending? false true)[0m
+  [36m226[0m  [36m  (.requestAnimationFrame js/window[0m
+  [36m227[0m  [36m      (fn [][0m
+  [33m228[0m  [1m        (q/render (App @(:state app) (:channels app[0m
+  [0m   [0m  [33m                                                ^--- Use of undeclared Var speicher.render/app[0m
+  [36m229[0m  [36m                                      (.getElementById js/document "speicher"))))))[0m
+  [36m230[0m  [36m  (reset! render-pending? false))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[32mSuccessfully compiled "resources/public/js/browser_tests.js" in 1.525 seconds.[0m
+notifying browser that file changed:  resources/public/js/out/goog/deps.js
+notifying browser that file changed:  resources/public/js/out/cljs_deps.js
+notifying browser that file changed:  out/speicher/render.js
+[0mCompiling "resources/public/js/browser_tests.js" from ["src" "test"]...[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:44  column:11  ----[0m
+
+  [1mUse of undeclared Var speicher.render/Nav[0m
+
+  [36m40[0m  [36m(q/defcomponent WordList[0m
+  [36m41[0m  [36m  "A list of words rendered in table"[0m
+  [36m42[0m  [36m  [state input-chan][0m
+  [36m43[0m  [36m  (d/div nil[0m
+  [33m44[0m  [1m         (Nav "Review")[0m
+  [0m  [0m  [33m          ^--- Use of undeclared Var speicher.render/Nav[0m
+  [36m45[0m  [36m         (d/div {:className "page-content"}[0m
+  [36m46[0m  [36m                (d/div {:className "accordion-list list-block"}[0m
+  [36m47[0m  [36m                       (apply d/ul nil[0m
+  [36m48[0m  [36m                              (map #(Wordrow % input-chan) (:words state)))))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:134  column:13  ----[0m
+
+  [1mUse of undeclared Var speicher.render/Nav[0m
+
+  [36m130[0m  [36m"Page to search for and add new word to list"[0m
+  [36m131[0m  [36m(let [handle-search (partial handle-search-submit input-chan)[0m
+  [36m132[0m  [36m      handle-new-word (partial handle-new-word-submit input-chan)][0m
+  [36m133[0m  [36m  (d/div nil[0m
+  [33m134[0m  [1m         (Nav "Enter German Word")[0m
+  [0m   [0m  [33m          ^--- Use of undeclared Var speicher.render/Nav[0m
+  [36m135[0m  [36m         (d/form {:className "searchbar"[0m
+  [36m136[0m  [36m                  :onSubmit handle-search}[0m
+  [36m137[0m  [36m                 (d/div {:className "searchbar-input"}[0m
+  [36m138[0m  [36m                        (d/input {:type "search" :name "search" :id "term" :placeholder "Search"})[0m
+  [36m139[0m  [36m                        (d/a {:href "#" :className "searchbar-clear"}))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:228  column:13  ----[0m
+
+  [1mWrong number of args (1) passed to quiescent.core/render[0m
+
+  [36m224[0m  [36m[state][0m
+  [36m225[0m  [36m(when (compare-and-set! render-pending? false true)[0m
+  [36m226[0m  [36m  (.requestAnimationFrame js/window[0m
+  [36m227[0m  [36m      (fn [][0m
+  [33m228[0m  [1m        (q/render (App @(:state app) (:channels app[0m
+  [0m   [0m  [33m        ^--- Wrong number of args (1) passed to quiescent.core/render[0m
+  [36m229[0m  [36m                                      (.getElementById js/document "speicher"))))))[0m
+  [36m230[0m  [36m  (reset! render-pending? false))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:228  column:24  ----[0m
+
+  [1mUse of undeclared Var speicher.render/App[0m
+
+  [36m224[0m  [36m[state][0m
+  [36m225[0m  [36m(when (compare-and-set! render-pending? false true)[0m
+  [36m226[0m  [36m  (.requestAnimationFrame js/window[0m
+  [36m227[0m  [36m      (fn [][0m
+  [33m228[0m  [1m        (q/render (App @(:state app) (:channels app[0m
+  [0m   [0m  [33m                   ^--- Use of undeclared Var speicher.render/App[0m
+  [36m229[0m  [36m                                      (.getElementById js/document "speicher"))))))[0m
+  [36m230[0m  [36m  (reset! render-pending? false))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:228  column:37  ----[0m
+
+  [1mUse of undeclared Var speicher.render/app[0m
+
+  [36m224[0m  [36m[state][0m
+  [36m225[0m  [36m(when (compare-and-set! render-pending? false true)[0m
+  [36m226[0m  [36m  (.requestAnimationFrame js/window[0m
+  [36m227[0m  [36m      (fn [][0m
+  [33m228[0m  [1m        (q/render (App @(:state app) (:channels app[0m
+  [0m   [0m  [33m                                ^--- Use of undeclared Var speicher.render/app[0m
+  [36m229[0m  [36m                                      (.getElementById js/document "speicher"))))))[0m
+  [36m230[0m  [36m  (reset! render-pending? false))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:228  column:53  ----[0m
+
+  [1mUse of undeclared Var speicher.render/app[0m
+
+  [36m224[0m  [36m[state][0m
+  [36m225[0m  [36m(when (compare-and-set! render-pending? false true)[0m
+  [36m226[0m  [36m  (.requestAnimationFrame js/window[0m
+  [36m227[0m  [36m      (fn [][0m
+  [33m228[0m  [1m        (q/render (App @(:state app) (:channels app[0m
+  [0m   [0m  [33m                                                ^--- Use of undeclared Var speicher.render/app[0m
+  [36m229[0m  [36m                                      (.getElementById js/document "speicher"))))))[0m
+  [36m230[0m  [36m  (reset! render-pending? false))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:7  column:1  ----[0m
+
+  [1mUse of undeclared Var cljs.test/test-var[0m
+
+  [36m 3[0m  [36m  (:require [speicher.client :refer (level-complete? level-up)]))[0m
+  [36m 4[0m  [36m[0m
+  [36m 5[0m  [36m(enable-console-print!)[0m
+  [36m 6[0m  [36m(println "TESTING")[0m
+  [33m 7[0m  [1m(deftest level-complete?-test[0m
+  [0m  [0m  [33m^--- Use of undeclared Var cljs.test/test-var[0m
+  [36m 8[0m  [36m  (testing "level-complete?"[0m
+  [36m 9[0m  [36m    (testing "Edge cases\n"[0m
+  [36m10[0m  [36m      (testing "all upper bounds"[0m
+  [36m11[0m  [36m        (is (= true (level-complete? :daily 6)))[0m
+  [36m12[0m  [36m        (is (= true (level-complete? :weekly 6)))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:8  column:3  ----[0m
+
+  [1mUse of undeclared Var cljs.test/update-current-env![0m
+
+  [36m 5[0m  [36m(enable-console-print!)[0m
+  [36m 6[0m  [36m(println "TESTING")[0m
+  [36m 7[0m  [36m(deftest level-complete?-test[0m
+  [33m 8[0m  [1m  (testing "level-complete?"[0m
+  [0m  [0m  [33m  ^--- Use of undeclared Var cljs.test/update-current-env![0m
+  [36m 9[0m  [36m    (testing "Edge cases\n"[0m
+  [36m10[0m  [36m      (testing "all upper bounds"[0m
+  [36m11[0m  [36m        (is (= true (level-complete? :daily 6)))[0m
+  [36m12[0m  [36m        (is (= true (level-complete? :weekly 6)))[0m
+  [36m13[0m  [36m        (is (= true (level-complete? :monthly 11)))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:8  column:3  ----[0m
+
+  [1mUse of undeclared Var cljs.test/update-current-env![0m
+
+  [36m 5[0m  [36m(enable-console-print!)[0m
+  [36m 6[0m  [36m(println "TESTING")[0m
+  [36m 7[0m  [36m(deftest level-complete?-test[0m
+  [33m 8[0m  [1m  (testing "level-complete?"[0m
+  [0m  [0m  [33m  ^--- Use of undeclared Var cljs.test/update-current-env![0m
+  [36m 9[0m  [36m    (testing "Edge cases\n"[0m
+  [36m10[0m  [36m      (testing "all upper bounds"[0m
+  [36m11[0m  [36m        (is (= true (level-complete? :daily 6)))[0m
+  [36m12[0m  [36m        (is (= true (level-complete? :weekly 6)))[0m
+  [36m13[0m  [36m        (is (= true (level-complete? :monthly 11)))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:9  column:5  ----[0m
+
+  [1mUse of undeclared Var cljs.test/update-current-env![0m
+
+  [36m 5[0m  [36m(enable-console-print!)[0m
+  [36m 6[0m  [36m(println "TESTING")[0m
+  [36m 7[0m  [36m(deftest level-complete?-test[0m
+  [36m 8[0m  [36m  (testing "level-complete?"[0m
+  [33m 9[0m  [1m    (testing "Edge cases\n"[0m
+  [0m  [0m  [33m    ^--- Use of undeclared Var cljs.test/update-current-env![0m
+  [36m10[0m  [36m      (testing "all upper bounds"[0m
+  [36m11[0m  [36m        (is (= true (level-complete? :daily 6)))[0m
+  [36m12[0m  [36m        (is (= true (level-complete? :weekly 6)))[0m
+  [36m13[0m  [36m        (is (= true (level-complete? :monthly 11)))[0m
+  [36m14[0m  [36m        (is (= true (level-complete? :yearly 6)))))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:9  column:5  ----[0m
+
+  [1mUse of undeclared Var cljs.test/update-current-env![0m
+
+  [36m 5[0m  [36m(enable-console-print!)[0m
+  [36m 6[0m  [36m(println "TESTING")[0m
+  [36m 7[0m  [36m(deftest level-complete?-test[0m
+  [36m 8[0m  [36m  (testing "level-complete?"[0m
+  [33m 9[0m  [1m    (testing "Edge cases\n"[0m
+  [0m  [0m  [33m    ^--- Use of undeclared Var cljs.test/update-current-env![0m
+  [36m10[0m  [36m      (testing "all upper bounds"[0m
+  [36m11[0m  [36m        (is (= true (level-complete? :daily 6)))[0m
+  [36m12[0m  [36m        (is (= true (level-complete? :weekly 6)))[0m
+  [36m13[0m  [36m        (is (= true (level-complete? :monthly 11)))[0m
+  [36m14[0m  [36m        (is (= true (level-complete? :yearly 6)))))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:10  column:7  ----[0m
+
+  [1mUse of undeclared Var cljs.test/update-current-env![0m
+
+  [36m 6[0m  [36m(println "TESTING")[0m
+  [36m 7[0m  [36m(deftest level-complete?-test[0m
+  [36m 8[0m  [36m  (testing "level-complete?"[0m
+  [36m 9[0m  [36m    (testing "Edge cases\n"[0m
+  [33m10[0m  [1m      (testing "all upper bounds"[0m
+  [0m  [0m  [33m      ^--- Use of undeclared Var cljs.test/update-current-env![0m
+  [36m11[0m  [36m        (is (= true (level-complete? :daily 6)))[0m
+  [36m12[0m  [36m        (is (= true (level-complete? :weekly 6)))[0m
+  [36m13[0m  [36m        (is (= true (level-complete? :monthly 11)))[0m
+  [36m14[0m  [36m        (is (= true (level-complete? :yearly 6)))))[0m
+  [36m15[0m  [36m    (testing "not complete"[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:10  column:7  ----[0m
+
+  [1mUse of undeclared Var cljs.test/update-current-env![0m
+
+  [36m 6[0m  [36m(println "TESTING")[0m
+  [36m 7[0m  [36m(deftest level-complete?-test[0m
+  [36m 8[0m  [36m  (testing "level-complete?"[0m
+  [36m 9[0m  [36m    (testing "Edge cases\n"[0m
+  [33m10[0m  [1m      (testing "all upper bounds"[0m
+  [0m  [0m  [33m      ^--- Use of undeclared Var cljs.test/update-current-env![0m
+  [36m11[0m  [36m        (is (= true (level-complete? :daily 6)))[0m
+  [36m12[0m  [36m        (is (= true (level-complete? :weekly 6)))[0m
+  [36m13[0m  [36m        (is (= true (level-complete? :monthly 11)))[0m
+  [36m14[0m  [36m        (is (= true (level-complete? :yearly 6)))))[0m
+  [36m15[0m  [36m    (testing "not complete"[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:11  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m 7[0m  [36m(deftest level-complete?-test[0m
+  [36m 8[0m  [36m  (testing "level-complete?"[0m
+  [36m 9[0m  [36m    (testing "Edge cases\n"[0m
+  [36m10[0m  [36m      (testing "all upper bounds"[0m
+  [33m11[0m  [1m        (is (= true (level-complete? :daily 6)))[0m
+  [0m  [0m  [33m        ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m12[0m  [36m        (is (= true (level-complete? :weekly 6)))[0m
+  [36m13[0m  [36m        (is (= true (level-complete? :monthly 11)))[0m
+  [36m14[0m  [36m        (is (= true (level-complete? :yearly 6)))))[0m
+  [36m15[0m  [36m    (testing "not complete"[0m
+  [36m16[0m  [36m        (is (= false (level-complete? :daily 1)))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:11  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m 7[0m  [36m(deftest level-complete?-test[0m
+  [36m 8[0m  [36m  (testing "level-complete?"[0m
+  [36m 9[0m  [36m    (testing "Edge cases\n"[0m
+  [36m10[0m  [36m      (testing "all upper bounds"[0m
+  [33m11[0m  [1m        (is (= true (level-complete? :daily 6)))[0m
+  [0m  [0m  [33m        ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m12[0m  [36m        (is (= true (level-complete? :weekly 6)))[0m
+  [36m13[0m  [36m        (is (= true (level-complete? :monthly 11)))[0m
+  [36m14[0m  [36m        (is (= true (level-complete? :yearly 6)))))[0m
+  [36m15[0m  [36m    (testing "not complete"[0m
+  [36m16[0m  [36m        (is (= false (level-complete? :daily 1)))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:11  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m 7[0m  [36m(deftest level-complete?-test[0m
+  [36m 8[0m  [36m  (testing "level-complete?"[0m
+  [36m 9[0m  [36m    (testing "Edge cases\n"[0m
+  [36m10[0m  [36m      (testing "all upper bounds"[0m
+  [33m11[0m  [1m        (is (= true (level-complete? :daily 6)))[0m
+  [0m  [0m  [33m        ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m12[0m  [36m        (is (= true (level-complete? :weekly 6)))[0m
+  [36m13[0m  [36m        (is (= true (level-complete? :monthly 11)))[0m
+  [36m14[0m  [36m        (is (= true (level-complete? :yearly 6)))))[0m
+  [36m15[0m  [36m    (testing "not complete"[0m
+  [36m16[0m  [36m        (is (= false (level-complete? :daily 1)))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:12  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m 8[0m  [36m(testing "level-complete?"[0m
+  [36m 9[0m  [36m  (testing "Edge cases\n"[0m
+  [36m10[0m  [36m    (testing "all upper bounds"[0m
+  [36m11[0m  [36m      (is (= true (level-complete? :daily 6)))[0m
+  [33m12[0m  [1m      (is (= true (level-complete? :weekly 6)))[0m
+  [0m  [0m  [33m      ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m13[0m  [36m      (is (= true (level-complete? :monthly 11)))[0m
+  [36m14[0m  [36m      (is (= true (level-complete? :yearly 6)))))[0m
+  [36m15[0m  [36m  (testing "not complete"[0m
+  [36m16[0m  [36m      (is (= false (level-complete? :daily 1)))[0m
+  [36m17[0m  [36m      (is (= false (level-complete? :weekly 1)))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:12  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m 8[0m  [36m(testing "level-complete?"[0m
+  [36m 9[0m  [36m  (testing "Edge cases\n"[0m
+  [36m10[0m  [36m    (testing "all upper bounds"[0m
+  [36m11[0m  [36m      (is (= true (level-complete? :daily 6)))[0m
+  [33m12[0m  [1m      (is (= true (level-complete? :weekly 6)))[0m
+  [0m  [0m  [33m      ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m13[0m  [36m      (is (= true (level-complete? :monthly 11)))[0m
+  [36m14[0m  [36m      (is (= true (level-complete? :yearly 6)))))[0m
+  [36m15[0m  [36m  (testing "not complete"[0m
+  [36m16[0m  [36m      (is (= false (level-complete? :daily 1)))[0m
+  [36m17[0m  [36m      (is (= false (level-complete? :weekly 1)))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:12  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m 8[0m  [36m(testing "level-complete?"[0m
+  [36m 9[0m  [36m  (testing "Edge cases\n"[0m
+  [36m10[0m  [36m    (testing "all upper bounds"[0m
+  [36m11[0m  [36m      (is (= true (level-complete? :daily 6)))[0m
+  [33m12[0m  [1m      (is (= true (level-complete? :weekly 6)))[0m
+  [0m  [0m  [33m      ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m13[0m  [36m      (is (= true (level-complete? :monthly 11)))[0m
+  [36m14[0m  [36m      (is (= true (level-complete? :yearly 6)))))[0m
+  [36m15[0m  [36m  (testing "not complete"[0m
+  [36m16[0m  [36m      (is (= false (level-complete? :daily 1)))[0m
+  [36m17[0m  [36m      (is (= false (level-complete? :weekly 1)))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:13  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m 9[0m  [36m(testing "Edge cases\n"[0m
+  [36m10[0m  [36m  (testing "all upper bounds"[0m
+  [36m11[0m  [36m    (is (= true (level-complete? :daily 6)))[0m
+  [36m12[0m  [36m    (is (= true (level-complete? :weekly 6)))[0m
+  [33m13[0m  [1m    (is (= true (level-complete? :monthly 11)))[0m
+  [0m  [0m  [33m    ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m14[0m  [36m    (is (= true (level-complete? :yearly 6)))))[0m
+  [36m15[0m  [36m(testing "not complete"[0m
+  [36m16[0m  [36m    (is (= false (level-complete? :daily 1)))[0m
+  [36m17[0m  [36m    (is (= false (level-complete? :weekly 1)))[0m
+  [36m18[0m  [36m    (is (= false (level-complete? :monthly 1))))))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:13  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m 9[0m  [36m(testing "Edge cases\n"[0m
+  [36m10[0m  [36m  (testing "all upper bounds"[0m
+  [36m11[0m  [36m    (is (= true (level-complete? :daily 6)))[0m
+  [36m12[0m  [36m    (is (= true (level-complete? :weekly 6)))[0m
+  [33m13[0m  [1m    (is (= true (level-complete? :monthly 11)))[0m
+  [0m  [0m  [33m    ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m14[0m  [36m    (is (= true (level-complete? :yearly 6)))))[0m
+  [36m15[0m  [36m(testing "not complete"[0m
+  [36m16[0m  [36m    (is (= false (level-complete? :daily 1)))[0m
+  [36m17[0m  [36m    (is (= false (level-complete? :weekly 1)))[0m
+  [36m18[0m  [36m    (is (= false (level-complete? :monthly 1))))))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:13  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m 9[0m  [36m(testing "Edge cases\n"[0m
+  [36m10[0m  [36m  (testing "all upper bounds"[0m
+  [36m11[0m  [36m    (is (= true (level-complete? :daily 6)))[0m
+  [36m12[0m  [36m    (is (= true (level-complete? :weekly 6)))[0m
+  [33m13[0m  [1m    (is (= true (level-complete? :monthly 11)))[0m
+  [0m  [0m  [33m    ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m14[0m  [36m    (is (= true (level-complete? :yearly 6)))))[0m
+  [36m15[0m  [36m(testing "not complete"[0m
+  [36m16[0m  [36m    (is (= false (level-complete? :daily 1)))[0m
+  [36m17[0m  [36m    (is (= false (level-complete? :weekly 1)))[0m
+  [36m18[0m  [36m    (is (= false (level-complete? :monthly 1))))))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:14  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m10[0m  [36m  (testing "all upper bounds"[0m
+  [36m11[0m  [36m    (is (= true (level-complete? :daily 6)))[0m
+  [36m12[0m  [36m    (is (= true (level-complete? :weekly 6)))[0m
+  [36m13[0m  [36m    (is (= true (level-complete? :monthly 11)))[0m
+  [33m14[0m  [1m    (is (= true (level-complete? :yearly 6)))))[0m
+  [0m  [0m  [33m    ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m15[0m  [36m(testing "not complete"[0m
+  [36m16[0m  [36m    (is (= false (level-complete? :daily 1)))[0m
+  [36m17[0m  [36m    (is (= false (level-complete? :weekly 1)))[0m
+  [36m18[0m  [36m    (is (= false (level-complete? :monthly 1))))))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:14  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m10[0m  [36m  (testing "all upper bounds"[0m
+  [36m11[0m  [36m    (is (= true (level-complete? :daily 6)))[0m
+  [36m12[0m  [36m    (is (= true (level-complete? :weekly 6)))[0m
+  [36m13[0m  [36m    (is (= true (level-complete? :monthly 11)))[0m
+  [33m14[0m  [1m    (is (= true (level-complete? :yearly 6)))))[0m
+  [0m  [0m  [33m    ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m15[0m  [36m(testing "not complete"[0m
+  [36m16[0m  [36m    (is (= false (level-complete? :daily 1)))[0m
+  [36m17[0m  [36m    (is (= false (level-complete? :weekly 1)))[0m
+  [36m18[0m  [36m    (is (= false (level-complete? :monthly 1))))))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:14  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m10[0m  [36m  (testing "all upper bounds"[0m
+  [36m11[0m  [36m    (is (= true (level-complete? :daily 6)))[0m
+  [36m12[0m  [36m    (is (= true (level-complete? :weekly 6)))[0m
+  [36m13[0m  [36m    (is (= true (level-complete? :monthly 11)))[0m
+  [33m14[0m  [1m    (is (= true (level-complete? :yearly 6)))))[0m
+  [0m  [0m  [33m    ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m15[0m  [36m(testing "not complete"[0m
+  [36m16[0m  [36m    (is (= false (level-complete? :daily 1)))[0m
+  [36m17[0m  [36m    (is (= false (level-complete? :weekly 1)))[0m
+  [36m18[0m  [36m    (is (= false (level-complete? :monthly 1))))))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:15  column:5  ----[0m
+
+  [1mUse of undeclared Var cljs.test/update-current-env![0m
+
+  [36m11[0m  [36m        (is (= true (level-complete? :daily 6)))[0m
+  [36m12[0m  [36m        (is (= true (level-complete? :weekly 6)))[0m
+  [36m13[0m  [36m        (is (= true (level-complete? :monthly 11)))[0m
+  [36m14[0m  [36m        (is (= true (level-complete? :yearly 6)))))[0m
+  [33m15[0m  [1m    (testing "not complete"[0m
+  [0m  [0m  [33m    ^--- Use of undeclared Var cljs.test/update-current-env![0m
+  [36m16[0m  [36m        (is (= false (level-complete? :daily 1)))[0m
+  [36m17[0m  [36m        (is (= false (level-complete? :weekly 1)))[0m
+  [36m18[0m  [36m        (is (= false (level-complete? :monthly 1))))))[0m
+  [36m19[0m  [36m[0m
+  [36m20[0m  [36m(deftest level-up-test[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:15  column:5  ----[0m
+
+  [1mUse of undeclared Var cljs.test/update-current-env![0m
+
+  [36m11[0m  [36m        (is (= true (level-complete? :daily 6)))[0m
+  [36m12[0m  [36m        (is (= true (level-complete? :weekly 6)))[0m
+  [36m13[0m  [36m        (is (= true (level-complete? :monthly 11)))[0m
+  [36m14[0m  [36m        (is (= true (level-complete? :yearly 6)))))[0m
+  [33m15[0m  [1m    (testing "not complete"[0m
+  [0m  [0m  [33m    ^--- Use of undeclared Var cljs.test/update-current-env![0m
+  [36m16[0m  [36m        (is (= false (level-complete? :daily 1)))[0m
+  [36m17[0m  [36m        (is (= false (level-complete? :weekly 1)))[0m
+  [36m18[0m  [36m        (is (= false (level-complete? :monthly 1))))))[0m
+  [36m19[0m  [36m[0m
+  [36m20[0m  [36m(deftest level-up-test[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:16  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m12[0m  [36m        (is (= true (level-complete? :weekly 6)))[0m
+  [36m13[0m  [36m        (is (= true (level-complete? :monthly 11)))[0m
+  [36m14[0m  [36m        (is (= true (level-complete? :yearly 6)))))[0m
+  [36m15[0m  [36m    (testing "not complete"[0m
+  [33m16[0m  [1m        (is (= false (level-complete? :daily 1)))[0m
+  [0m  [0m  [33m        ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m17[0m  [36m        (is (= false (level-complete? :weekly 1)))[0m
+  [36m18[0m  [36m        (is (= false (level-complete? :monthly 1))))))[0m
+  [36m19[0m  [36m[0m
+  [36m20[0m  [36m(deftest level-up-test[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:16  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m12[0m  [36m        (is (= true (level-complete? :weekly 6)))[0m
+  [36m13[0m  [36m        (is (= true (level-complete? :monthly 11)))[0m
+  [36m14[0m  [36m        (is (= true (level-complete? :yearly 6)))))[0m
+  [36m15[0m  [36m    (testing "not complete"[0m
+  [33m16[0m  [1m        (is (= false (level-complete? :daily 1)))[0m
+  [0m  [0m  [33m        ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m17[0m  [36m        (is (= false (level-complete? :weekly 1)))[0m
+  [36m18[0m  [36m        (is (= false (level-complete? :monthly 1))))))[0m
+  [36m19[0m  [36m[0m
+  [36m20[0m  [36m(deftest level-up-test[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:16  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m12[0m  [36m        (is (= true (level-complete? :weekly 6)))[0m
+  [36m13[0m  [36m        (is (= true (level-complete? :monthly 11)))[0m
+  [36m14[0m  [36m        (is (= true (level-complete? :yearly 6)))))[0m
+  [36m15[0m  [36m    (testing "not complete"[0m
+  [33m16[0m  [1m        (is (= false (level-complete? :daily 1)))[0m
+  [0m  [0m  [33m        ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m17[0m  [36m        (is (= false (level-complete? :weekly 1)))[0m
+  [36m18[0m  [36m        (is (= false (level-complete? :monthly 1))))))[0m
+  [36m19[0m  [36m[0m
+  [36m20[0m  [36m(deftest level-up-test[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:17  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m13[0m  [36m        (is (= true (level-complete? :monthly 11)))[0m
+  [36m14[0m  [36m        (is (= true (level-complete? :yearly 6)))))[0m
+  [36m15[0m  [36m    (testing "not complete"[0m
+  [36m16[0m  [36m        (is (= false (level-complete? :daily 1)))[0m
+  [33m17[0m  [1m        (is (= false (level-complete? :weekly 1)))[0m
+  [0m  [0m  [33m        ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m18[0m  [36m        (is (= false (level-complete? :monthly 1))))))[0m
+  [36m19[0m  [36m[0m
+  [36m20[0m  [36m(deftest level-up-test[0m
+  [36m21[0m  [36m[0m
+  [36m22[0m  [36m  (testing "Leveling  up"[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:17  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m13[0m  [36m        (is (= true (level-complete? :monthly 11)))[0m
+  [36m14[0m  [36m        (is (= true (level-complete? :yearly 6)))))[0m
+  [36m15[0m  [36m    (testing "not complete"[0m
+  [36m16[0m  [36m        (is (= false (level-complete? :daily 1)))[0m
+  [33m17[0m  [1m        (is (= false (level-complete? :weekly 1)))[0m
+  [0m  [0m  [33m        ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m18[0m  [36m        (is (= false (level-complete? :monthly 1))))))[0m
+  [36m19[0m  [36m[0m
+  [36m20[0m  [36m(deftest level-up-test[0m
+  [36m21[0m  [36m[0m
+  [36m22[0m  [36m  (testing "Leveling  up"[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:17  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m13[0m  [36m        (is (= true (level-complete? :monthly 11)))[0m
+  [36m14[0m  [36m        (is (= true (level-complete? :yearly 6)))))[0m
+  [36m15[0m  [36m    (testing "not complete"[0m
+  [36m16[0m  [36m        (is (= false (level-complete? :daily 1)))[0m
+  [33m17[0m  [1m        (is (= false (level-complete? :weekly 1)))[0m
+  [0m  [0m  [33m        ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m18[0m  [36m        (is (= false (level-complete? :monthly 1))))))[0m
+  [36m19[0m  [36m[0m
+  [36m20[0m  [36m(deftest level-up-test[0m
+  [36m21[0m  [36m[0m
+  [36m22[0m  [36m  (testing "Leveling  up"[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:18  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m14[0m  [36m        (is (= true (level-complete? :yearly 6)))))[0m
+  [36m15[0m  [36m    (testing "not complete"[0m
+  [36m16[0m  [36m        (is (= false (level-complete? :daily 1)))[0m
+  [36m17[0m  [36m        (is (= false (level-complete? :weekly 1)))[0m
+  [33m18[0m  [1m        (is (= false (level-complete? :monthly 1))))))[0m
+  [0m  [0m  [33m        ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m19[0m  [36m[0m
+  [36m20[0m  [36m(deftest level-up-test[0m
+  [36m21[0m  [36m[0m
+  [36m22[0m  [36m  (testing "Leveling  up"[0m
+  [36m23[0m  [36m    (is (= {:words [nil] :next-list [["Tag" "day" 0 :weekly]]}[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:18  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m14[0m  [36m        (is (= true (level-complete? :yearly 6)))))[0m
+  [36m15[0m  [36m    (testing "not complete"[0m
+  [36m16[0m  [36m        (is (= false (level-complete? :daily 1)))[0m
+  [36m17[0m  [36m        (is (= false (level-complete? :weekly 1)))[0m
+  [33m18[0m  [1m        (is (= false (level-complete? :monthly 1))))))[0m
+  [0m  [0m  [33m        ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m19[0m  [36m[0m
+  [36m20[0m  [36m(deftest level-up-test[0m
+  [36m21[0m  [36m[0m
+  [36m22[0m  [36m  (testing "Leveling  up"[0m
+  [36m23[0m  [36m    (is (= {:words [nil] :next-list [["Tag" "day" 0 :weekly]]}[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:18  column:9  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m14[0m  [36m        (is (= true (level-complete? :yearly 6)))))[0m
+  [36m15[0m  [36m    (testing "not complete"[0m
+  [36m16[0m  [36m        (is (= false (level-complete? :daily 1)))[0m
+  [36m17[0m  [36m        (is (= false (level-complete? :weekly 1)))[0m
+  [33m18[0m  [1m        (is (= false (level-complete? :monthly 1))))))[0m
+  [0m  [0m  [33m        ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m19[0m  [36m[0m
+  [36m20[0m  [36m(deftest level-up-test[0m
+  [36m21[0m  [36m[0m
+  [36m22[0m  [36m  (testing "Leveling  up"[0m
+  [36m23[0m  [36m    (is (= {:words [nil] :next-list [["Tag" "day" 0 :weekly]]}[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:20  column:1  ----[0m
+
+  [1mUse of undeclared Var cljs.test/test-var[0m
+
+  [36m16[0m  [36m        (is (= false (level-complete? :daily 1)))[0m
+  [36m17[0m  [36m        (is (= false (level-complete? :weekly 1)))[0m
+  [36m18[0m  [36m        (is (= false (level-complete? :monthly 1))))))[0m
+  [36m19[0m  [36m[0m
+  [33m20[0m  [1m(deftest level-up-test[0m
+  [0m  [0m  [33m^--- Use of undeclared Var cljs.test/test-var[0m
+  [36m21[0m  [36m[0m
+  [36m22[0m  [36m  (testing "Leveling  up"[0m
+  [36m23[0m  [36m    (is (= {:words [nil] :next-list [["Tag" "day" 0 :weekly]]}[0m
+  [36m24[0m  [36m           (level-up {:words ["a"] :next-list []} ["Tag" "day" 6 :daily])))))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:22  column:3  ----[0m
+
+  [1mUse of undeclared Var cljs.test/update-current-env![0m
+
+  [36m18[0m  [36m        (is (= false (level-complete? :monthly 1))))))[0m
+  [36m19[0m  [36m[0m
+  [36m20[0m  [36m(deftest level-up-test[0m
+  [36m21[0m  [36m[0m
+  [33m22[0m  [1m  (testing "Leveling  up"[0m
+  [0m  [0m  [33m  ^--- Use of undeclared Var cljs.test/update-current-env![0m
+  [36m23[0m  [36m    (is (= {:words [nil] :next-list [["Tag" "day" 0 :weekly]]}[0m
+  [36m24[0m  [36m           (level-up {:words ["a"] :next-list []} ["Tag" "day" 6 :daily])))))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:22  column:3  ----[0m
+
+  [1mUse of undeclared Var cljs.test/update-current-env![0m
+
+  [36m18[0m  [36m        (is (= false (level-complete? :monthly 1))))))[0m
+  [36m19[0m  [36m[0m
+  [36m20[0m  [36m(deftest level-up-test[0m
+  [36m21[0m  [36m[0m
+  [33m22[0m  [1m  (testing "Leveling  up"[0m
+  [0m  [0m  [33m  ^--- Use of undeclared Var cljs.test/update-current-env![0m
+  [36m23[0m  [36m    (is (= {:words [nil] :next-list [["Tag" "day" 0 :weekly]]}[0m
+  [36m24[0m  [36m           (level-up {:words ["a"] :next-list []} ["Tag" "day" 6 :daily])))))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:23  column:5  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m20[0m  [36m(deftest level-up-test[0m
+  [36m21[0m  [36m[0m
+  [36m22[0m  [36m  (testing "Leveling  up"[0m
+  [33m23[0m  [1m    (is (= {:words [nil] :next-list [["Tag" "day" 0 :weekly]]}[0m
+  [0m  [0m  [33m    ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m24[0m  [36m           (level-up {:words ["a"] :next-list []} ["Tag" "day" 6 :daily])))))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:23  column:5  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m20[0m  [36m(deftest level-up-test[0m
+  [36m21[0m  [36m[0m
+  [36m22[0m  [36m  (testing "Leveling  up"[0m
+  [33m23[0m  [1m    (is (= {:words [nil] :next-list [["Tag" "day" 0 :weekly]]}[0m
+  [0m  [0m  [33m    ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m24[0m  [36m           (level-up {:words ["a"] :next-list []} ["Tag" "day" 6 :daily])))))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[36m----  Compiler Warning on   test/speicher/client_test.cljs   line:23  column:5  ----[0m
+
+  [1mUse of undeclared Var cljs.test/do-report[0m
+
+  [36m20[0m  [36m(deftest level-up-test[0m
+  [36m21[0m  [36m[0m
+  [36m22[0m  [36m  (testing "Leveling  up"[0m
+  [33m23[0m  [1m    (is (= {:words [nil] :next-list [["Tag" "day" 0 :weekly]]}[0m
+  [0m  [0m  [33m    ^--- Use of undeclared Var cljs.test/do-report[0m
+  [36m24[0m  [36m           (level-up {:words ["a"] :next-list []} ["Tag" "day" 6 :daily])))))[0m
+
+[36m----  Compiler Warning : Please see test/speicher/client_test.cljs  ----[0m
+[32mSuccessfully compiled "resources/public/js/browser_tests.js" in 4.673 seconds.[0m
+notifying browser that file changed:  resources/public/js/out/goog/deps.js
+notifying browser that file changed:  resources/public/js/out/cljs_deps.js
+notifying browser that file changed:  out/speicher/render.js
+[0mCompiling "resources/public/js/speicher.js" from ["src" "dev_src"]...[0m
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 0.952 seconds.[0m
+notifying browser that file changed:  resources/public/js/out/goog/deps.js
+notifying browser that file changed:  resources/public/js/out/cljs_deps.js
+notifying browser that file changed:  out/speicher/client.js
+[0mCompiling "resources/public/js/speicher.js" from ["src" "dev_src"]...[0m
+[36m----  Compiler Warning on   src/speicher/client.cljs   line:146  column:30  ----[0m
+
+  [1mUse of undeclared Var speicher.client/init-swiper[0m
+
+  [36m142[0m  [36m:functions {:correct correct[0m
+  [36m143[0m  [36m            :enter-page show-enter[0m
+  [36m144[0m  [36m            :definitions show-definitions[0m
+  [36m145[0m  [36m            :definition-added print-entry[0m
+  [33m146[0m  [1m            :init-swiper init-swiper[0m
+  [0m   [0m  [33m                         ^--- Use of undeclared Var speicher.client/init-swiper[0m
+  [36m147[0m  [36m            :response handle-response[0m
+  [36m148[0m  [36m            :review-list review-list[0m
+  [36m149[0m  [36m            :saved-list print-entry[0m
+  [36m150[0m  [36m            :search-term lookup[0m
+  [36m151[0m  [36m            :show-list show-list[0m
+
+[36m----  Compiler Warning : Please see src/speicher/client.cljs  ----[0m
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 0.99 seconds.[0m
+notifying browser that file changed:  out/speicher/client.js
+[0mCompiling "resources/public/js/speicher.js" from ["src" "dev_src"]...[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:44  column:11  ----[0m
+
+  [1mUse of undeclared Var speicher.render/Nav[0m
+
+  [36m40[0m  [36m(q/defcomponent WordList[0m
+  [36m41[0m  [36m  "A list of words rendered in table"[0m
+  [36m42[0m  [36m  [state input-chan][0m
+  [36m43[0m  [36m  (d/div nil[0m
+  [33m44[0m  [1m         (Nav "Review")[0m
+  [0m  [0m  [33m          ^--- Use of undeclared Var speicher.render/Nav[0m
+  [36m45[0m  [36m         (d/div {:className "page-content"}[0m
+  [36m46[0m  [36m                (d/div {:className "accordion-list list-block"}[0m
+  [36m47[0m  [36m                       (apply d/ul nil[0m
+  [36m48[0m  [36m                              (map #(Wordrow % input-chan) (:words state)))))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:134  column:13  ----[0m
+
+  [1mUse of undeclared Var speicher.render/Nav[0m
+
+  [36m130[0m  [36m"Page to search for and add new word to list"[0m
+  [36m131[0m  [36m(let [handle-search (partial handle-search-submit input-chan)[0m
+  [36m132[0m  [36m      handle-new-word (partial handle-new-word-submit input-chan)][0m
+  [36m133[0m  [36m  (d/div nil[0m
+  [33m134[0m  [1m         (Nav "Enter German Word")[0m
+  [0m   [0m  [33m          ^--- Use of undeclared Var speicher.render/Nav[0m
+  [36m135[0m  [36m         (d/form {:className "searchbar"[0m
+  [36m136[0m  [36m                  :onSubmit handle-search}[0m
+  [36m137[0m  [36m                 (d/div {:className "searchbar-input"}[0m
+  [36m138[0m  [36m                        (d/input {:type "search" :name "search" :id "term" :placeholder "Search"})[0m
+  [36m139[0m  [36m                        (d/a {:href "#" :className "searchbar-clear"}))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:228  column:13  ----[0m
+
+  [1mWrong number of args (1) passed to quiescent.core/render[0m
+
+  [36m224[0m  [36m[state][0m
+  [36m225[0m  [36m(when (compare-and-set! render-pending? false true)[0m
+  [36m226[0m  [36m  (.requestAnimationFrame js/window[0m
+  [36m227[0m  [36m      (fn [][0m
+  [33m228[0m  [1m        (q/render (Page @(:state app) (:channels app[0m
+  [0m   [0m  [33m        ^--- Wrong number of args (1) passed to quiescent.core/render[0m
+  [36m229[0m  [36m                                      (.getElementById js/document "speicher"))))))[0m
+  [36m230[0m  [36m  (reset! render-pending? false))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:228  column:38  ----[0m
+
+  [1mUse of undeclared Var speicher.render/app[0m
+
+  [36m224[0m  [36m[state][0m
+  [36m225[0m  [36m(when (compare-and-set! render-pending? false true)[0m
+  [36m226[0m  [36m  (.requestAnimationFrame js/window[0m
+  [36m227[0m  [36m      (fn [][0m
+  [33m228[0m  [1m        (q/render (Page @(:state app) (:channels app[0m
+  [0m   [0m  [33m                                 ^--- Use of undeclared Var speicher.render/app[0m
+  [36m229[0m  [36m                                      (.getElementById js/document "speicher"))))))[0m
+  [36m230[0m  [36m  (reset! render-pending? false))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:228  column:54  ----[0m
+
+  [1mUse of undeclared Var speicher.render/app[0m
+
+  [36m224[0m  [36m[state][0m
+  [36m225[0m  [36m(when (compare-and-set! render-pending? false true)[0m
+  [36m226[0m  [36m  (.requestAnimationFrame js/window[0m
+  [36m227[0m  [36m      (fn [][0m
+  [33m228[0m  [1m        (q/render (Page @(:state app) (:channels app[0m
+  [0m   [0m  [33m                                                 ^--- Use of undeclared Var speicher.render/app[0m
+  [36m229[0m  [36m                                      (.getElementById js/document "speicher"))))))[0m
+  [36m230[0m  [36m  (reset! render-pending? false))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/client.cljs   line:146  column:30  ----[0m
+
+  [1mUse of undeclared Var speicher.client/init-swiper[0m
+
+  [36m142[0m  [36m:functions {:correct correct[0m
+  [36m143[0m  [36m            :enter-page show-enter[0m
+  [36m144[0m  [36m            :definitions show-definitions[0m
+  [36m145[0m  [36m            :definition-added print-entry[0m
+  [33m146[0m  [1m            :init-swiper init-swiper[0m
+  [0m   [0m  [33m                         ^--- Use of undeclared Var speicher.client/init-swiper[0m
+  [36m147[0m  [36m            :response handle-response[0m
+  [36m148[0m  [36m            :review-list review-list[0m
+  [36m149[0m  [36m            :saved-list print-entry[0m
+  [36m150[0m  [36m            :search-term lookup[0m
+  [36m151[0m  [36m            :show-list show-list[0m
+
+[36m----  Compiler Warning : Please see src/speicher/client.cljs  ----[0m
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 1.318 seconds.[0m
+notifying browser that file changed:  out/speicher/render.js
+[0mCompiling "resources/public/js/speicher.js" from ["src" "dev_src"]...[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:133  column:13  ----[0m
+
+  [1mUse of undeclared Var speicher.render/Nav[0m
+
+  [36m129[0m  [36m"Page to search for and add new word to list"[0m
+  [36m130[0m  [36m(let [handle-search (partial handle-search-submit input-chan)[0m
+  [36m131[0m  [36m      handle-new-word (partial handle-new-word-submit input-chan)][0m
+  [36m132[0m  [36m  (d/div nil[0m
+  [33m133[0m  [1m         (Nav "Enter German Word")[0m
+  [0m   [0m  [33m          ^--- Use of undeclared Var speicher.render/Nav[0m
+  [36m134[0m  [36m         (d/form {:className "searchbar"[0m
+  [36m135[0m  [36m                  :onSubmit handle-search}[0m
+  [36m136[0m  [36m                 (d/div {:className "searchbar-input"}[0m
+  [36m137[0m  [36m                        (d/input {:type "search" :name "search" :id "term" :placeholder "Search"})[0m
+  [36m138[0m  [36m                        (d/a {:href "#" :className "searchbar-clear"}))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:227  column:13  ----[0m
+
+  [1mWrong number of args (1) passed to quiescent.core/render[0m
+
+  [36m223[0m  [36m[state][0m
+  [36m224[0m  [36m(when (compare-and-set! render-pending? false true)[0m
+  [36m225[0m  [36m  (.requestAnimationFrame js/window[0m
+  [36m226[0m  [36m      (fn [][0m
+  [33m227[0m  [1m        (q/render (Page @(:state app) (:channels app[0m
+  [0m   [0m  [33m        ^--- Wrong number of args (1) passed to quiescent.core/render[0m
+  [36m228[0m  [36m                                      (.getElementById js/document "speicher"))))))[0m
+  [36m229[0m  [36m  (reset! render-pending? false))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:227  column:38  ----[0m
+
+  [1mUse of undeclared Var speicher.render/app[0m
+
+  [36m223[0m  [36m[state][0m
+  [36m224[0m  [36m(when (compare-and-set! render-pending? false true)[0m
+  [36m225[0m  [36m  (.requestAnimationFrame js/window[0m
+  [36m226[0m  [36m      (fn [][0m
+  [33m227[0m  [1m        (q/render (Page @(:state app) (:channels app[0m
+  [0m   [0m  [33m                                 ^--- Use of undeclared Var speicher.render/app[0m
+  [36m228[0m  [36m                                      (.getElementById js/document "speicher"))))))[0m
+  [36m229[0m  [36m  (reset! render-pending? false))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:227  column:54  ----[0m
+
+  [1mUse of undeclared Var speicher.render/app[0m
+
+  [36m223[0m  [36m[state][0m
+  [36m224[0m  [36m(when (compare-and-set! render-pending? false true)[0m
+  [36m225[0m  [36m  (.requestAnimationFrame js/window[0m
+  [36m226[0m  [36m      (fn [][0m
+  [33m227[0m  [1m        (q/render (Page @(:state app) (:channels app[0m
+  [0m   [0m  [33m                                                 ^--- Use of undeclared Var speicher.render/app[0m
+  [36m228[0m  [36m                                      (.getElementById js/document "speicher"))))))[0m
+  [36m229[0m  [36m  (reset! render-pending? false))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/client.cljs   line:146  column:30  ----[0m
+
+  [1mUse of undeclared Var speicher.client/init-swiper[0m
+
+  [36m142[0m  [36m:functions {:correct correct[0m
+  [36m143[0m  [36m            :enter-page show-enter[0m
+  [36m144[0m  [36m            :definitions show-definitions[0m
+  [36m145[0m  [36m            :definition-added print-entry[0m
+  [33m146[0m  [1m            :init-swiper init-swiper[0m
+  [0m   [0m  [33m                         ^--- Use of undeclared Var speicher.client/init-swiper[0m
+  [36m147[0m  [36m            :response handle-response[0m
+  [36m148[0m  [36m            :review-list review-list[0m
+  [36m149[0m  [36m            :saved-list print-entry[0m
+  [36m150[0m  [36m            :search-term lookup[0m
+  [36m151[0m  [36m            :show-list show-list[0m
+
+[36m----  Compiler Warning : Please see src/speicher/client.cljs  ----[0m
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 1.284 seconds.[0m
+notifying browser that file changed:  out/speicher/render.js
+[0mCompiling "resources/public/js/speicher.js" from ["src" "dev_src"]...[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:227  column:13  ----[0m
+
+  [1mWrong number of args (1) passed to quiescent.core/render[0m
+
+  [36m223[0m  [36m[state][0m
+  [36m224[0m  [36m(when (compare-and-set! render-pending? false true)[0m
+  [36m225[0m  [36m  (.requestAnimationFrame js/window[0m
+  [36m226[0m  [36m      (fn [][0m
+  [33m227[0m  [1m        (q/render (Page @(:state app) (:channels app[0m
+  [0m   [0m  [33m        ^--- Wrong number of args (1) passed to quiescent.core/render[0m
+  [36m228[0m  [36m                                      (.getElementById js/document "speicher"))))))[0m
+  [36m229[0m  [36m  (reset! render-pending? false))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:227  column:38  ----[0m
+
+  [1mUse of undeclared Var speicher.render/app[0m
+
+  [36m223[0m  [36m[state][0m
+  [36m224[0m  [36m(when (compare-and-set! render-pending? false true)[0m
+  [36m225[0m  [36m  (.requestAnimationFrame js/window[0m
+  [36m226[0m  [36m      (fn [][0m
+  [33m227[0m  [1m        (q/render (Page @(:state app) (:channels app[0m
+  [0m   [0m  [33m                                 ^--- Use of undeclared Var speicher.render/app[0m
+  [36m228[0m  [36m                                      (.getElementById js/document "speicher"))))))[0m
+  [36m229[0m  [36m  (reset! render-pending? false))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:227  column:54  ----[0m
+
+  [1mUse of undeclared Var speicher.render/app[0m
+
+  [36m223[0m  [36m[state][0m
+  [36m224[0m  [36m(when (compare-and-set! render-pending? false true)[0m
+  [36m225[0m  [36m  (.requestAnimationFrame js/window[0m
+  [36m226[0m  [36m      (fn [][0m
+  [33m227[0m  [1m        (q/render (Page @(:state app) (:channels app[0m
+  [0m   [0m  [33m                                                 ^--- Use of undeclared Var speicher.render/app[0m
+  [36m228[0m  [36m                                      (.getElementById js/document "speicher"))))))[0m
+  [36m229[0m  [36m  (reset! render-pending? false))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/client.cljs   line:146  column:30  ----[0m
+
+  [1mUse of undeclared Var speicher.client/init-swiper[0m
+
+  [36m142[0m  [36m:functions {:correct correct[0m
+  [36m143[0m  [36m            :enter-page show-enter[0m
+  [36m144[0m  [36m            :definitions show-definitions[0m
+  [36m145[0m  [36m            :definition-added print-entry[0m
+  [33m146[0m  [1m            :init-swiper init-swiper[0m
+  [0m   [0m  [33m                         ^--- Use of undeclared Var speicher.client/init-swiper[0m
+  [36m147[0m  [36m            :response handle-response[0m
+  [36m148[0m  [36m            :review-list review-list[0m
+  [36m149[0m  [36m            :saved-list print-entry[0m
+  [36m150[0m  [36m            :search-term lookup[0m
+  [36m151[0m  [36m            :show-list show-list[0m
+
+[36m----  Compiler Warning : Please see src/speicher/client.cljs  ----[0m
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 1.215 seconds.[0m
+notifying browser that file changed:  out/speicher/render.js
+[0mCompiling "resources/public/js/speicher.js" from ["src" "dev_src"]...[0m
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 0.817 seconds.[0m
+notifying browser that file changed:  out/speicher/client.js
+[0mCompiling "resources/public/js/speicher.js" from ["src" "dev_src"]...[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:227  column:13  ----[0m
+
+  [1mWrong number of args (1) passed to quiescent.core/render[0m
+
+  [36m223[0m  [36m[state][0m
+  [36m224[0m  [36m(when (compare-and-set! render-pending? false true)[0m
+  [36m225[0m  [36m  (.requestAnimationFrame js/window[0m
+  [36m226[0m  [36m      (fn [][0m
+  [33m227[0m  [1m        (q/render (Page (:state app) (:channels app[0m
+  [0m   [0m  [33m        ^--- Wrong number of args (1) passed to quiescent.core/render[0m
+  [36m228[0m  [36m                                      (.getElementById js/document "speicher"))))))[0m
+  [36m229[0m  [36m  (reset! render-pending? false))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:227  column:37  ----[0m
+
+  [1mUse of undeclared Var speicher.render/app[0m
+
+  [36m223[0m  [36m[state][0m
+  [36m224[0m  [36m(when (compare-and-set! render-pending? false true)[0m
+  [36m225[0m  [36m  (.requestAnimationFrame js/window[0m
+  [36m226[0m  [36m      (fn [][0m
+  [33m227[0m  [1m        (q/render (Page (:state app) (:channels app[0m
+  [0m   [0m  [33m                                ^--- Use of undeclared Var speicher.render/app[0m
+  [36m228[0m  [36m                                      (.getElementById js/document "speicher"))))))[0m
+  [36m229[0m  [36m  (reset! render-pending? false))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[36m----  Compiler Warning on   src/speicher/render.cljs   line:227  column:53  ----[0m
+
+  [1mUse of undeclared Var speicher.render/app[0m
+
+  [36m223[0m  [36m[state][0m
+  [36m224[0m  [36m(when (compare-and-set! render-pending? false true)[0m
+  [36m225[0m  [36m  (.requestAnimationFrame js/window[0m
+  [36m226[0m  [36m      (fn [][0m
+  [33m227[0m  [1m        (q/render (Page (:state app) (:channels app[0m
+  [0m   [0m  [33m                                                ^--- Use of undeclared Var speicher.render/app[0m
+  [36m228[0m  [36m                                      (.getElementById js/document "speicher"))))))[0m
+  [36m229[0m  [36m  (reset! render-pending? false))))[0m
+
+[36m----  Compiler Warning : Please see src/speicher/render.cljs  ----[0m
+[32mSuccessfully compiled "resources/public/js/speicher.js" in 1.137 seconds.[0m
+notifying browser that file changed:  out/speicher/render.js

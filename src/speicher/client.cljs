@@ -61,16 +61,6 @@
      (assoc-in state [:words idx] [ger eng (inc  c) list-kw]))))
 
 
-(defn init-swiper [state _]
-  (let [swiper (.swiper (:f7 state) ".swiper-container"
-                        #js {:nextButton ".swiper-next-button"
-                             :prevButton ".swiper-prev-button"})
-        html "<div class='swiper-slide'><span>All Done? <br><a href=\"next.html\" class=\"button\"} >Save</a>
-        </span></div>"]
-    (.append (js/Dom7 ".swiper-wrapper") html)
-    (.update swiper)
-    (assoc state :swiper-init? true :swiper swiper)))
-
 
 (defn review-list [state list-kw]
   (fetch-list state list-kw)
@@ -144,30 +134,15 @@
             (render/request-render @state))))))
 
 (defn load-app []
-  (let [ch (chan)
-        f7 (js/Framework7.
-            #js {:onPageInit (fn init-callback [app, page]
-                               (case (.-name page)
-                                 "index" (.log js/console "index page called")
-                                 "review"  (go (let [list (keyword (aget page "query" "list"))]
-                                                 (>! ch [:review-list list])))
-                                 "next" (go (>! ch [:review-done nil]))
-                                 "show" (go (>! ch [:show-list :daily]))
-                                 "search" (go (>! ch [:search-page nil]))
-                                 (println "Nothing found ")))})
-        main (.addView f7 ".view-main")]
+  (let [ch (chan)]
    {:state (atom {:input-chan ch
                   :mode :start
-                  :current-list :daily
-                  :f7 f7
-                  :main-view main})
-                 ;(or (store/load) (data/fresh))
+                  :current-list :daily})
 
     :functions {:correct correct
                 :enter-page show-enter
                 :definitions show-definitions
                 :definition-added print-entry
-                :init-swiper init-swiper
                 :response handle-response
                 :review-list review-list
                 :saved-list print-entry

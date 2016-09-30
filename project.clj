@@ -22,9 +22,7 @@
   :node-dependencies [[source-map-support "0.2.8"]]
   :profiles { :dev { :plugins [ [lein-cljsbuild "1.0.4"]
                                [lein-npm "0.4.0"]
-                               [lein-figwheel "0.5.8"]
-                               [com.cemerick/clojurescript.test "0.3.3"]]}
-
+                               [lein-figwheel "0.5.8"]]}
               :production {:env {:environ :production}}
               :uberjar {:aot :all}}
   :plugins [[lein-environ "1.1.0"]
@@ -39,23 +37,24 @@
   :test-paths ["test"]
   :clean-targets  ^{:protect false} ["out" "resources/public/js/speicher.js"
                                      "resources/public/js/speicher.min.js"]
-  :cljsbuild {:builds [{:id "dev"
-                        :source-paths ["src" "test"]
+  :cljsbuild {:builds [{:id :dev
+                        :source-paths ["src" "dev_src"]
+                        :figwheel true
                         :compiler {:output-to "resources/public/js/speicher.js"
                                    :output-dir "resources/public/js/out"
-                                   :main speicher.dev
-                                   :optimizations :simple
+                                   :main "speicher.dev"
+                                   :optimizations :none
                                    :asset-path "/js/out"
                                    :cache-analysis true
                                  ;  :source-map true
                                    :source-map-timestamp true
                                    :pretty-print true}}
-                       {:id "test"
-                         :source-paths ["src" "test"]
-                         :compiler {:output-to "resources/public/js/browser_tests.js"
-                                    :main 'speicher.runner
-                                    :optimizations :none}}
-                       {:id "release"
+                      ;  {:id :test
+                      ;    :source-paths ["src" "test"]
+                      ;    :compiler {:output-to "resources/public/js/browser_tests.js"
+                      ;               :main "speicher.runner"
+                      ;               :optimizations :none}}
+                       {:id :release
                         :source-paths ["src"]
                         :compiler {:output-to "resources/public/js/speicher.min.js"
                                    :externs  ["externs.js"]
