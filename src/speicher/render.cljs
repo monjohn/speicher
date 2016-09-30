@@ -208,12 +208,15 @@
 (q/defcomponent Menu [state chans]
   (d/aside {:className "menu"}
     (d/p {:className "menu-label"} "Review")
-    (d/ul {:classNmae "menu-list"}
-      (d/li
-        (d/a {:href ""} "Review")))))
+    (d/ul {:className "menu-list"}
+      (d/li nil
+        (d/a {:href ""} "Daily"))
+      (d/li nil
+        (d/a {:href ""} "Weekly")))))
 
 (q/defcomponent Page [state chans]
-          (Menu state chans))
+  (d/section {:className "container"}
+    (Menu state chans)))
 
 ;; Here we use an atom to tell us if we already have a render queued
 ;; up; if so, requesting another render is a no-op

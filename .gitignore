@@ -1,6 +1,6 @@
 out/
 *-init.clj
-figweel_server.log
+figwheel_server.log
 bower_components/
 resources/public/js/out
 pom.xml

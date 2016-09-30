@@ -40,24 +40,25 @@
   :cljsbuild {:builds [{:id :dev
                         :source-paths ["src" "dev_src"]
                         :figwheel true
-                        :css-dirs ["css"]
                         :compiler {:output-to "resources/public/js/speicher.js"
-                                   :output-dir "resources/public/js/out"
                                    :main "speicher.dev"
                                    :optimizations :none
                                    :asset-path "/js/out"
                                    :cache-analysis true
+                                   :output-dir "out"
                                  ;  :source-map true
                                    :source-map-timestamp true
                                    :pretty-print true}}
-                      ;  {:id :test
-                      ;    :source-paths ["src" "test"]
-                      ;    :compiler {:output-to "resources/public/js/browser_tests.js"
-                      ;               :main "speicher.runner"
-                      ;               :optimizations :none}}
+                       {:id :test
+                         :source-paths ["src" "test"]
+                         :compiler {:output-to "resources/public/js/browser_tests.js"
+                                    :main "speicher.runner"
+                                    :optimizations :none}}
                        {:id :release
                         :source-paths ["src"]
                         :compiler {:output-to "resources/public/js/speicher.min.js"
                                    :externs  ["externs.js"]
+                                   :output-dir "resources/public/js/charlie"
                                    :pretty-print true
-                                   :optimizations :advanced}}]})
+                                   :optimizations :advanced}}]}
+  :figwheel {:css-dirs ["css"]})
