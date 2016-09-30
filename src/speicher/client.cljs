@@ -160,6 +160,7 @@
   (let [app (load-app)
         state @(:state app)]
     ; (store/init-persistence app)
-    (init-updates app)
     (render/request-render state)))
+    ;(init-updates app)))
+
    ; (go (>! (:input-chan state) [:nav "Test"]))

@@ -40,6 +40,7 @@
   :cljsbuild {:builds [{:id :dev
                         :source-paths ["src" "dev_src"]
                         :figwheel true
+                        :css-dirs ["css"]
                         :compiler {:output-to "resources/public/js/speicher.js"
                                    :output-dir "resources/public/js/out"
                                    :main "speicher.dev"

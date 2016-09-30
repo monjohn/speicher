@@ -1,7 +1,7 @@
 (ns speicher.render
   (:require [cljs.core.async :refer [>!]]
             [cljs.reader :refer [read-string]]
-            [cljsjs.react]
+            ; [cljsjs.react]
             [quiescent.core :as q :include-macros true]
             [quiescent.dom :as d]
             [clojure.walk :refer [keywordize-keys]]
@@ -224,6 +224,6 @@
     (when (compare-and-set! render-pending? false true)
       (.requestAnimationFrame js/window
           (fn []
-            (q/render (Page (:state app) (:channels app
-                                          (.getElementById js/document "speicher"))))))
+            (q/render (Page state  (:input-chan state))
+                      (.getElementById js/document "speicher"))))
       (reset! render-pending? false))))
