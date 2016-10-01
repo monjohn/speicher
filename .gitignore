@@ -18,3 +18,4 @@ pom.xml.asc
 node_modules/
 resources/public/js/browser_tests.js
 .sass-cache
+resources/public/css/style.css.map

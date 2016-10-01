@@ -86,37 +86,14 @@
 (defn format-entries [dict]
   (map format-entry dict))
 
-
-(defn init-slider [state]
-  (let [app (:f7 state)]
-    (.swiper app ".swiper-container" #js {:nextButton ".swiper-next-button"
-                                          :prevButton ".swiper-prev-button"})))
-
-(q/defcomponent Slides
-  "The components for the words"
-  [ch idx word]
-  (if (even? idx)
-    (d/div {:className "swiper-slide"} (d/span nil word))
-    (d/div {:className "swiper-slide"}
-           (d/span nil  word)
-           (d/br nil)
-           (d/button {:className "button button-big  color-green"
-                      :onClick #(go
-                                 (>! ch [:correct (quot idx 2)]) )} "I remember"))))
-
 ;; TODO: Check for empty list and save
-(q/defcomponent ReviewPage [state]
-
- ; (d/div {:className "swiper-custom"}
-      ;   (Nav "Daily")
-  ;       (d/div {:className "slider-container"}
-                (apply d/div {:className "swiper-wrapper"}
-
-                       (map-indexed (fn [idx word] (Slides (:input-chan state) idx word))
-                                    (flatten (map (fn [x] [(first x) (second x)]) (:words state))))))
-
+; (q/defcomponent ReviewPage [state]
+;
+;                 (apply d/div {:className "swiper-wrapper"}
+;
+;                        (map-indexed (fn [idx word] (Slides (:input-chan state) idx word))
+;                                     (flatten (map (fn [x] [(first x) (second x)]) (:words state))))))
 ;))
-
 
 (q/defcomponent SearchTableRow [id top? g e]
   (d/li {:className "accordion-item"}
@@ -147,26 +124,12 @@
                                                (format-entries dictionary)))))))))
 
 
-(q/defcomponent NextPage [state]
-  (d/div nil
-         (d/div {:className "navbar"}
-                (d/div {:className "navbar-inner"}
-                       (d/div {:className "left"}
-                              (d/a {:href "index.html" :className "link"}
-                                   (d/i {:className "icon icon-home"})
-                                   (d/span nil "Home")))
-                       (d/div {:className "center" :style {:left "22px"}}
-                              "Choose another list")
-                       (d/div {:className "right"})))
-         (d/a {:href "review.html?list=weekly"} "Weekly")))
-
 
 (q/defcomponent Link [state]
   (d/a {:className "link"
         :onClick  #(go
                     (let [mv (:main-view state)
                           ch (:input-chan state)]
-                      (.. mv -router (loadPage "review.html"))
                       (>! ch [:show-list :daily])) false )} "Show List "))
 
 
@@ -199,6 +162,27 @@
                                                 (d/input {:type "submit" :value "Submit"
                                                           :className "close-popup button button-big button-fill color-green"}))))))))))
 
+(q/defcomponent Row
+  :keyfn (comp :ger first)
+  [[ger eng]]
+  (d/tr nil
+    (d/td nil ger)
+    (d/td nil eng)))
+
+(q/defcomponent Table [state]
+  (d/table {:className "table"}
+    (d/thead nil
+      (d/tr nil
+        (d/th nil "German")
+        (d/th nil "English")))
+    (d/tbody nil
+      (map #(Row %) [["Tag" "Day"]]))))
+
+(q/defcomponent Main [state]
+  (d/section nil
+    (d/h1 "List")
+    (Table)))
+
 (q/defcomponent Nav [state chans]
   (d/nav {:className "nav"}
     (d/div {:className "nav-left"}
@@ -206,17 +190,30 @@
     (d/div {:className "nav-center"})))
 
 (q/defcomponent Menu [state chans]
-  (d/aside {:className "menu"}
-    (d/p {:className "menu-label"} "Review")
-    (d/ul {:className "menu-list"}
-      (d/li nil
-        (d/a {:href ""} "Daily"))
-      (d/li nil
-        (d/a {:href ""} "Weekly")))))
+  (let [active (:nav state)]
+    (d/aside {:className "menu"}
+      (d/div {:className "container"})
+        (d/p {:className "menu-label"} "View")
+        (d/ul {:className "menu-list"}
+          (d/li nil
+            (d/a {:className (if (= active :daily) "is-active" )} "Daily"))
+          (d/li nil
+            (d/a {:href ""} "Weekly"))))))
 
 (q/defcomponent Page [state chans]
-  (d/section {:className "container"}
-    (Menu state chans)))
+  (d/div nil
+    (d/section {:className "hero is-primary"}
+      (d/div {:className "hero-body"}
+        (d/div {:className "container"}
+          (d/h1 {:className "title"}
+            "Speicher")
+          (d/h2 {:className "subtitle"}
+            "Learn Your German"))))
+    (d/div {:className "columns"}
+      (d/div {:className "column is-one-quarter"}
+        (Menu state chans))
+      (d/div {:className "column"}
+        (Main state chans)))))
 
 ;; Here we use an atom to tell us if we already have a render queued
 ;; up; if so, requesting another render is a no-op

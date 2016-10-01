@@ -40,7 +40,7 @@
   (save-lists! state)
   (-> state
       (dissoc  :words :next-list :swiper)
-      (assoc  :mode :next)))
+      (assoc  :nav :next)))
 
 
 (defn level-complete? [level count]
@@ -64,7 +64,7 @@
 
 (defn review-list [state list-kw]
   (fetch-list state list-kw)
-  (assoc state :mode :review-list
+  (assoc state :nav :review-list
     :swiper-init? false
          :current-list list-kw
          :answered []
@@ -74,13 +74,13 @@
 
 (defn show-list [state kw]
   (do (fetch-list state kw)
-   (assoc  state :mode :show-list)))
+   (assoc  state :nav :show-list)))
 
 (defn show-search [state _]
-  (assoc state :mode :search-page))
+  (assoc state :nav :search-page))
 
 (defn show-enter [state _]
-  (assoc state :mode :enter-page))
+  (assoc state :nav :enter-page))
 
 (defn lookup [state word]
   (go (let [ch (:input-chan state)
@@ -129,14 +129,13 @@
           (let [[msg-name msg-data] (<! input-chan)
                 _ (.log js/console (str "on channel [" msg-name "], received value [" msg-data "]"))
                 update-fn  (get functions msg-name)]
-
              (swap! state update-fn msg-data)
             (render/request-render @state))))))
 
 (defn load-app []
   (let [ch (chan)]
    {:state (atom {:input-chan ch
-                  :mode :start
+                  :nav :daily
                   :current-list :daily})
 
     :functions {:correct correct
@@ -160,7 +159,7 @@
   (let [app (load-app)
         state @(:state app)]
     ; (store/init-persistence app)
-    (render/request-render state)))
-    ;(init-updates app)))
+    (render/request-render state)
+    (init-updates app)))
 
    ; (go (>! (:input-chan state) [:nav "Test"]))

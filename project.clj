@@ -41,11 +41,10 @@
                         :source-paths ["src" "dev_src"]
                         :figwheel true
                         :compiler {:output-to "resources/public/js/speicher.js"
+                                   :output-dir "resources/public/js/out"
                                    :main "speicher.dev"
                                    :optimizations :none
                                    :asset-path "/js/out"
-                                   :cache-analysis true
-                                   :output-dir "out"
                                  ;  :source-map true
                                    :source-map-timestamp true
                                    :pretty-print true}}
@@ -58,7 +57,7 @@
                         :source-paths ["src"]
                         :compiler {:output-to "resources/public/js/speicher.min.js"
                                    :externs  ["externs.js"]
-                                   :output-dir "resources/public/js/charlie"
+                                   :output-dir "release"
                                    :pretty-print true
                                    :optimizations :advanced}}]}
   :figwheel {:css-dirs ["css"]})
