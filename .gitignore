@@ -1,6 +1,5 @@
-out/
 *-init.clj
-figweel_server.log
+figwheel_server.log
 bower_components/
 resources/public/js/out
 pom.xml
@@ -17,4 +16,5 @@ pom.xml.asc
 .nrepl-port
 node_modules/
 resources/public/js/browser_tests.js
+resources/public/css/style.css.map
 .sass-cache/
