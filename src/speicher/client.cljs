@@ -24,7 +24,6 @@
                  :weekly :monthly
                  :monthly :yearly})
 
-
 (defn save-lists! [{:keys [words next-list current-list input-chan]
                       :as state}]
   (go (let [response (<! (http/post "/save"
@@ -36,7 +35,6 @@
 
 
 (defn finished [state]
-  (.destroy (:swiper state))
   (save-lists! state)
   (-> state
       (dissoc  :words :next-list :swiper)
@@ -106,16 +104,15 @@
   state)
 
 (defn handle-response [state {:keys [status body]}]
- ; (println "handle response: " (assoc state :words body))
   ( assoc state :words body))
 
 (defn show-definitions [state {:keys [body]}]
   (assoc state :dictionary body))
 
-
 (defn print-entry [state data]
   (println "print entry" data)
   state)
+
 ;;; ----------- Initialization ----------
 
 (defn init-updates
@@ -158,8 +155,8 @@
   []
   (let [app (load-app)
         state @(:state app)]
-    ; (store/init-persistence app)
-    (render/request-render state)
-    (init-updates app)))
+    (init-updates app)
+    (go (>! (:input-chan state) [:show-list :daily]))))
+    ;(render/request-render state)))
 
-   ; (go (>! (:input-chan state) [:nav "Test"]))
+   ;

@@ -163,25 +163,25 @@
                                                           :className "close-popup button button-big button-fill color-green"}))))))))))
 
 (q/defcomponent Row
-  :keyfn (comp :ger first)
-  [[ger eng]]
+  :keyfn first
+  [[ger eng score level]]
   (d/tr nil
     (d/td nil ger)
     (d/td nil eng)))
 
-(q/defcomponent Table [state]
+(q/defcomponent Table [{:keys [words]}]
   (d/table {:className "table"}
     (d/thead nil
       (d/tr nil
         (d/th nil "German")
         (d/th nil "English")))
     (d/tbody nil
-      (map #(Row %) [["Tag" "Day"]]))))
+      (map #(Row %) words))))
 
 (q/defcomponent Main [state]
   (d/section nil
-    (d/h1 "List")
-    (Table)))
+    (d/h1 {:className "title"} "List")
+    (Table state)))
 
 (q/defcomponent Nav [state chans]
   (d/nav {:className "nav"}
