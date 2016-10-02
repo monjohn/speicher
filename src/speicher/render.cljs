@@ -169,18 +169,20 @@
     (d/td nil ger)
     (d/td nil eng)))
 
-(q/defcomponent Table [{:keys [words]}]
-  (d/table {:className "table"}
-    (d/thead nil
-      (d/tr nil
-        (d/th nil "German")
-        (d/th nil "English")))
-    (d/tbody nil
-      (map #(Row %) words))))
+(q/defcomponent Table [state]
+  (let [current-list (:current-list state)
+        words (get-in state [:lists current-list :words])]
+    (d/table {:className "table"}
+      (d/thead nil
+        (d/tr nil
+          (d/th nil "German")
+          (d/th nil "English")))
+      (d/tbody nil
+        (map #(Row %) words)))))
 
 (q/defcomponent Main [state]
   (d/section nil
-    (d/h1 {:className "title"} "List")
+    (d/h1 {:className "title"} (str (capitalize (name (:current-list state) )) " List"))
     (Table state)))
 
 (q/defcomponent Nav [state chans]
@@ -189,16 +191,25 @@
       (d/a {:className "nav-item is-brand" :href "#"} "SPEICHER"))
     (d/div {:className "nav-center"})))
 
+(defn send-message [state message]
+  (fn []
+    (go (>! (:input-chan state) message))))
+
 (q/defcomponent Menu [state chans]
   (let [active (:nav state)]
     (d/aside {:className "menu"}
-      (d/div {:className "container"})
+      (d/div {:className "container"}
         (d/p {:className "menu-label"} "View")
         (d/ul {:className "menu-list"}
           (d/li nil
-            (d/a {:className (if (= active :daily) "is-active" )} "Daily"))
+            (d/a {:onClick (send-message state [:show-list :daily])
+                  :className (if (= active :daily) "is-active")}
+              "Daily"))
           (d/li nil
-            (d/a {:href ""} "Weekly"))))))
+            (d/a {:onClick (send-message state [:show-list :weekly])
+                  :className (if (= active :weekly) "is-active")}
+              "Weekly")))
+        (d/p {:className "menu-label"} "Review")))))
 
 (q/defcomponent Page [state chans]
   (d/div nil

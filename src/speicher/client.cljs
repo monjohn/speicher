@@ -7,9 +7,6 @@
 
 (enable-console-print!)
 
-;; Going through the list of words, right or wrong,
-;; adjusting state accordingling
-
 (defn fetch-list [state kw]
   (go (let [ch (:input-chan state)
             response (<! (http/get (str "/list/" kw)))]
@@ -33,13 +30,11 @@
          (>! input-chan [:saved-list response]))))
 
 
-
 (defn finished [state]
   (save-lists! state)
   (-> state
       (dissoc  :words :next-list :swiper)
       (assoc  :nav :next)))
-
 
 (defn level-complete? [level count]
   (= (get level-limit level)
@@ -57,7 +52,6 @@
    (if (level-complete? list-kw c)
      (level-up state [ger eng c list-kw])
      (assoc-in state [:words idx] [ger eng (inc  c) list-kw]))))
-
 
 
 (defn review-list [state list-kw]
@@ -104,7 +98,11 @@
   state)
 
 (defn handle-response [state {:keys [status body]}]
-  ( assoc state :words body))
+  (let [words (:words body)
+        list-name (:list-name body)]
+    (-> state
+      (assoc :nav list-name :current-list list-name)
+      (assoc-in [:lists list-name :words] words))))
 
 (defn show-definitions [state {:keys [body]}]
   (assoc state :dictionary body))
@@ -133,8 +131,10 @@
   (let [ch (chan)]
    {:state (atom {:input-chan ch
                   :nav :daily
-                  :current-list :daily})
-
+                  :current-list :daily
+                  :lists {:daily {:words []}
+                          :weekly {:words []}
+                          :monthly {:words []}}})
     :functions {:correct correct
                 :enter-page show-enter
                 :definitions show-definitions

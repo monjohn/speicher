@@ -33,7 +33,8 @@
                  :monthly :yearly})
 
 (defn get-list [kw]
-  (db/load-data kw))
+  {:list-name kw
+   :words (db/load-data kw)})
 
 
 ;; (defn test-list []
