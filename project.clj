@@ -48,7 +48,7 @@
                                  ;  :source-map true
                                    :source-map-timestamp true
                                    :pretty-print true}}
-                       {:id :test
+                       {:id "browser-tests"
                          :source-paths ["src" "test"]
                          :compiler {:output-to "resources/public/js/browser_tests.js"
                                     :main "speicher.runner"
