@@ -26,6 +26,8 @@
        (assoc %1 k v)) {})
    keywordize-keys))
 
+(defn humanize [key-word]
+  (-> key-word name capitalize (clojure.string/replace #"-|_" " ")))
 
 (q/defcomponent Wordrow [row input-chan]
   (d/div {:className "accordion-item"}
@@ -196,20 +198,26 @@
     (go (>! (:input-chan state) message))))
 
 (q/defcomponent Menu [state chans]
-  (let [active (:nav state)]
+  (let [active-class (fn [key-word] (if (= (:nav state) key-word) "is-active" ""))
+        link (fn [key-word]
+                (d/li {:key (name key-word)}
+                  (d/a {:onClick (send-message state [:show-list key-word])
+                        :className (active-class key-word)}
+                    (humanize key-word))))]
     (d/aside {:className "menu"}
       (d/div {:className "container"}
+        (d/p {:className "menu-label"}
+          (d/a {:onClick (send-message state [:review :daily])
+                :className (active-class :review)}
+            "Review"))
         (d/p {:className "menu-label"} "View")
         (d/ul {:className "menu-list"}
-          (d/li nil
-            (d/a {:onClick (send-message state [:show-list :daily])
-                  :className (if (= active :daily) "is-active")}
-              "Daily"))
-          (d/li nil
-            (d/a {:onClick (send-message state [:show-list :weekly])
-                  :className (if (= active :weekly) "is-active")}
-              "Weekly")))
-        (d/p {:className "menu-label"} "Review")))))
+          (map link [:daily :weekly :monthly]))
+        (d/p {:className "menu-label"} "Add New Words")
+        (d/ul {:className "menu-list"}
+          (map link [:search :enter-definition]))))))
+
+
 
 (q/defcomponent Page [state chans]
   (d/div nil

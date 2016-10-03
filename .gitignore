@@ -1,7 +1,6 @@
 *-init.clj
 figwheel_server.log
 bower_components/
-resources/public/js/out
 pom.xml
 pom.xml.asc
 *jar
@@ -15,6 +14,8 @@ pom.xml.asc
 .lein-failures
 .nrepl-port
 node_modules/
+resources/public/js/out
 resources/public/js/browser_tests.js
 resources/public/css/style.css.map
+out/
 .sass-cache/
